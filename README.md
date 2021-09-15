@@ -1,2 +1,5 @@
 # WebTradingProject
-aplicación software que permita controlar las ventas físicas y virtuales de una empresa de manufactura  de electrinica y hacerles el correspondiente seguimiento
+Aplicación software que permita controlar las ventas físicas y virtuales de una empresa de manufactura de electronica y hacerles el correspondiente seguimiento.
+
+Scrum Team 
+Product Owner: Jhon hayden Ospina Loaiza 
