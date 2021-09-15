@@ -5,6 +5,7 @@ Scrum Team
 
 Product Owner: Jhon hayden Ospina Loaiza 
 
+Scrum Master: Stefania Jimenez Valencia @sjimenezv16
 
 Development Team:
 
