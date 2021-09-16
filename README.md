@@ -3,17 +3,20 @@ Aplicación software que permita controlar las ventas físicas y virtuales de un
 
 Además, el lenguaje que se puede usar es JavaScript, y el stack tecnológico a
 emplear será:
-o React JS
-o HTML 5
-o CSS3
-o Lenguaje JavaScript
-o Lenguaje TypeScript
-o Node Js
-o Plataformas de desarrollo para Backend (Node JS)
-o Stack MERN
-o (OAuth2)
-o (Heroku)
-o (Git / GitHub)
+
+
+
+1. React JS
+2. HTML 5
+3. CSS3
+4. Lenguaje JavaScript
+5. Lenguaje TypeScript
+6. Node Js
+7. Plataformas de desarrollo para Backend (Node JS)
+8. Stack MERN
+9. (OAuth2)
+10. (Heroku)
+11. (Git / GitHub)
 
 ______________________________________________________________________________________________________________________________________________________________
                                  Scrum Team 
