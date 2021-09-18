@@ -5,7 +5,6 @@ Además, el lenguaje que se puede usar es JavaScript, y el stack tecnológico a
 emplear será:
 
 
-
 1. React JS
 2. HTML 5
 3. CSS3
@@ -36,4 +35,5 @@ Usuario Cuenta GitHub: jole4f4
 
 Administrador de BD: Arlex Jimenez Lopez
 Usuario Cuenta GitHub: ajimenezl0608
+________________________________________________________________________________________________________________
 
