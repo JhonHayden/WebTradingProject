@@ -20,11 +20,11 @@ emplear será:
 ______________________________________________________________________________________________________________________________________________________________
                                  Scrum Team 
 ______________________________________________________________________________________________________________________________________________________________
-Product Owner: Jhon hayden Ospina Loaiza 
-Usuario Cuenta GitHub: jhonHayden
-
-Scrum Master: Stefania Jimenez Valencia
+Product Owner: Stefania Jimenez Valencia
 Usuario Cuenta GitHub: sjimenezv16
+
+Scrum Master: Jhon hayden Ospina Loaiza 
+Usuario Cuenta GitHub: jhonHayden
 
 Development Team:
 
