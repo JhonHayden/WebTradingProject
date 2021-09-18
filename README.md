@@ -63,5 +63,5 @@ y el diseño del módulo.
 • Gestión de usuarios y roles: Deberá contener un identificador único del
 usuario, el nombre y el rol en el sistema de información (vendedor,
 administrador, ejecutivo, operario, director, gerente comercial) con el fin de
-restringir/otorgar accesos al sistema de información.
+restringir/otorgar accesos al sistema de información. 
 
