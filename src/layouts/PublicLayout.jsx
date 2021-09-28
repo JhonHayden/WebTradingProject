@@ -3,7 +3,9 @@ import React from 'react'
 const PublicLayout = ({Children}) => {
     return (
         <div>
-            <head></head>
+            <header>
+                <h1>PublicLayout</h1>
+            </header>
             
             <main>
                 <Children />
