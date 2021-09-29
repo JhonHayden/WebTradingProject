@@ -1,17 +1,9 @@
 import React from 'react'
 
-const PublicLayout = ({Children}) => {
+const PublicLayout = () => {
     return (
         <div>
-            <header>
-                <h1>PublicLayout</h1>
-            </header>
-            
-            <main>
-                <Children />
-            </main>  
-            
-            <footer></footer>
+                PublicLayout
         </div>
     )
 }

@@ -1,15 +1,13 @@
 import React from 'react'
 
-const Index = () => {  // las funciones se deben de llamar con la primera letra en mayusculas
+const Index = () => {
     return (
         <div>
-            hola mundo 
+            index principal   pagina principal 
         </div>
     )
 }
 
 export default Index
-
-
 
 

@@ -3,10 +3,11 @@ import React from 'react'
 const Registro = () => {
     return (
         <div>
-            pagina de Registro 
-            
+            pagina registro 
         </div>
     )
 }
 
 export default Registro
+
+

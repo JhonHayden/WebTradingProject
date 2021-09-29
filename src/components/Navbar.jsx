@@ -1,13 +1,12 @@
 import React from 'react'
 
-const Header = () => {
+const Navbar = () => {
     return (
-        <div>
-            
-
+    <div>
+        Navbar
             
         </div>
     )
 }
 
-export default Header
+export default Navbar
