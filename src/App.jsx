@@ -66,20 +66,4 @@ function App() {
 export default App;
 
 
- /*   <Router>
-        <Switch>
-          <Route path='/Admin'>
-            <Admin/>       
-          </Route>
-          <Route path='/Login'>          
-            <Login/>           
-          </Route>
-          <Route path='/Registro'>          
-            <Registro/>           
-          </Route>
-          <Route path='/'>            
-            <Index/>           
-          </Route>
-        </Switch>
-      </Router>
- */
+ 

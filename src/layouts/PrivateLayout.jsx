@@ -1,16 +1,18 @@
 import React from 'react'  
 import Navbar from 'components/Navbar'
+import Footer from 'components/Footer'
 
 const PrivateLayout = ({children}) => {
     return (
-        <div>
+        <div className='flex flex-col justify-between h-screen '>
             <Navbar/>
-                
-            <main>
-            {children}
-                PrivateLayout 
-            </main>
-
+            <div className='h-full overflow-scroll'>
+                <main className='h-full'>
+                    {children}  
+                    PrivateLayout 
+                </main>
+                <Footer/>
+            </div>    
 
         </div>
     )
