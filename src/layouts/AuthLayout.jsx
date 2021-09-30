@@ -1,8 +1,12 @@
 import React from 'react'
 
-const AuthLayout = () => {
+
+const AuthLayout = ({Children}) => {
     return (
-        <div>
+        <div className='place-content-center'>
+            
+            {Children}
+            
             AuthLayout            
         </div>
     )

@@ -1,9 +1,16 @@
 import React from 'react'  
+import Navbar from 'components/Navbar'
 
 const PrivateLayout = () => {
     return (
         <div>
-            PrivateLayout
+            <Navbar/>
+                
+            <main>
+                PrivateLayout 
+            </main>
+
+
         </div>
     )
 }

@@ -1,29 +1,38 @@
 import 'styles/styles.css';
-import Admin from 'pages/Admin';
+
 import Index from 'pages/Index';
-import Login from 'pages/Login';
-import Registro from 'pages/Registro';
+
 import {BrowserRouter as Router,Switch,Route } from 'react-router-dom';  // importo libreria para navegacion 
+import PrivateLayout from './layouts/PrivateLayout';
+import AuthLayout from './layouts/AuthLayout';
+import PublicLayout from './layouts/PublicLayout';
 
 function App() { 
   return (  
-  
-      <Router>
-        <Switch> 
-          <Route pathP='/login'>            
-              <Login />   
-          </Route>
-          <Route pathP='/registro'>            
-            <Registro />   
-          </Route>
-          <Route pathP='/admin'>            
-              <Admin />   
-          </Route>
-          <Route pathP='/'>            
-              <Index />   
-          </Route>
-        </Switch>
-      </Router>
+
+    <Router>
+      <Switch>
+        <Route>
+          <PrivateLayout>
+
+          </PrivateLayout>
+        </Route>
+        <Route>
+          <AuthLayout>
+
+          </AuthLayout>
+        </Route>
+        <Route>
+          <PublicLayout>
+            
+
+          </PublicLayout>
+
+        </Route>
+        
+        
+      </Switch>
+    </Router>
       
   );
 }
@@ -33,16 +42,16 @@ export default App;
 
  /*   <Router>
         <Switch>
-          <Route pathP='/Admin'>
+          <Route path='/Admin'>
             <Admin/>       
           </Route>
-          <Route pathP='/Login'>          
+          <Route path='/Login'>          
             <Login/>           
           </Route>
-          <Route pathP='/Registro'>          
+          <Route path='/Registro'>          
             <Registro/>           
           </Route>
-          <Route pathP='/'>            
+          <Route path='/'>            
             <Index/>           
           </Route>
         </Switch>

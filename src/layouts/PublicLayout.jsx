@@ -1,9 +1,18 @@
 import React from 'react'
+import Footer from 'components/Footer'
 
-const PublicLayout = () => {
+import Navbar from 'components/Navbar'
+
+
+const PublicLayout = ({Children}) => {  // funcion que me entrega una etiqueta personalizada  con contenido 
+    // el children es una palabra reservada para indicarle que tendra contenido dentro de la etiqueta personalizada PublicLayout
     return (
-        <div>
-                PublicLayout
+        <div className='flex flex-col'>
+            <Navbar />
+            <main>
+                {Children}
+            </main>                
+            <Footer />
         </div>
     )
 }
