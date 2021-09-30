@@ -1,12 +1,13 @@
 import React from 'react'  
 import Navbar from 'components/Navbar'
 
-const PrivateLayout = () => {
+const PrivateLayout = ({children}) => {
     return (
         <div>
             <Navbar/>
                 
             <main>
+            {children}
                 PrivateLayout 
             </main>
 

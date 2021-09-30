@@ -1,11 +1,12 @@
 import React from 'react'
 
-const index = () => {
+const Admin = () => {
     return (
+        
         <div>
-             index page  principal de administracion 
+            index Admin page  principal de administracion 
         </div>
     )
 }
 
-export default index
+export default Admin

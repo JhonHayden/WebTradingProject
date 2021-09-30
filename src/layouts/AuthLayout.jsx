@@ -1,11 +1,11 @@
 import React from 'react'
 
 
-const AuthLayout = ({Children}) => {
+const AuthLayout = ({children}) => {
     return (
         <div className='place-content-center'>
             
-            {Children}
+            {children}
             
             AuthLayout            
         </div>

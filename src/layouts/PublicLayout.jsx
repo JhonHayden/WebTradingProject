@@ -4,13 +4,14 @@ import Footer from 'components/Footer'
 import Navbar from 'components/Navbar'
 
 
-const PublicLayout = ({Children}) => {  // funcion que me entrega una etiqueta personalizada  con contenido 
+const PublicLayout = ({children}) => {  // funcion que me entrega una etiqueta personalizada  con contenido 
     // el children es una palabra reservada para indicarle que tendra contenido dentro de la etiqueta personalizada PublicLayout
     return (
         <div className='flex flex-col'>
             <Navbar />
             <main>
-                {Children}
+            PublicLayout
+                {children}
             </main>                
             <Footer />
         </div>
