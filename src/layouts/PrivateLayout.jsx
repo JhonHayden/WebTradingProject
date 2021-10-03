@@ -6,7 +6,7 @@ const PrivateLayout = ({children}) => {
     return (
         <div className='flex flex-col justify-between h-screen '>
             <Navbar/>
-            <div className='h-full overflow-scroll'>
+            <div className='h-full  '>
                 <main className='h-full'>
                     {children}  
                     PrivateLayout 
