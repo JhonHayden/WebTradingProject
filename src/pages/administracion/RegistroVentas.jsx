@@ -2,10 +2,10 @@ import React from 'react'
 
 const RegistroVentas = () => {
     return (
-        <div className='justify-center justify-items-center'> 
+        <div > 
             pagina RegistroVentas
 
-            <form className='flex flex-col  '>
+            <form  className='flex flex-col'>
                 <label htmlFor="fecha">Fecha Venta: </label>
                 <input type="date" placeholder='dd/mm/aa' name='fecha' />
                 <label htmlFor="codigoVenta">Codigo Venta</label>
@@ -32,6 +32,7 @@ const RegistroVentas = () => {
                 <input type="text" name='valorTotal' />
                 <label htmlFor="codigoProducto">Codigo Producto: </label>
                 <input type="submit" value='Registro Venta' />
+                <input type="reset"></input>
 
             </form>
 
