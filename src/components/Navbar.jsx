@@ -4,30 +4,30 @@ const Navbar = () => {
     return (
         <nav className='bg-gray-500'>
            <ul className='flex justify-between m-5 text-white'>
-               <li>
+               <li className='text-3xl'>
                    Logo
                </li>
-               <li >
+               <li className='text-3xl'>
                    <Link to= '/administracion/registroproductos'>
                         Registro Productos
                    </Link>  
                 </li>
-               <li>
+               <li className='text-3xl'>
                    <Link to= '/administracion/maestroproductos'>
                         Maestro Productos 
                    </Link>
                 </li>
-               <li>
+               <li className='text-3xl'>
                     <Link to= '/administracion/registroventas'>
                         Registro Ventas
                    </Link>
                 </li>
-               <li> 
+               <li className='text-3xl'> 
                    <Link to= '/administracion/maestroventas'>
                         Maestro Ventas 
                    </Link>
                 </li>
-               <li>
+               <li className='text-3xl'>
                     <Link to= '/administracion/maestrousuario'>
                         Maestro Usuario
                    </Link>

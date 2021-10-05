@@ -5,7 +5,7 @@ const RegistroProductos = () => {
         <div>
             RegistroProductos page
             
-            <form className='flex flex-col' >
+            <form className='flex flex-col text-3xl' >
                 <label htmlFor="codigoProducto">Codigo Producto: </label>
                 <input type="text" name='codigoProducto' />
                 <label htmlFor="descripcionProduct">Descripción Producto</label>
