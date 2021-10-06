@@ -7,9 +7,8 @@ const PrivateLayout = ({children}) => {
         <div className='flex flex-col justify-between h-screen '>
             <Navbar/>
             <div className='h-full'>
-                <main className='h-full flex justify-center'>
+                <main className='h-full flex justify-center w-full'>
                     {children}  
-                    PrivateLayout 
                 </main>
                 <Footer/>
             </div>    

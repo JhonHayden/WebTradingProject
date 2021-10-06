@@ -1,10 +1,15 @@
 import React from 'react'
 
+const TablaVentas = (props) => {
 
 
-const MaestroVentas = (props) => {
+    console.log(props.fecha)
     return (
         <div>
+            <h1 className='text-4xl'>
+                soy tabla Ventas
+            </h1>
+            <div>
             <div className='flex flex-col '>
                 <h1 className=' text-center font-extrabold text-4xl mt-12'>
                     Maestro Ventas
@@ -18,7 +23,7 @@ const MaestroVentas = (props) => {
                             type="text"
                             onKeyDown=""
                             className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                            value={props} />
+                             />
 
                     </label>
 
@@ -34,7 +39,7 @@ const MaestroVentas = (props) => {
                 <table >
                     <tr >
                         <th className='text-3xl'>Codigo Venta</th>
-                        <th className='text-3xl'>Fecha</th>
+                        <th className='text-3xl' >Fecha</th>
                         <th className='text-3xl'>Producto</th>
                         <th className='text-3xl'>Cantidad</th>
                         <th className='text-3xl' >Vendedor</th>
@@ -45,15 +50,22 @@ const MaestroVentas = (props) => {
                     </tr>
                     <tbody>
                         <tr>
-
-                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2' type="text" name="" id="" /></td>
-                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2' type="text" name="" id="" /></td>
-                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2' type="text" name="" id="" /></td>
-                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2' type="text" name="" id="" /></td>
-                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2' type="text" name="" id="" /></td>
-                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2' type="text" name="" id="" /></td>
-                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2' type="text" name="" id="" /></td>
-                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2' type="text" name="" id="" /></td>
+                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2' 
+                            type="text" name="fecha" id="" value={props.fecha}/></td>
+                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                             type="text" name="" id="" /></td>
+                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2' 
+                            type="text" name="" id="" /></td>
+                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2' 
+                            type="text" name="" id="" /></td>
+                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2' 
+                            type="text" name="" id="" /></td>
+                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                             type="text" name="" id="" /></td>
+                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                             type="text" name="" id="" /></td>
+                            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2' 
+                            type="text" name="" id="" /></td>
                             {/* Drop-down list */}
                             <td>
                                 <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2 text-xl' type="text" name="" id="">
@@ -74,7 +86,9 @@ const MaestroVentas = (props) => {
 
             </div>
         </div>
+
+        </div>
     )
 }
 
-export default MaestroVentas
+export default TablaVentas

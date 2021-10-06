@@ -6,7 +6,7 @@ import PublicLayout from 'layouts/PublicLayout';
 import MaestroProductos from 'pages/administracion/MaestroProductos';
 import MaestroProductosActualizar from 'pages/administracion/MaestroProductosActualizar';
 import MaestroVentas from 'pages/administracion/MaestroVentas';
-import RegistroVentas from 'pages/administracion/RegistroVentas';
+import ModuloVentas from 'pages/administracion/ModuloVentas';
 import RegistroProductos from 'pages/administracion/RegistroProductos';
 import MaestroUsuario from 'pages/administracion/MaestroUsuario';
 import Admin from 'pages/administracion/Index';
@@ -20,7 +20,7 @@ function App() {
       <Switch>
         <Route path={['/administracion/maestroproductos','/administracion/maestroproductosactualizar',
         '/administracion/maestrousuario','/administracion/ventas','/administracion/registroproductos',
-        '/administracion/registroVentas','/administracion']}>
+        '/administracion/moduloVentas','/administracion']}>
           <PrivateLayout>
             <Switch>
               <Route path='/administracion/maestroproductos'>
@@ -38,8 +38,8 @@ function App() {
               <Route path='/administracion/registroproductos'>
                 <RegistroProductos/>
               </Route>
-              <Route path='/administracion/registroVentas'>
-                <RegistroVentas/>
+              <Route path='/administracion/moduloVentas'>
+                <ModuloVentas/>
               </Route>
               <Route path='/administracion'>
                 <Admin/>

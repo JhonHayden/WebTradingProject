@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 const Navbar = () => {
     return (
         <nav className='bg-gray-500'>
-           <ul className='flex justify-between m-5 text-white'>
+           <ul className='flex justify-between m-7 text-white'>
                <li className='text-3xl'>
                    Logo
                </li>
@@ -18,8 +18,8 @@ const Navbar = () => {
                    </Link>
                 </li>
                <li className='text-3xl'>
-                    <Link to= '/administracion/registroventas'>
-                        Registro Ventas
+                    <Link to= '/administracion/moduloventas'>
+                       Módulo Ventas
                    </Link>
                 </li>
                <li className='text-3xl'> 

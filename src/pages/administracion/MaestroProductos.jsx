@@ -1,9 +1,20 @@
 import React from 'react'
 
+
 const MaestroProductos = () => {
+
+  
+
+
     return (
         <div>
-            MaestroProductos page
+            <h1>Maestro Productos</h1>
+            <ul>
+                <li>
+                    
+                </li>
+            </ul>
+            
         </div>
     )
 }
