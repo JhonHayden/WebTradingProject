@@ -49,9 +49,7 @@ const ModuloVentas = () => {
     const [mostrarTablaVentas, setMostrarTablaVentas] = useState(false);
     // // const [fecha, setFecha] = useState('dd/mm/aa');
     const [cambiarNombreBoton, setCambiarNombreBoton] = useState('Registrar Venta');
-    // const enviarAMaestroVentas = () => {
 
-    // }
     const [ventas, setVentas] = useState([]); // estado o variable que me almacena los datos del backend en formato .json
 
 
@@ -264,68 +262,68 @@ const FormularioVentas = ({
 
 
     // con el useRef y el FormData ya podemos eliminar cada estado para cada input por pruebas solo los comentaremos
-    // const [fecha, setFecha] = useState('')
-    // const [codigoVenta, setCodigoVenta] = useState('')
-    // const [nombreVendedor, setNombreVendedor] = useState('')
-    // const [identificacionVendedor, setIdentificacionVendedor] = useState('')
-    // const [nombreCliente, setNombreCliente] = useState('')
-    // const [identificacionCliente, setIdentificacionCliente] = useState('')
+    const [fecha, setFecha] = useState('')
+    const [codigoVenta, setCodigoVenta] = useState('')
+    const [nombreVendedor, setNombreVendedor] = useState('')
+    const [identificacionVendedor, setIdentificacionVendedor] = useState('')
+    const [nombreCliente, setNombreCliente] = useState('')
+    const [identificacionCliente, setIdentificacionCliente] = useState('')
     const [cantidadProducto, setCantidadProducto] = useState('')
-    // const [codigoProducto, setCodigoProducto] = useState('')
+    const [codigoProducto, setCodigoProducto] = useState('')
     const [precioUnitario, setPrecioUnitario] = useState('')
     const [valorTotal, setValorTotal] = useState('')
     // const [reset, setReset] = useState()
 
 
     // funcion que me hace todo el proceso de registro en la tabla ventas 
-    // const enviarAlBackend = () => {
+    const enviarAlBackend = () => {
 
 
-    //     console.log('fecha:', fecha, 'codigoVenta:', codigoVenta, 'nombreVendedor:', nombreVendedor, 'identificacionVendedor:',
-    //         identificacionVendedor, 'nombreCliente:', nombreCliente, 'identificacionCliente:', identificacionCliente, 'cantidadProducto:',
-    //         cantidadProducto, 'codigoProducto:', codigoProducto, 'precioUnitario:', precioUnitario, 'valorTotal:', valorTotal);
+        console.log('fecha:', fecha, 'codigoVenta:', codigoVenta, 'nombreVendedor:', nombreVendedor, 'identificacionVendedor:',
+            identificacionVendedor, 'nombreCliente:', nombreCliente, 'identificacionCliente:', identificacionCliente, 'cantidadProducto:',
+            cantidadProducto, 'codigoProducto:', codigoProducto, 'precioUnitario:', precioUnitario, 'valorTotal:', valorTotal);
 
-    //     //codigo para evitar que se envie una casilla vacia usando condicional if existe otra mejor forma y es usando html los atributos required de 
-    //     // los input y el boton asociado al formulario ponerlo de tipo submit
+        //codigo para evitar que se envie una casilla vacia usando condicional if existe otra mejor forma y es usando html los atributos required de 
+        // los input y el boton asociado al formulario ponerlo de tipo submit
 
-    //     if (fecha===''||codigoVenta===''||nombreVendedor===''||identificacionVendedor===''||nombreCliente===''
-    //     ||identificacionCliente===''|| cantidadProducto===''||codigoProducto===''||precioUnitario==='') {
+        if (fecha === '' || codigoVenta === '' || nombreVendedor === '' || identificacionVendedor === '' || nombreCliente === ''
+            || identificacionCliente === '' || cantidadProducto === '' || codigoProducto === '' || precioUnitario === '') {
 
-    //         toast.error('Ingrese todos los datos', {
-    //             position: "bottom-center",
-    //             autoClose: 5000,
-    //         })
-    //     }else {
-
-
-    //         toast.success('Registro Exitoso', {
-    //             position: "bottom-center",
-    //             autoClose: 5000,
-    //         })
-
-    //         irTablasVentas(true);// esto es equivante internamente a setMostrarTablaVentas (true) cambio el estado de mostrarTablaVentas
+            toast.error('Ingrese todos los datos', {
+                position: "bottom-center",
+                autoClose: 5000,
+            })
+        } else {
 
 
-    //         funcionAgregarNuevaVenta([        // esta funcion es setVentas entonces me agrega nuevos datos a el array json pero necesito dejar lo que tiene y
-    //             // agregra nuevos datos a la cola de este para esto se usa ...ventas me dice ponga los que ya tiene guardados 
-    //             // listaVentas es el prop que es equivalente y le asigne el estado ventas la variable ventas 
-    //             //spread operator ( ... ) significa ponga lo que ya tenia mas las cosas nuevas
+            toast.success('Registro Exitoso', {
+                position: "bottom-center",
+                autoClose: 5000,
+            })
 
-    //             ...listaVentas, {
-    //                 codigoVenta: codigoVenta,
-    //                 fecha: fecha,
-    //                 codigoProducto: codigoProducto,
-    //                 cantidadProducto: cantidadProducto,
-    //                 nombreVendedor: nombreVendedor,
-    //                 nombreCliente: nombreCliente,
-    //                 precioUnitario:precioUnitario,
-    //                 valorTotal:valorTotal
-    //             }
-    //         ])
+            irTablasVentas(true);// esto es equivante internamente a setMostrarTablaVentas (true) cambio el estado de mostrarTablaVentas
 
-    //     }
 
-    // };
+            funcionAgregarNuevaVenta([        // esta funcion es setVentas entonces me agrega nuevos datos a el array json pero necesito dejar lo que tiene y
+                // agregra nuevos datos a la cola de este para esto se usa ...ventas me dice ponga los que ya tiene guardados 
+                // listaVentas es el prop que es equivalente y le asigne el estado ventas la variable ventas 
+                //spread operator ( ... ) significa ponga lo que ya tenia mas las cosas nuevas
+
+                ...listaVentas, {
+                    codigoVenta: codigoVenta,
+                    fecha: fecha,
+                    codigoProducto: codigoProducto,
+                    cantidadProducto: cantidadProducto,
+                    nombreVendedor: nombreVendedor,
+                    nombreCliente: nombreCliente,
+                    precioUnitario: precioUnitario,
+                    valorTotal: valorTotal
+                }
+            ])
+
+        }
+
+    };
 
     // useEffect(() => {
     //     console.log(fecha)
@@ -352,7 +350,7 @@ const FormularioVentas = ({
         //   "multipart/form-data".
         claveValorDeValuesFomulario.forEach((valorDeCadaElementoDelFormData, claveDeCadaElementoDelFormData) => {
 
-            console.log(claveDeCadaElementoDelFormData,valorDeCadaElementoDelFormData)
+            console.log(claveDeCadaElementoDelFormData, valorDeCadaElementoDelFormData)
 
             // todo esto con la finalidad de evitar el uso de un estado para cada input puesto que con el FormData me muestra todo los datos 
             // pero para usar esto primero usamos permitimos el evento onSubmit en el form y el boton debe ser type=submit luego referenciamos
@@ -390,11 +388,11 @@ const FormularioVentas = ({
                         type="date"
                         name='fecha'
                         required
-                        // {/*ya podemos comentar*/} value={fecha}                       //---------------------------------------------------
-                        // {/*los onChange*/} onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                        //     {/*y los value */ }                          //
-                        //     setFecha(evento.target.value);  //--------------------------------------------------
-                        // }}
+                        value={fecha}                       //---------------------------------------------------
+                        onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                            //
+                            setFecha(evento.target.value);  //--------------------------------------------------
+                        }}
                     />
                 </label>
                 <label htmlFor="codigoVenta">Codigo Venta
@@ -403,12 +401,12 @@ const FormularioVentas = ({
                         placeholder=''
                         name="codigoVenta"
                         required
-                        // value={codigoVenta}                       //---------------------------------------------------
-                        // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                        //     //
-                        //     setCodigoVenta(evento.target.value);  //--------------------------------------------------
-                        // }} 
-                        />
+                        value={codigoVenta}                       //---------------------------------------------------
+                        onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                            //
+                            setCodigoVenta(evento.target.value);  //--------------------------------------------------
+                        }}
+                    />
                 </label>
                 <div>
                     <label htmlFor="nombreVendedor">Nombre Vendedor:
@@ -416,24 +414,24 @@ const FormularioVentas = ({
                             type="text"
                             name='nombreVendedor'
                             required
-                            // value={nombreVendedor}                       //---------------------------------------------------
-                            // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //     //
-                            //     setNombreVendedor(evento.target.value);  //--------------------------------------------------
-                            // }} 
-                            />
+                            value={nombreVendedor}                       //---------------------------------------------------
+                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //
+                                setNombreVendedor(evento.target.value);  //--------------------------------------------------
+                            }}
+                        />
                     </label>
                     <label htmlFor="identificacionVendedor">Indentificación:
                         <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='identificacionVendedor'
                             required
-                            // value={identificacionVendedor}                       //---------------------------------------------------
-                            // onChange={(evento) => {                                          //intrucciones necesarias para tener control del un input
-                            //     //
-                            //     setIdentificacionVendedor(evento.target.value);                                //--------------------------------------------------
-                            // }}
-                             />
+                            value={identificacionVendedor}                       //---------------------------------------------------
+                            onChange={(evento) => {                                          //intrucciones necesarias para tener control del un input
+                                //
+                                setIdentificacionVendedor(evento.target.value);                                //--------------------------------------------------
+                            }}
+                        />
                     </label>
                 </div>
                 <div>
@@ -442,24 +440,24 @@ const FormularioVentas = ({
                             type="text"
                             name='nombreCliente'
                             required
-                            // value={nombreCliente}                       //---------------------------------------------------
-                            // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //     //
-                            //     setNombreCliente(evento.target.value);  //--------------------------------------------------
-                            // }}
-                             />
+                            value={nombreCliente}                       //---------------------------------------------------
+                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //
+                                setNombreCliente(evento.target.value);  //--------------------------------------------------
+                            }}
+                        />
                     </label>
                     <label htmlFor="identificacionCliente">Indentificación:
                         <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='identificacionCliente'
                             required
-                            // value={identificacionCliente}                       //---------------------------------------------------
-                            // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //     //
-                            //     setIdentificacionCliente(evento.target.value);  //--------------------------------------------------
-                            // }} 
-                            />
+                            value={identificacionCliente}                       //---------------------------------------------------
+                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //
+                                setIdentificacionCliente(evento.target.value);  //--------------------------------------------------
+                            }}
+                        />
                     </label>
                 </div>
                 <label htmlFor="codigoProducto">Codigo Producto:
@@ -467,12 +465,12 @@ const FormularioVentas = ({
                         type="text"
                         name='codigoProducto'
                         required
-                        // value={codigoProducto}                       //---------------------------------------------------
-                        // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                        //     //
-                        //     setCodigoProducto(evento.target.value);  //--------------------------------------------------
-                        // }} 
-                        />
+                        value={codigoProducto}                       //---------------------------------------------------
+                        onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                            //
+                            setCodigoProducto(evento.target.value);  //--------------------------------------------------
+                        }}
+                    />
                 </label>
                 <label htmlFor="cantidadProducto">Cantidad Producto:
                     <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
@@ -483,8 +481,8 @@ const FormularioVentas = ({
                         onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                             //
                             setCantidadProducto(evento.target.value);  //--------------------------------------------------
-                        }} 
-                        />
+                        }}
+                    />
                 </label>
                 <label htmlFor="precioUnitario">Precio Producto:
                     <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
@@ -495,8 +493,8 @@ const FormularioVentas = ({
                         onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                             //
                             setPrecioUnitario(evento.target.value);  //--------------------------------------------------
-                        }} 
-                        />
+                        }}
+                    />
                 </label>
                 <label htmlFor="valorTotal">Valor Total:
                     <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
@@ -506,17 +504,17 @@ const FormularioVentas = ({
                         onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                             //
                             setValorTotal(evento.target.value);  //--------------------------------------------------
-                        }} 
-                        />
+                        }}
+                    />
                 </label>
                 <button className='  self-end text-3xl bg-blue-400 p-5 mb-14 
                 rounded-full shadow-md hover:bg-blue-900 text-gray-100'
                     type='submit'
-                // onClick={() => {
+                    onClick={() => {
 
-                //     enviarAlBackend();
-                // }
-                // }
+                        enviarAlBackend();
+                    }
+                    }
                 >Registrar Venta</button>
             </form>
 

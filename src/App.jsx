@@ -1,3 +1,4 @@
+import React, { useState, useEffect} from 'react';
 import 'styles/styles.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';  // importo libreria para navegacion 
 import PrivateLayout from 'layouts/PrivateLayout';
@@ -15,9 +16,21 @@ import Index from 'pages/Index';
 import { DarkModeContext } from 'contexto/DarkMode'
 
 function App() {
+  const [darkMode, setDarkMode] = useState(false); // la idea de tener esto es para usar estados sin pasarlos por props 
+// este useState sera usado por todos los componentes de mis aplicacion puede acceder a lo que tiene guardado y ademas pueden modificarlo 
+// con el setDarkMode sin tener que pasarlo por props esto es para lo que sirve el crear contextos un context
+
+useEffect(() => {
+ 
+  console.log('Modo Dark',darkMode);
+  }, [darkMode]); 
+
   return (
     <div>
-      <DarkModeContext.Provider>
+
+      {/* con <DarkModeContext.Provider value={{darkMode,setDarkMode}}></DarkModeContext.Provider> permito usar un contexto un estado una variable usada
+      por todos mis componentes de la aplicacion sin tener que pasarlo por los props  */}
+      <DarkModeContext.Provider value={{darkMode,setDarkMode}}> {/*en value coloco el estado que quiero que se transmita a toda la aplicacion*/}
         <Router>
           <Switch>
             <Route path={['/administracion/maestroproductos', '/administracion/maestroproductosactualizar',
