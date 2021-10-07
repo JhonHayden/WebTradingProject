@@ -1,6 +1,6 @@
 import React from 'react'
 
-const TablaVentas = (props) => {
+const TablaVentas2 = (props) => {
 
 
     console.log(props.fecha)
@@ -91,4 +91,4 @@ const TablaVentas = (props) => {
     )
 }
 
-export default TablaVentas
+export default TablaVentas2

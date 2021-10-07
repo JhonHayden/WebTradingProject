@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import TablaVentas from './TablaVentas'
+// import TablaVentas from './TablaVentas'
 
 
 
-const FormularioVentas = () => {
+const FormularioVentas2 = () => {
 
     const [fecha, setFecha] = useState()
     const [codigoVenta, setCodigoVenta] = useState()
@@ -144,4 +144,4 @@ const FormularioVentas = () => {
     )
 }
 
-export default FormularioVentas
+export default FormularioVentas2
