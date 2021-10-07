@@ -6,7 +6,6 @@ import AuthLayout from 'layouts/AuthLayout';
 import PublicLayout from 'layouts/PublicLayout';
 import MaestroProductos from 'pages/administracion/MaestroProductos';
 import MaestroProductosActualizar from 'pages/administracion/MaestroProductosActualizar';
-import MaestroVentas from 'pages/administracion/MaestroVentas';
 import ModuloVentas from 'pages/administracion/ModuloVentas';
 import RegistroProductos from 'pages/administracion/RegistroProductos';
 import MaestroUsuario from 'pages/administracion/MaestroUsuario';
@@ -46,9 +45,6 @@ useEffect(() => {
                   </Route>
                   <Route path='/administracion/maestrousuario'>
                     <MaestroUsuario />
-                  </Route>
-                  <Route path='/administracion/maestroventas'>
-                    <MaestroVentas />
                   </Route>
                   <Route path='/administracion/registroproductos'>
                     <RegistroProductos />

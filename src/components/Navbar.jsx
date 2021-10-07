@@ -22,11 +22,6 @@ const Navbar = () => {
                        Módulo Ventas
                    </Link>
                 </li>
-               <li className='text-3xl'> 
-                   <Link to= '/administracion/maestroventas'>
-                        Maestro Ventas 
-                   </Link>
-                </li>
                <li className='text-3xl'>
                     <Link to= '/administracion/maestrousuario'>
                         Maestro Usuario
