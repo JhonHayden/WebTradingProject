@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef} from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -257,10 +257,12 @@ const TablaVentas = ({ listaVentas }) => {
 
 const FormularioVentas = ({
     irTablasVentas,
-    listaVentas,
+    listaVentas,                       // props 
     funcionAgregarNuevaVenta
 
 }) => {
+
+
 
     const [fecha, setFecha] = useState('')
     const [codigoVenta, setCodigoVenta] = useState('')
@@ -276,54 +278,54 @@ const FormularioVentas = ({
 
 
     // funcion que me hace todo el proceso de registro en la tabla ventas 
-    const enviarAlBackend = () => {
+    // const enviarAlBackend = () => {
 
 
-        console.log('fecha:', fecha, 'codigoVenta:', codigoVenta, 'nombreVendedor:', nombreVendedor, 'identificacionVendedor:',
-            identificacionVendedor, 'nombreCliente:', nombreCliente, 'identificacionCliente:', identificacionCliente, 'cantidadProducto:',
-            cantidadProducto, 'codigoProducto:', codigoProducto, 'precioUnitario:', precioUnitario, 'valorTotal:', valorTotal);
+    //     console.log('fecha:', fecha, 'codigoVenta:', codigoVenta, 'nombreVendedor:', nombreVendedor, 'identificacionVendedor:',
+    //         identificacionVendedor, 'nombreCliente:', nombreCliente, 'identificacionCliente:', identificacionCliente, 'cantidadProducto:',
+    //         cantidadProducto, 'codigoProducto:', codigoProducto, 'precioUnitario:', precioUnitario, 'valorTotal:', valorTotal);
 
-        //codigo para evitar que se envie una casilla vacia usando condicional if existe otra mejor forma y es usando html los atributos required de 
-        // los input y el boton asociado al formulario ponerlo de tipo submit
+    //     //codigo para evitar que se envie una casilla vacia usando condicional if existe otra mejor forma y es usando html los atributos required de 
+    //     // los input y el boton asociado al formulario ponerlo de tipo submit
 
-        if (fecha===''||codigoVenta===''||nombreVendedor===''||identificacionVendedor===''||nombreCliente===''
-        ||identificacionCliente===''|| cantidadProducto===''||codigoProducto===''||precioUnitario==='') {
+    //     if (fecha===''||codigoVenta===''||nombreVendedor===''||identificacionVendedor===''||nombreCliente===''
+    //     ||identificacionCliente===''|| cantidadProducto===''||codigoProducto===''||precioUnitario==='') {
 
-            toast.error('Ingrese todos los datos', {
-                position: "bottom-center",
-                autoClose: 5000,
-            })
-        }else {
+    //         toast.error('Ingrese todos los datos', {
+    //             position: "bottom-center",
+    //             autoClose: 5000,
+    //         })
+    //     }else {
 
-            
-            toast.success('Registro Exitoso', {
-                position: "bottom-center",
-                autoClose: 5000,
-            })
-    
-            irTablasVentas(true);// esto es equivante internamente a setMostrarTablaVentas (true) cambio el estado de mostrarTablaVentas
-            
-    
-            funcionAgregarNuevaVenta([        // esta funcion es setVentas entonces me agrega nuevos datos a el array json pero necesito dejar lo que tiene y
-                // agregra nuevos datos a la cola de este para esto se usa ...ventas me dice ponga los que ya tiene guardados 
-                // listaVentas es el prop que es equivalente y le asigne el estado ventas la variable ventas 
-                //spread operator ( ... ) significa ponga lo que ya tenia mas las cosas nuevas
-    
-                ...listaVentas, {
-                    codigoVenta: codigoVenta,
-                    fecha: fecha,
-                    codigoProducto: codigoProducto,
-                    cantidadProducto: cantidadProducto,
-                    nombreVendedor: nombreVendedor,
-                    nombreCliente: nombreCliente,
-                    precioUnitario:precioUnitario,
-                    valorTotal:valorTotal
-                }
-            ])
 
-        }
+    //         toast.success('Registro Exitoso', {
+    //             position: "bottom-center",
+    //             autoClose: 5000,
+    //         })
 
-    };
+    //         irTablasVentas(true);// esto es equivante internamente a setMostrarTablaVentas (true) cambio el estado de mostrarTablaVentas
+
+
+    //         funcionAgregarNuevaVenta([        // esta funcion es setVentas entonces me agrega nuevos datos a el array json pero necesito dejar lo que tiene y
+    //             // agregra nuevos datos a la cola de este para esto se usa ...ventas me dice ponga los que ya tiene guardados 
+    //             // listaVentas es el prop que es equivalente y le asigne el estado ventas la variable ventas 
+    //             //spread operator ( ... ) significa ponga lo que ya tenia mas las cosas nuevas
+
+    //             ...listaVentas, {
+    //                 codigoVenta: codigoVenta,
+    //                 fecha: fecha,
+    //                 codigoProducto: codigoProducto,
+    //                 cantidadProducto: cantidadProducto,
+    //                 nombreVendedor: nombreVendedor,
+    //                 nombreCliente: nombreCliente,
+    //                 precioUnitario:precioUnitario,
+    //                 valorTotal:valorTotal
+    //             }
+    //         ])
+
+    //     }
+
+    // };
 
     // useEffect(() => {
     //     console.log(fecha)
@@ -331,12 +333,32 @@ const FormularioVentas = ({
 
     // }, [fecha])
 
+    const referenciaFomulario = useRef(null); //aun no se pero la idea es que me devuele una referencia apuntando al codigo html que le indique        
+        
+
+    const submitFormulario = (evento) => {  // con esta funcion nos permite controlar mejor la validaciones 
+        evento.preventDefault(); // no permite tener mayor control sobre los inputs
+
+        console.log('datos del formulario enviados', referenciaFomulario.current);// con referenciaFomulario.current me saca todo el codigo en 
+        // bloque html del form .. formulario de la etiqueta <form> a la cual se puse de ref={referenciaFomulario} le puse el hook useRef()
+        // me permite tener todo el bloque de este html como una variable y asi acceder al valor actual registrado por el usuario en cada uno de 
+        // los inputs de este formulario que hemos referenciado con el hook useRef y nos sirve para provar cosas con el backend nos permita sacar 
+        // esta infomacion en un formato super facil de manejar 
+    }
+
+
     return (
         <div className='scale-95 border border-blue-300 p-20'>
             <h1 className='text-4xl'>
                 Soy Componente Formulario Ventas
             </h1>
-            <form className='flex flex-col text-4xl'>
+
+            {/* usaremos una propiedad de los formularios para generar una accion y es con el evento onSubmit donde le pondremos una 
+            funcion para saber cuando se le esta haciendo submit con el boton del fomulario */}
+            <form
+                ref={referenciaFomulario}
+                onSubmit={submitFormulario}
+                className='flex flex-col text-4xl'>
                 <label htmlFor="fecha">Fecha Venta:
                     <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                         type="date"
@@ -446,7 +468,7 @@ const FormularioVentas = ({
                     <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                         type="text"
                         name='valorTotal'
-                        value={cantidadProducto*precioUnitario}                       //---------------------------------------------------
+                        value={cantidadProducto * precioUnitario}                       //---------------------------------------------------
                         onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                             //
                             setValorTotal(evento.target.value);  //--------------------------------------------------
@@ -455,11 +477,11 @@ const FormularioVentas = ({
                 <button className='  self-end text-3xl bg-blue-400 p-5 mb-14 
                 rounded-full shadow-md hover:bg-blue-900 text-gray-100'
                     type='submit'
-                    onClick={() => {
-                        
-                        enviarAlBackend();
-                    }
-                    }
+                // onClick={() => {
+
+                //     enviarAlBackend();
+                // }
+                // }
                 >Registrar Venta</button>
             </form>
 
