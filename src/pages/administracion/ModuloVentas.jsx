@@ -262,16 +262,16 @@ const FormularioVentas = ({
 
 }) => {
 
-    const [fecha, setFecha] = useState()
-    const [codigoVenta, setCodigoVenta] = useState()
-    const [nombreVendedor, setNombreVendedor] = useState()
-    const [identificacionVendedor, setIdentificacionVendedor] = useState()
-    const [nombreCliente, setNombreCliente] = useState()
-    const [identificacionCliente, setIdentificacionCliente] = useState()
-    const [cantidadProducto, setCantidadProducto] = useState()
-    const [codigoProducto, setCodigoProducto] = useState()
-    const [precioUnitario, setPrecioUnitario] = useState()
-    const [valorTotal, setValorTotal] = useState()
+    const [fecha, setFecha] = useState('')
+    const [codigoVenta, setCodigoVenta] = useState('')
+    const [nombreVendedor, setNombreVendedor] = useState('')
+    const [identificacionVendedor, setIdentificacionVendedor] = useState('')
+    const [nombreCliente, setNombreCliente] = useState('')
+    const [identificacionCliente, setIdentificacionCliente] = useState('')
+    const [cantidadProducto, setCantidadProducto] = useState('')
+    const [codigoProducto, setCodigoProducto] = useState('')
+    const [precioUnitario, setPrecioUnitario] = useState('')
+    const [valorTotal, setValorTotal] = useState('')
     // const [reset, setReset] = useState()
 
 
@@ -283,30 +283,45 @@ const FormularioVentas = ({
             identificacionVendedor, 'nombreCliente:', nombreCliente, 'identificacionCliente:', identificacionCliente, 'cantidadProducto:',
             cantidadProducto, 'codigoProducto:', codigoProducto, 'precioUnitario:', precioUnitario, 'valorTotal:', valorTotal);
 
-        toast.success('Registro Exitoso', {
-            position: "bottom-center",
-            autoClose: 5000,
-        })
+        //codigo para evitar que se envie una casilla vacia usando condicional if existe otra mejor forma y es usando html los atributos required de 
+        // los input y el boton asociado al formulario ponerlo de tipo submit
 
-        irTablasVentas(true);// esto es equivante internamente a setMostrarTablaVentas (true) cambio el estado de mostrarTablaVentas
-        
+        if (fecha===''||codigoVenta===''||nombreVendedor===''||identificacionVendedor===''||nombreCliente===''
+        ||identificacionCliente===''|| cantidadProducto===''||codigoProducto===''||precioUnitario==='') {
 
-        funcionAgregarNuevaVenta([        // esta funcion es setVentas entonces me agrega nuevos datos a el array json pero necesito dejar lo que tiene y
-            // agregra nuevos datos a la cola de este para esto se usa ...ventas me dice ponga los que ya tiene guardados 
-            // listaVentas es el prop que es equivalente y le asigne el estado ventas la variable ventas 
-            //spread operator ( ... ) significa ponga lo que ya tenia mas las cosas nuevas
+            toast.error('Ingrese todos los datos', {
+                position: "bottom-center",
+                autoClose: 5000,
+            })
+        }else {
 
-            ...listaVentas, {
-                codigoVenta: codigoVenta,
-                fecha: fecha,
-                codigoProducto: codigoProducto,
-                cantidadProducto: cantidadProducto,
-                nombreVendedor: nombreVendedor,
-                nombreCliente: nombreCliente,
-                precioUnitario:precioUnitario,
-                valorTotal:valorTotal
-            }
-        ])
+            
+            toast.success('Registro Exitoso', {
+                position: "bottom-center",
+                autoClose: 5000,
+            })
+    
+            irTablasVentas(true);// esto es equivante internamente a setMostrarTablaVentas (true) cambio el estado de mostrarTablaVentas
+            
+    
+            funcionAgregarNuevaVenta([        // esta funcion es setVentas entonces me agrega nuevos datos a el array json pero necesito dejar lo que tiene y
+                // agregra nuevos datos a la cola de este para esto se usa ...ventas me dice ponga los que ya tiene guardados 
+                // listaVentas es el prop que es equivalente y le asigne el estado ventas la variable ventas 
+                //spread operator ( ... ) significa ponga lo que ya tenia mas las cosas nuevas
+    
+                ...listaVentas, {
+                    codigoVenta: codigoVenta,
+                    fecha: fecha,
+                    codigoProducto: codigoProducto,
+                    cantidadProducto: cantidadProducto,
+                    nombreVendedor: nombreVendedor,
+                    nombreCliente: nombreCliente,
+                    precioUnitario:precioUnitario,
+                    valorTotal:valorTotal
+                }
+            ])
+
+        }
 
     };
 
@@ -326,6 +341,7 @@ const FormularioVentas = ({
                     <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                         type="date"
                         name='fecha'
+                        required
                         value={fecha}                       //---------------------------------------------------
                         onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                             //
@@ -338,6 +354,7 @@ const FormularioVentas = ({
                         type='text'
                         placeholder=''
                         name="codigoVenta"
+                        required
                         value={codigoVenta}                       //---------------------------------------------------
                         onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                             //
@@ -349,6 +366,7 @@ const FormularioVentas = ({
                         <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='nombreVendedor'
+                            required
                             value={nombreVendedor}                       //---------------------------------------------------
                             onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                                 //
@@ -359,6 +377,7 @@ const FormularioVentas = ({
                         <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='identificacionVendedor'
+                            required
                             value={identificacionVendedor}                       //---------------------------------------------------
                             onChange={(evento) => {                                          //intrucciones necesarias para tener control del un input
                                 //
@@ -371,6 +390,7 @@ const FormularioVentas = ({
                         <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='nombreCliente'
+                            required
                             value={nombreCliente}                       //---------------------------------------------------
                             onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                                 //
@@ -381,6 +401,7 @@ const FormularioVentas = ({
                         <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='identificacionCliente'
+                            required
                             value={identificacionCliente}                       //---------------------------------------------------
                             onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                                 //
@@ -392,6 +413,7 @@ const FormularioVentas = ({
                     <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                         type="text"
                         name='codigoProducto'
+                        required
                         value={codigoProducto}                       //---------------------------------------------------
                         onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                             //
@@ -402,6 +424,7 @@ const FormularioVentas = ({
                     <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                         type="text"
                         name='cantidadProducto'
+                        required
                         value={cantidadProducto}                       //---------------------------------------------------
                         onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                             //
@@ -412,6 +435,7 @@ const FormularioVentas = ({
                     <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                         type="text"
                         name='precioUnitario'
+                        required
                         value={precioUnitario}                       //---------------------------------------------------
                         onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                             //
@@ -430,7 +454,7 @@ const FormularioVentas = ({
                 </label>
                 <button className='  self-end text-3xl bg-blue-400 p-5 mb-14 
                 rounded-full shadow-md hover:bg-blue-900 text-gray-100'
-                    type='button'
+                    type='submit'
                     onClick={() => {
                         
                         enviarAlBackend();
