@@ -1,6 +1,6 @@
-// import FormularioVentas from 'components/componentesVentas/FormularioVentas';
-// import TablaVentas from 'components/componentesVentas/TablaVentas';
 import React, { useEffect, useState } from 'react'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // datos que simularan ser traidos desde el backend
 const ventasDatosBackend = [{
@@ -65,16 +65,34 @@ const ModuloVentas = () => {
 
 
     useEffect(() => {
-        mostrarTablaVentas ? setCambiarNombreBoton('Nueva Venta') : setCambiarNombreBoton('Registra Venta')
+        mostrarTablaVentas ? setCambiarNombreBoton('Nueva Venta') : setCambiarNombreBoton('Tabla Ventas')
 
     }, [mostrarTablaVentas])
     return (
         <div >
             <h1 className='text-4xl'>Módulo Ventas</h1>
 
+            <button className='  self-end text-3xl bg-blue-400 p-5 mb-14 
+                rounded-full shadow-md hover:bg-blue-900 text-gray-100'
+                type='button'
+                onClick={() => {
+
+
+                    setMostrarTablaVentas(!mostrarTablaVentas)
+                }
+                }
+            >{cambiarNombreBoton}</button>
+
             {/* el props que le paso al componente TablaVentas es mi estado donde esta 
                                                 almacenado las ventas desde el backend */}
-            {mostrarTablaVentas ? <TablaVentas listaVentas={ventas} /> : <FormularioVentas entrada='jhon' />}
+            {mostrarTablaVentas ? (
+                <TablaVentas listaVentas={ventas} />
+            ) : (
+                <FormularioVentas
+                    irTablasVentas={setMostrarTablaVentas}
+                    funcionAgregarNuevaVenta={setVentas}   // prop para poder agregar ventas desde el formulario 
+                    listaVentas={ventas} // necesito tambien la lista de formato json osea mis datos backend para poder agregrar esos y los nuevos 
+                />)}
 
             {/* // enviarDatosAlBackend();  // funcion del boton cuando se ejecuta el evento onClick
                         // enviarAMaestroVentas();
@@ -82,19 +100,10 @@ const ModuloVentas = () => {
                     }}>Registro Venta</button> */}
 
 
-
-            <button className='  self-end text-3xl bg-blue-400 p-5 mb-14 
-                rounded-full shadow-md hover:bg-blue-900 text-gray-100'
-                type='button'
-                onClick={() => {
-
-                    setMostrarTablaVentas(!mostrarTablaVentas)
-                }
-                }
-            >{cambiarNombreBoton}</button>
+            <ToastContainer position="top-center"
+                autoClose={5000} />
         </div>
     )
-
 
 }
 
@@ -153,7 +162,7 @@ const TablaVentas = ({ listaVentas }) => {
                                 <th className='text-3xl'>Valor Venta</th>
                                 <th className='text-3xl'>Estado Venta</th>
                             </tr>
-                                {/* codigoVenta: '123',
+                            {/* codigoVenta: '123',
                                 fecha: '15/2/2021',
                                 codigoProducto: 'tarjeta elenctronica',
                                 cantidadProducto: '50',
@@ -171,7 +180,7 @@ const TablaVentas = ({ listaVentas }) => {
                             {listaVentas.map((ventas) => {  // como parametro de entrada le paso el estado que me tiene guardado 
                                 // el arreglo y los datos en formato .json de mi datos del backend
 
-                                return ( 
+                                return (
                                     // en el retorno pongo el html relacionada con el arreglo de mi informacion 
                                     <tr>
                                         <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
@@ -184,32 +193,38 @@ const TablaVentas = ({ listaVentas }) => {
                                             type="text"
                                             name="fecha"
                                             id=""
-                                            value={ventas.fecha }/>
-                                            </td>
+                                            value={ventas.fecha} />
+                                        </td>
                                         <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                                             type="text"
                                             name="codigoProducto"
-                                            id="" value={ventas.codigoProducto}/></td>
+                                            id=""
+                                            value={ventas.codigoProducto} /></td>
                                         <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                                             type="text"
                                             name="cantidadProducto"
-                                            id="" value={ventas.cantidadProducto}/></td>
+                                            id=""
+                                            value={ventas.cantidadProducto} /></td>
                                         <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                                             type="text"
                                             name="nombreVendedor"
-                                            id="" value={ventas.nombreVendedor}/></td>
+                                            id=""
+                                            value={ventas.nombreVendedor} /></td>
                                         <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                                             type="text"
                                             name="nombreCliente"
-                                            id="" value={ventas.nombreCliente}/></td>
+                                            id=""
+                                            value={ventas.nombreCliente} /></td>
                                         <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                                             type="text"
                                             name="precioUnitario"
-                                            id="" value={ventas.precioUnitario}/></td>
+                                            id=""
+                                            value={ventas.precioUnitario} /></td>
                                         <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                                             type="text"
                                             name="valorTotal"
-                                            id="" value={ventas.precioUnitario*ventas.cantidadProducto}/></td>
+                                            id=""
+                                            value={ventas.precioUnitario * ventas.cantidadProducto} /></td>
                                         {/* Drop-down list */}
                                         <td>
                                             <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2 text-xl' type="text" name="" id="">
@@ -240,7 +255,12 @@ const TablaVentas = ({ listaVentas }) => {
 
 
 
-const FormularioVentas = () => {
+const FormularioVentas = ({
+    irTablasVentas,
+    listaVentas,
+    funcionAgregarNuevaVenta
+
+}) => {
 
     const [fecha, setFecha] = useState()
     const [codigoVenta, setCodigoVenta] = useState()
@@ -255,11 +275,46 @@ const FormularioVentas = () => {
     // const [reset, setReset] = useState()
 
 
-    useEffect(() => {
-        console.log(fecha)
+    // funcion que me hace todo el proceso de registro en la tabla ventas 
+    const enviarAlBackend = () => {
 
 
-    }, [fecha])
+        console.log('fecha:', fecha, 'codigoVenta:', codigoVenta, 'nombreVendedor:', nombreVendedor, 'identificacionVendedor:',
+            identificacionVendedor, 'nombreCliente:', nombreCliente, 'identificacionCliente:', identificacionCliente, 'cantidadProducto:',
+            cantidadProducto, 'codigoProducto:', codigoProducto, 'precioUnitario:', precioUnitario, 'valorTotal:', valorTotal);
+
+        toast.success('Registro Exitoso', {
+            position: "bottom-center",
+            autoClose: 5000,
+        })
+
+        irTablasVentas(true);// esto es equivante internamente a setMostrarTablaVentas (true) cambio el estado de mostrarTablaVentas
+        
+
+        funcionAgregarNuevaVenta([        // esta funcion es setVentas entonces me agrega nuevos datos a el array json pero necesito dejar lo que tiene y
+            // agregra nuevos datos a la cola de este para esto se usa ...ventas me dice ponga los que ya tiene guardados 
+            // listaVentas es el prop que es equivalente y le asigne el estado ventas la variable ventas 
+            //spread operator ( ... ) significa ponga lo que ya tenia mas las cosas nuevas
+
+            ...listaVentas, {
+                codigoVenta: codigoVenta,
+                fecha: fecha,
+                codigoProducto: codigoProducto,
+                cantidadProducto: cantidadProducto,
+                nombreVendedor: nombreVendedor,
+                nombreCliente: nombreCliente,
+                precioUnitario:precioUnitario,
+                valorTotal:valorTotal
+            }
+        ])
+
+    };
+
+    // useEffect(() => {
+    //     console.log(fecha)
+
+
+    // }, [fecha])
 
     return (
         <div className='scale-95 border border-blue-300 p-20'>
@@ -302,7 +357,7 @@ const FormularioVentas = () => {
                     </label>
                     <label htmlFor="identificacionVendedor">Indentificación:
                         <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                            type="number"
+                            type="text"
                             name='identificacionVendedor'
                             value={identificacionVendedor}                       //---------------------------------------------------
                             onChange={(evento) => {                                          //intrucciones necesarias para tener control del un input
@@ -324,7 +379,7 @@ const FormularioVentas = () => {
                     </label>
                     <label htmlFor="identificacionCliente">Indentificación:
                         <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                            type="number"
+                            type="text"
                             name='identificacionCliente'
                             value={identificacionCliente}                       //---------------------------------------------------
                             onChange={(evento) => {             //intrucciones necesarias para tener control del un input
@@ -367,12 +422,21 @@ const FormularioVentas = () => {
                     <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                         type="text"
                         name='valorTotal'
-                        value={valorTotal}                       //---------------------------------------------------
+                        value={cantidadProducto*precioUnitario}                       //---------------------------------------------------
                         onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                             //
                             setValorTotal(evento.target.value);  //--------------------------------------------------
                         }} />
                 </label>
+                <button className='  self-end text-3xl bg-blue-400 p-5 mb-14 
+                rounded-full shadow-md hover:bg-blue-900 text-gray-100'
+                    type='button'
+                    onClick={() => {
+                        
+                        enviarAlBackend();
+                    }
+                    }
+                >Registrar Venta</button>
             </form>
 
 
