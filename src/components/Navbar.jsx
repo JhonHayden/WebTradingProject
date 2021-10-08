@@ -8,14 +8,10 @@ const Navbar = () => {
                     Logo
                 </li>
                 <li className='text-3xl'>
-                    <Link to='/administracion/registroproductos'>
-                        Registro Productos
-                    </Link>
-                </li>
-                <li className='text-3xl'>
                     <Link to='/administracion/moduloproductos'>
                         Modulo Productos
                     </Link>
+                    
                 </li>
                 <li className='text-3xl'>
                     <Link to='/administracion/moduloventas'>
