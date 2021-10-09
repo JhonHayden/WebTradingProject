@@ -67,10 +67,10 @@ const ModuloVentas = () => {
 
     }, [mostrarTablaVentas])
     return (
-        <div className=' border border-gray-700 flex flex-col' >
+        <div className='flex flex-col' >
 
-            <button className=' self-start text-3xl bg-blue-400 p-5  mt-3
-                rounded-full shadow-md hover:bg-blue-900 text-gray-100'
+            <button className=' self-start text-3xl bg-blue-500 p-5  mt-3 mb-4
+                rounded-full shadow-md hover:bg-blue-900 border hover:border-gray-700 text-gray-100'
                 type='button'
                 onClick={() => {
 
@@ -117,44 +117,45 @@ const TablaVentas = ({ listaVentas }) => {
 
     return (
         <div>
-            <div className='border border-gray-700'>
+            <div className='border rounded-xl p-3 bg-blue-400 '>
                 <div className='flex flex-col '>
                     <h1 className=' text-center font-extrabold text-4xl mt-2'>
                         Maestro Ventas
                     </h1>
 
-                    <form className='text-3xl font-bold'>
-                        <label htmlFor="buscar">
-                            Buscar Venta
-                            <input name='buscar'
-                                id="buscar"
-                                type="text"
-                                className='bg-gray-50 border border-gray-300 p-2 rounded-lg '
-                            />
+                    <form className='text-3xl font-bold text-gray-800 '>
+                        <div className='bg-blue-500 w-max p-3 rounded-xl'>
+                            <label className='font-bold' htmlFor="buscar">
+                                Buscar Venta
+                                <input name='buscar'
+                                    id="buscar"
+                                    type="text"
+                                    className='bg-gray-50 border border-gray-300 p-2 rounded-lg ml-5'
+                                />
 
-                        </label>
-
+                            </label>
+                        </div>
                     </form>
                     <button
                         type='button'
-                        className='  self-end text-3xl bg-blue-400 p-5 mb-14 rounded-full shadow-md hover:bg-blue-900 text-gray-100'
+                        className='  self-end text-3xl bg-blue-600 p-5 mb-14 rounded-full shadow-md hover:bg-blue-900 text-gray-100'
 
                     >Actualizar Estado</button>
 
                 </div>
                 <div>
                     <table >
-                        <thead>
-                            <tr className='bg-blue-400 '>
-                                <th className='text-3xl'>Codigo Venta</th>
-                                <th className='text-3xl' >Fecha</th>
-                                <th className='text-3xl'>Producto</th>
-                                <th className='text-3xl'>Cantidad</th>
-                                <th className='text-3xl' >Vendedor</th>
-                                <th className='text-3xl'>Cliente</th>
-                                <th className='text-3xl'>Precio Unitario</th>
-                                <th className='text-3xl'>Valor Venta</th>
-                                <th className='text-3xl'>Estado Venta</th>
+                        <thead >
+                            <tr >
+                                <th className='text-3xl  bg-blue-500 rounded-xl p-1 '>Codigo Venta</th>
+                                <th className='text-3xl bg-blue-500 rounded-xl p-1 ' >Fecha</th>
+                                <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Producto</th>
+                                <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Cantidad</th>
+                                <th className='text-3xl bg-blue-500 rounded-xl p-1 ' >Vendedor</th>
+                                <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Cliente</th>
+                                <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Precio Unitario</th>
+                                <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Valor Venta</th>
+                                <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Estado Venta</th>
                             </tr>
                             {/* codigoVenta: '123',
                                 fecha: '15/2/2021',
@@ -367,7 +368,7 @@ const FormularioVentas = ({
     // estonces seri name : value  key: valor
 
     return (
-        <div className='scale-95 border border-blue-300 p-3'>
+        <div className=' border rounded-xl p-3 bg-blue-400 '>
             <h1 className='text-4xl text-center font-extrabold mb-5 text-gray-800'>
                 Formulario Ventas
             </h1>
@@ -378,140 +379,142 @@ const FormularioVentas = ({
                 ref={referenciaFomulario} // con esto yo referencio esta etiqueta y como tal todo el grupo del fromulario y me devuelve un trozo
                 // de este formulario como variable 
                 onSubmit={submitFormulario} // con esto se le idica que ejecute esta accion esta funcion cuando se oprime el boton del formulario 
-                className='flex flex-col text-4xl'>
-                <label htmlFor="fecha">Fecha Venta:
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type="date"
-                        name='fecha'
-                        required
-                        value={fecha}                       //---------------------------------------------------
-                        onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //
-                            setFecha(evento.target.value);  //--------------------------------------------------
-                        }}
-                    />
-                </label>
-                <label htmlFor="codigoVenta">Codigo Venta
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type='text'
-                        placeholder=''
-                        name="codigoVenta"
-                        required
-                        value={codigoVenta}                       //---------------------------------------------------
-                        onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //
-                            setCodigoVenta(evento.target.value);  //--------------------------------------------------
-                        }}
-                    />
-                </label>
-                <div>
-                    <label htmlFor="nombreVendedor">Nombre Vendedor:
-                        <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                            type="text"
-                            name='nombreVendedor'
+                className='flex flex-col text-3xl'>
+                <div className='grid-cols-2 grid gap-4 m-7'>
+                    <label className='font-bold text-gray-800' htmlFor="fecha">Fecha Venta
+                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                            type="date"
+                            name='fecha'
                             required
-                            value={nombreVendedor}                       //---------------------------------------------------
+                            value={fecha}                       //---------------------------------------------------
                             onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                                 //
-                                setNombreVendedor(evento.target.value);  //--------------------------------------------------
+                                setFecha(evento.target.value);  //--------------------------------------------------
                             }}
                         />
                     </label>
-                    <label htmlFor="identificacionVendedor">Indentificación:
-                        <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                            type="text"
-                            name='identificacionVendedor'
+                    <label className='font-bold text-gray-800' htmlFor="codigoVenta">Codigo Venta
+                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                            type='text'
+                            placeholder=''
+                            name="codigoVenta"
                             required
-                            value={identificacionVendedor}                       //---------------------------------------------------
-                            onChange={(evento) => {                                          //intrucciones necesarias para tener control del un input
+                            value={codigoVenta}                       //---------------------------------------------------
+                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                                 //
-                                setIdentificacionVendedor(evento.target.value);                                //--------------------------------------------------
+                                setCodigoVenta(evento.target.value);  //--------------------------------------------------
+                            }}
+                        />
+                    </label>
+                
+                        <label className='font-bold text-gray-800' htmlFor="nombreVendedor">Nombre Vendedor
+                            <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                                type="text"
+                                name='nombreVendedor'
+                                required
+                                value={nombreVendedor}                       //---------------------------------------------------
+                                onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                    //
+                                    setNombreVendedor(evento.target.value);  //--------------------------------------------------
+                                }}
+                            />
+                        </label>
+                        <label className='font-bold text-gray-800' htmlFor="identificacionVendedor">Indentificación
+                            <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                                type="text"
+                                name='identificacionVendedor'
+                                required
+                                value={identificacionVendedor}                       //---------------------------------------------------
+                                onChange={(evento) => {                                          //intrucciones necesarias para tener control del un input
+                                    //
+                                    setIdentificacionVendedor(evento.target.value);                                //--------------------------------------------------
+                                }}
+                            />
+                        </label>
+                    
+                
+                        <label className='font-bold text-gray-800' htmlFor="nombreCliente">Nombre Cliente
+                            <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                                type="text"
+                                name='nombreCliente'
+                                required
+                                value={nombreCliente}                       //---------------------------------------------------
+                                onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                    //
+                                    setNombreCliente(evento.target.value);  //--------------------------------------------------
+                                }}
+                            />
+                        </label>
+                        <label className='font-bold text-gray-800' htmlFor="identificacionCliente">Indentificación
+                            <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                                type="text"
+                                name='identificacionCliente'
+                                required
+                                value={identificacionCliente}                       //---------------------------------------------------
+                                onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                    //
+                                    setIdentificacionCliente(evento.target.value);  //--------------------------------------------------
+                                }}
+                            />
+                        </label>
+                    
+                    <label className='font-bold text-gray-800' htmlFor="codigoProducto">Codigo Producto
+                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                            type="text"
+                            name='codigoProducto'
+                            required
+                            value={codigoProducto}                       //---------------------------------------------------
+                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //
+                                setCodigoProducto(evento.target.value);  //--------------------------------------------------
+                            }}
+                        />
+                    </label>
+                    <label className='font-bold text-gray-800' htmlFor="cantidadProducto">Cantidad Producto
+                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                            type="text"
+                            name='cantidadProducto'
+                            required
+                            value={cantidadProducto}                       //---------------------------------------------------
+                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //
+                                setCantidadProducto(evento.target.value);  //--------------------------------------------------
+                            }}
+                        />
+                    </label>
+                    <label className='font-bold text-gray-800' htmlFor="precioUnitario">Precio Producto
+                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                            type="text"
+                            name='precioUnitario'
+                            required
+                            value={precioUnitario}                       //---------------------------------------------------
+                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //
+                                setPrecioUnitario(evento.target.value);  //--------------------------------------------------
+                            }}
+                        />
+                    </label>
+                    <label className='font-bold text-gray-800' htmlFor="valorTotal">Valor Total
+                        <input className=' block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                            type="text"
+                            name='valorTotal'
+                            value={cantidadProducto * precioUnitario}                       //---------------------------------------------------
+                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //
+                                setValorTotal(evento.target.value);  //--------------------------------------------------
                             }}
                         />
                     </label>
                 </div>
-                <div>
-                    <label htmlFor="nombreCliente">Nombre Cliente:
-                        <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                            type="text"
-                            name='nombreCliente'
-                            required
-                            value={nombreCliente}                       //---------------------------------------------------
-                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                //
-                                setNombreCliente(evento.target.value);  //--------------------------------------------------
-                            }}
-                        />
-                    </label>
-                    <label htmlFor="identificacionCliente">Indentificación:
-                        <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                            type="text"
-                            name='identificacionCliente'
-                            required
-                            value={identificacionCliente}                       //---------------------------------------------------
-                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                //
-                                setIdentificacionCliente(evento.target.value);  //--------------------------------------------------
-                            }}
-                        />
-                    </label>
-                </div>
-                <label htmlFor="codigoProducto">Codigo Producto:
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type="text"
-                        name='codigoProducto'
-                        required
-                        value={codigoProducto}                       //---------------------------------------------------
-                        onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //
-                            setCodigoProducto(evento.target.value);  //--------------------------------------------------
-                        }}
-                    />
-                </label>
-                <label htmlFor="cantidadProducto">Cantidad Producto:
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type="text"
-                        name='cantidadProducto'
-                        required
-                        value={cantidadProducto}                       //---------------------------------------------------
-                        onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //
-                            setCantidadProducto(evento.target.value);  //--------------------------------------------------
-                        }}
-                    />
-                </label>
-                <label htmlFor="precioUnitario">Precio Producto:
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type="text"
-                        name='precioUnitario'
-                        required
-                        value={precioUnitario}                       //---------------------------------------------------
-                        onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //
-                            setPrecioUnitario(evento.target.value);  //--------------------------------------------------
-                        }}
-                    />
-                </label>
-                <label htmlFor="valorTotal">Valor Total:
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type="text"
-                        name='valorTotal'
-                        value={cantidadProducto * precioUnitario}                       //---------------------------------------------------
-                        onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //
-                            setValorTotal(evento.target.value);  //--------------------------------------------------
-                        }}
-                    />
-                </label>
-                <button className='  self-end text-3xl bg-blue-400 p-5 mb-14 
-                rounded-full shadow-md hover:bg-blue-900 text-gray-100'
-                    type='submit'
-                    onClick={() => {
+                    <button className=' text-3xl bg-blue-500 border border-gray-500 p-5 self-center m-3 
+                rounded-full  hover:bg-blue-900 text-gray-200'
+                        type='submit'
+                        onClick={() => {
 
-                        enviarAlBackend();
-                    }
-                    }
-                >Registrar Venta</button>
+                            enviarAlBackend();
+                        }
+                        }
+                    >Registrar Venta</button>
             </form>
 
 
