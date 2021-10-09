@@ -4,7 +4,7 @@ const Admin = () => {
     return (
         
         <div>
-            index Admin page  principal de administracion 
+            
         </div>
     )
 }

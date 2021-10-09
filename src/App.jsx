@@ -6,11 +6,11 @@ import AuthLayout from 'layouts/AuthLayout';
 import PublicLayout from 'layouts/PublicLayout';
 import ModuloVentas from 'pages/administracion/ModuloVentas';
 import ModuloProductos from 'pages/administracion/ModuloProductos';
-import MaestroUsuario from 'pages/administracion/MaestroUsuario';
+import ModuloUsuario from 'pages/administracion/ModuloUsuario';
 import Admin from 'pages/administracion/Index';
-import Login from 'pages/Login';
-import Index from 'pages/Index';
 import { DarkModeContext } from 'contexto/DarkMode'
+import Login from 'pages/auth/Login';
+import RegistroUsuario from 'pages/auth/RegistroUsuario';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false); // la idea de tener esto es para usar estados sin pasarlos por props 
@@ -30,12 +30,12 @@ function App() {
       <DarkModeContext.Provider value={{ darkMode, setDarkMode }}> {/*en value coloco el estado que quiero que se transmita a toda la aplicacion*/}
         <Router>
           <Switch>
-            <Route path={['/administracion/maestrousuario', '/administracion/ventas', 
-            '/administracion/moduloproductos','/administracion/moduloVentas', '/administracion']}>
+            <Route path={['/administracion/moduloUsuario', '/administracion/ventas',
+              '/administracion/moduloproductos', '/administracion/moduloVentas', '/administracion']}>
               <PrivateLayout>
                 <Switch>
-                  <Route path='/administracion/maestrousuario'>
-                    <MaestroUsuario />
+                  <Route path='/administracion/moduloUsuario'>
+                    <ModuloUsuario />
                   </Route>
                   <Route path='/administracion/moduloproductos'>
                     <ModuloProductos />
@@ -49,14 +49,20 @@ function App() {
                 </Switch>
               </PrivateLayout>
             </Route>
-            <Route path='/login'>
+            <Route path={['/RegistroUsuario', '/']}>
               <AuthLayout>
-                <Login />
+                <Switch >
+                  <Route path='/RegistroUsuario'>
+                    <RegistroUsuario />
+                  </Route>
+                  <Route path='/'>
+                    <Login />
+                  </Route>
+                </Switch>
               </AuthLayout>
             </Route>
-            <Route path='/'>
+            <Route path='/public'>
               <PublicLayout>
-                <Index />
               </PublicLayout>
             </Route>
           </Switch>

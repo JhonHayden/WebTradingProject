@@ -1,11 +1,11 @@
 import React from 'react'
 
-const MaestroUsuario = () => {
+const ModuloUsuario = () => {
     return (
         <div>
             <div className='flex flex-col  '>
                 <h1 className=' text-center font-extrabold text-4xl mt-12'>
-                Maestro Usuario
+                Modulo Usuario
                 </h1>
 
                 <form className='text-3xl font-bold mt-20 '>
@@ -78,4 +78,4 @@ const MaestroUsuario = () => {
     )
 }
 
-export default MaestroUsuario
+export default ModuloUsuario

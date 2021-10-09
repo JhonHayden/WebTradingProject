@@ -5,13 +5,14 @@ const Navbar = () => {
         <nav className='bg-gray-500'>
             <ul className='flex justify-between m-7 text-white'>
                 <li className='text-3xl'>
-                    Logo
+                    Logos
+                    <img src="" alt="" />
                 </li>
                 <li className='text-3xl'>
                     <Link to='/administracion/moduloproductos'>
                         Modulo Productos
                     </Link>
-                    
+
                 </li>
                 <li className='text-3xl'>
                     <Link to='/administracion/moduloventas'>
@@ -19,8 +20,8 @@ const Navbar = () => {
                     </Link>
                 </li>
                 <li className='text-3xl'>
-                    <Link to='/administracion/maestrousuario'>
-                        Maestro Usuario
+                    <Link to='/administracion/moduloUsuario'>
+                        Modulo Usuario
                     </Link>
                 </li>
             </ul>
