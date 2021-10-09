@@ -5,15 +5,15 @@ import Google from 'media/google_logo.png'
 const Login = () => {
     return (
         <div className='border border-gray-900 mt-20 p-10  bg-blue-400 rounded-md  ' >
-            <h1 className='m-6  text-center text-3xl font-bold text-gray-800' >Iniciar Sesión</h1>
+            <h1 className='m-6  text-center text-3xl font-extrabold text-gray-800' >Iniciar Sesión</h1>
             <form>
                 <div className="flex flex-col m-5 justify-items-center  ">
                     <input
-                        className=' rounded-md focus:outline-none text-gray-800 border border-blue-300 text-2xl'
+                        className='p-1 focus-within:rounded-md focus:outline-none text-gray-800 border border-blue-300 text-2xl'
                         type='email'
                         placeholder='Correo electrónico' />
 
-                    <input className='mt-5 rounded-md focus:outline-none text-gray-800 border border-blue-300 text-2xl'
+                    <input className=' p-1 mt-5 rounded-md focus:outline-none text-gray-800 border border-blue-300 text-2xl'
                         type='password'
                         placeholder='Introduce tu contraseña'
                         required />

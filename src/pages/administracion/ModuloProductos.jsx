@@ -9,7 +9,7 @@ const productosDatosDelBackend = [{
     codigoProducto: '123',
     descripcionProducto: 'tarjeta electronica',
     precioUnitario: '150000',
-    estadoProducto: ''
+    estadoProducto: 'No disponible'
 
 },
 {
@@ -17,7 +17,7 @@ const productosDatosDelBackend = [{
     codigoProducto: '122',
     descripcionProducto: 'Motor',
     precioUnitario: '110000',
-    estadoProducto: ''
+    estadoProducto: 'Disponible'
 
 },
 {
@@ -25,7 +25,7 @@ const productosDatosDelBackend = [{
     codigoProducto: '121',
     descripcionProducto: 'Rele electronico',
     precioUnitario: '170000',
-    estadoProducto: ''
+    estadoProducto: 'Disponible'
 
 },]
 
@@ -56,10 +56,8 @@ const ModuloProductos = () => {
     }, [mostrarTablaProductos])
     return (
         <div >
-            <h1 className='text-4xl'>Módulo Productos</h1>
-
-            <button className='  self-end text-3xl bg-blue-400 p-5 mb-14 
-                rounded-full shadow-md hover:bg-blue-900 text-gray-100'
+            <button className=' self-start text-3xl bg-blue-500 p-5  mt-3 mb-4
+                rounded-full shadow-md hover:bg-blue-900 border hover:border-gray-700 text-gray-100'
                 type='button'
                 onClick={() => {
 
@@ -87,7 +85,7 @@ const ModuloProductos = () => {
 
 
             <ToastContainer position="top-center"  /*componente de una libreria*/
-                autoClose={5000} />   
+                autoClose={5000} />
         </div>
     )
 
@@ -106,28 +104,28 @@ const TablaProductos = ({ listaProductos }) => {
 
     return (
         <div>
-            
-            <div>
+            <div className='border rounded-xl p-3 bg-blue-400 '>
                 <div className='flex flex-col '>
-                    <h1 className=' text-center font-extrabold text-4xl mt-12'>
+                    <h1 className=' text-center font-extrabold text-4xl mt-2 mb-4'>
                         Maestro Productos
                     </h1>
 
                     <form className='text-3xl font-bold'>
-                        <label htmlFor="buscar">
-                            Buscar Producto
-                            <input name='buscar'
-                                id="buscar"
-                                type="text"
-                                className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                            />
+                        <div className='bg-blue-500 w-max p-3 rounded-xl'>
+                            <label  htmlFor="buscar">
+                                Buscar Producto
+                                <input name='buscar'
+                                    id="buscar"
+                                    type="text"
+                                    className='bg-gray-50 border border-gray-300 p-2 rounded-lg ml-5'
+                                />
 
-                        </label>
-
+                            </label>
+                        </div>
                     </form>
                     <button
                         type='button'
-                        className='  self-end text-3xl bg-blue-400 p-5 mb-14 rounded-full shadow-md hover:bg-blue-900 text-gray-100'
+                        className='self-end text-3xl bg-blue-600 p-5 mb-14 rounded-full shadow-md hover:bg-blue-900 text-gray-100'
 
                     >Actualizar Estado</button>
                 </div>
@@ -135,11 +133,11 @@ const TablaProductos = ({ listaProductos }) => {
                     <table >
                         <thead>
                             <tr className='' >
-                                <th className='text-3xl p-5'>Codigo Producto</th>
-                                <th className='text-3xl p-5'>Descripción Producto</th>
-                                <th className='text-3xl p-5'>Precio Unitario</th>
-                                <th className='text-3xl p-5'>Estado Producto</th>
-                                <th className='text-3xl p-5'>Estado Producto</th>
+                                <th className='text-3xl  bg-blue-500 rounded-xl p-1'>Codigo Producto</th>
+                                <th className='text-3xl  bg-blue-500 rounded-xl p-1'>Descripción Producto</th>
+                                <th className='text-3xl  bg-blue-500 rounded-xl p-1'>Precio Unitario</th>
+                                <th className='text-3xl  bg-blue-500 rounded-xl p-1'>Estado Producto</th>
+                                {/* <th className='text-3xl p-5'>Estado Producto</th> */}
                             </tr>
                             {/* codigoProducto: '123',
                                 descripcionProducto: 'tarjeta electronica',
@@ -158,34 +156,35 @@ const TablaProductos = ({ listaProductos }) => {
                                 return (
                                     // en el retorno pongo el html relacionada con el arreglo de mi informacion 
                                     <tr>
-                                        <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                                        <td className=' text-center pr-5 mr-1'><input className='w-full bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                                             type="text"
                                             name="codigoProducto"
                                             id=""
                                             value={productos.codigoProducto} />
                                         </td>
-                                        <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                                        <td className=' text-center px-2 '><input className='w-full bg-gray-50 border border-gray-300  rounded-lg p-2 '
                                             type="text"
                                             name="descripcionProducto"
                                             id=""
                                             value={productos.descripcionProducto} /></td>
-                                        <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                                        <td className=' text-center  '><input className=' bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                                             type="text"
                                             name="precioUnitario"
                                             id=""
                                             value={productos.precioUnitario} /></td>
-                                        <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                                        <td className=' text-center  '><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                                             type="text"
                                             name="estadoProducto"
                                             id=""
                                             value={productos.estadoProducto} /></td>
                                         {/* Drop-down list */}
-                                        <td>
+                                        {/* <td className=' text-center  '>
                                             <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2 text-xl'
                                                 type="text"
                                                 name="estadoProducto"
+                                                defaultValue={0}
                                                 id="">
-                                                <option value="">
+                                                <option disabled value={0}>
                                                 </option>
                                                 <option value={productos.estadoProducto}>Disponible
                                                 </option>
@@ -193,7 +192,7 @@ const TablaProductos = ({ listaProductos }) => {
                                                 </option>
 
                                             </select>
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 );
                             })}{/* este codigo me transforma un array de tipo json en un array
@@ -231,12 +230,12 @@ const FormularioProductos = ({
     const enviarAlBackend = () => {
 
 
-        console.log('codigoProducto:', codigoProducto,'descripcionProducto:', descripcionProducto, 'precioUnitario:', precioUnitario, 'estadoProducto:', estadoProducto);
+        console.log('codigoProducto:', codigoProducto, 'descripcionProducto:', descripcionProducto, 'precioUnitario:', precioUnitario, 'estadoProducto:', estadoProducto);
 
         //codigo para evitar que se envie una casilla vacia usando condicional if existe otra mejor forma y es usando html los atributos required de 
         // los input y el boton asociado al formulario ponerlo de tipo submit
 
-        if (codigoProducto === ''  || descripcionProducto === '' || precioUnitario === '') {
+        if (codigoProducto === '' || descripcionProducto === '' || precioUnitario === '') {
 
             toast.error('Ingrese todos los datos', {
                 position: "bottom-center",
@@ -311,8 +310,8 @@ const FormularioProductos = ({
     // estonces seri name : value  key: valor
 
     return (
-        <div className='scale-95 border border-blue-300 p-20'>
-            <h1 className='text-4xl text-center font-extrabold p-14'>
+        <div className=' rounded-xl p-3 bg-blue-400 '>
+            <h1 className='text-4xl text-center font-extrabold mb-5 text-gray-800'>
                 Formulario Productos
             </h1>
 
@@ -322,79 +321,87 @@ const FormularioProductos = ({
                 ref={referenciaFomulario} // con esto yo referencio esta etiqueta y como tal todo el grupo del fromulario y me devuelve un trozo
                 // de este formulario como variable 
                 onSubmit={submitFormulario} // con esto se le idica que ejecute esta accion esta funcion cuando se oprime el boton del formulario 
-                className='flex flex-col text-4xl'>
-                <label htmlFor="codigoProducto">Codigo Producto
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type='text'
-                        placeholder=''
-                        name="codigoProducto"
-                        required
-                        value={codigoProducto}                       //---------------------------------------------------
-                        onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //
-                            setCodigoProducto(evento.target.value);  //--------------------------------------------------
-                        }}
-                    />
-                </label>
-                <label htmlFor="descripcionProducto">Descripción Producto:
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type="text"
-                        name='descripcionProducto'
-                        required
-                        value={descripcionProducto}                       //---------------------------------------------------
-                        onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //
-                            setDescripcionProducto(evento.target.value);  //--------------------------------------------------
-                        }}
-                    />
-                </label>
+                className='flex flex-col text-3xl'>
+                <div className='grid-cols-2 grid gap-4 m-7'>
 
-                <label htmlFor="precioUnitario">Precio Producto:
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type="text"
-                        name='precioUnitario'
-                        required
-                        value={precioUnitario}                       //---------------------------------------------------
-                        onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //
-                            setPrecioUnitario(evento.target.value);  //--------------------------------------------------
-                        }}
-                    />
-                </label>
-                <label htmlFor="estadoProducto">Estado Producto:
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type="text"
-                        name='estadoProducto'
-                        value={estadoProducto}                       //---------------------------------------------------
-                        onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //
-                            setEstadoProducto(evento.target.value);  //--------------------------------------------------
-                        }}
-                    />
-                </label>
-                <label htmlFor="">
+                    <label className='font-bold text-gray-800' htmlFor="codigoProducto">Codigo Producto
+                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                            type='text'
+                            placeholder=''
+                            name="codigoProducto"
+                            required
+                            value={codigoProducto}                       //---------------------------------------------------
+                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //
+                                setCodigoProducto(evento.target.value);  //--------------------------------------------------
+                            }}
+                        />
+                    </label>
+                    <label className='font-bold text-gray-800' htmlFor="descripcionProducto">Descripción Producto:
+                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                            type="text"
+                            name='descripcionProducto'
+                            required
+                            value={descripcionProducto}                       //---------------------------------------------------
+                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //
+                                setDescripcionProducto(evento.target.value);  //--------------------------------------------------
+                            }}
+                        />
+                    </label>
 
-                    <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2 text-xl'
-                        type="text"
-                        name="estadoProducto"
-                        id=""
-                        onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //
-                            setEstadoProducto(evento.target.value);  //--------------------------------------------------
-                        }}
-                    >
-                        <option value="">
-                        </option>
-                        <option value='Disponible'>Disponible
-                        </option>
-                        <option value='No Disponible'>No Disponible
-                        </option>
+                    <label className='font-bold text-gray-800' htmlFor="precioUnitario">Precio Producto:
+                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                            type="text"
+                            name='precioUnitario'
+                            required
+                            value={precioUnitario}                       //---------------------------------------------------
+                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //
+                                setPrecioUnitario(evento.target.value);  //--------------------------------------------------
+                            }}
+                        />
+                    </label>
+                    <label className='font-bold text-gray-800' htmlFor="estadoProducto">Estado Producto:
+                        <select className='block  border border-gray-300 p-2 rounded-lg m-2 text-2xl'
+                            type="text"
+                            name="estadoProducto"
+                            id=""
+                            value={estadoProducto}
+                            required
+                            defaultValue={0}
 
-                    </select>
+                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //
+                                setEstadoProducto(evento.target.value);  //--------------------------------------------------
+                            }}
+                        >
+                            <option  value={0}>Seleccione una opción
+                            </option>
+                            <option value='Disponible'>Disponible
+                            </option>
+                            <option value='No Disponible'>No Disponible
+                            </option>
 
-                </label>
-                <button className='  self-end text-3xl bg-blue-400 p-5 mb-14 
-                rounded-full shadow-md hover:bg-blue-900 text-gray-100'
+                        </select>
+                        <input className='block bg-blue-400 text-blue-400 '
+                            type="text"
+                            name='estadoProducto'
+                            value={estadoProducto}
+                            //---------------------------------------------------
+                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+
+                                setEstadoProducto(evento.target.value);  //--------------------------------------------------
+                            }}
+                        />
+                    </label>
+                    <label className='font-bold text-gray-800' htmlFor="">
+
+
+                    </label>
+                </div>
+                <button className=' text-3xl bg-blue-500 border border-gray-500 p-5 self-center m-3 
+                rounded-full  hover:bg-blue-900 text-gray-200'
                     type='submit'
                     onClick={() => {
 

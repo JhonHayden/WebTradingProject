@@ -6,7 +6,9 @@ const Navbar = () => {
         <nav className='bg-blue-400'>
             <ul className='flex justify-between m-1 ml-2 mr-2 text-white pt-2'>
                 <li className='text-2xl'>
-                    <ImagenLogo />
+                    <Link to='/administracion'>
+                        <ImagenLogo />
+                    </Link>
                 </li>
                 <li className='text-2xl'>
                     <Link to='/administracion/moduloproductos'>

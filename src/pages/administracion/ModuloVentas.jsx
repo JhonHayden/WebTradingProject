@@ -222,8 +222,12 @@ const TablaVentas = ({ listaVentas }) => {
                                             value={ventas.precioUnitario * ventas.cantidadProducto} /></td>
                                         {/* Drop-down list */}
                                         <td>
-                                            <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2 text-xl' type="text" name="" id="">
-                                                <option value="">
+                                            <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2 text-xl' 
+                                            type="text" 
+                                            name="" 
+                                            id=""
+                                            defaultValue={0}>
+                                                <option  value={0}>Seleccione una opción
                                                 </option>
                                                 <option value="proceso">En Proceso
                                                 </option>

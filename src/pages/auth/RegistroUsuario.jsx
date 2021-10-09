@@ -5,7 +5,7 @@ const RegistroUsuario = () => {
     return (
         <>
             <div className='m-8 border border-gray-700 items-center bg-blue-400 mt-20 p-10 rounded-md '>
-                <h1 className='mb-4  text-center text-3xl font-bold text-gray-800 '>Crear Cuenta</h1>
+                <h1 className='mb-4  text-center text-3xl font-extrabold text-gray-800 '>Crear Cuenta</h1>
                 <form >
                     <div className='grid grid-cols-2 items-center  gap-4 rounded-md '>
                         <label htmlFor="nombre"
