@@ -7,7 +7,7 @@ const ventasDatosBackend = [{
 
     codigoVenta: '123',
     fecha: '15/2/2021',
-    codigoProducto: 'tarjeta elenctronica',
+    codigoProducto: 'tarjeta electronica',
     cantidadProducto: '50',
     nombreVendedor: 'jhon',
     nombreCliente: 'Jhonny',
@@ -67,10 +67,9 @@ const ModuloVentas = () => {
 
     }, [mostrarTablaVentas])
     return (
-        <div >
-            <h1 className='text-4xl'>Módulo Ventas</h1>
+        <div className=' border border-gray-700 flex flex-col' >
 
-            <button className='  self-end text-3xl bg-blue-400 p-5 mb-14 
+            <button className=' self-start text-3xl bg-blue-400 p-5  mt-3
                 rounded-full shadow-md hover:bg-blue-900 text-gray-100'
                 type='button'
                 onClick={() => {
@@ -118,12 +117,9 @@ const TablaVentas = ({ listaVentas }) => {
 
     return (
         <div>
-            <h1 className='text-4xl'>
-                soy tabla Ventas
-            </h1>
-            <div>
+            <div className='border border-gray-700'>
                 <div className='flex flex-col '>
-                    <h1 className=' text-center font-extrabold text-4xl mt-12'>
+                    <h1 className=' text-center font-extrabold text-4xl mt-2'>
                         Maestro Ventas
                     </h1>
 
@@ -133,7 +129,7 @@ const TablaVentas = ({ listaVentas }) => {
                             <input name='buscar'
                                 id="buscar"
                                 type="text"
-                                className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                                className='bg-gray-50 border border-gray-300 p-2 rounded-lg '
                             />
 
                         </label>
@@ -149,7 +145,7 @@ const TablaVentas = ({ listaVentas }) => {
                 <div>
                     <table >
                         <thead>
-                            <tr >
+                            <tr className='bg-blue-400 '>
                                 <th className='text-3xl'>Codigo Venta</th>
                                 <th className='text-3xl' >Fecha</th>
                                 <th className='text-3xl'>Producto</th>
@@ -371,9 +367,9 @@ const FormularioVentas = ({
     // estonces seri name : value  key: valor
 
     return (
-        <div className='scale-95 border border-blue-300 p-20'>
-            <h1 className='text-4xl'>
-                Soy Componente Formulario Ventas
+        <div className='scale-95 border border-blue-300 p-3'>
+            <h1 className='text-4xl text-center font-extrabold mb-5 text-gray-800'>
+                Formulario Ventas
             </h1>
 
             {/* usaremos una propiedad de los formularios para generar una accion y es con el evento onSubmit donde le pondremos una 

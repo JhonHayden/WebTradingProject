@@ -106,9 +106,7 @@ const TablaProductos = ({ listaProductos }) => {
 
     return (
         <div>
-            <h1 className='text-4xl'>
-                
-            </h1>
+            
             <div>
                 <div className='flex flex-col '>
                     <h1 className=' text-center font-extrabold text-4xl mt-12'>
