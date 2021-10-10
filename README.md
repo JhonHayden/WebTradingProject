@@ -22,7 +22,7 @@ Product Owner: Stefania Jimenez Valencia
 Usuario Cuenta GitHub: sjimenezv16
 
 Scrum Master: Jhon hayden Ospina Loaiza 
-Usuario Cuenta GitHub: jhonHayden
+Usuario Cuenta GitHub: JhonHayden
 
 Development Team:
 
