@@ -83,10 +83,10 @@ const ModuloVentas = () => {
             {/* el props que le paso al componente TablaVentas es mi estado donde esta 
                                                 almacenado las ventas desde el backend */}
             {mostrarTablaVentas ? (
-                <TablaVentas listaVentas={ventas} />
+                <TablaVentas listaVentas={ventas} /> // prop lista de las ventas es decir los datos del backend para que se muestren en la tabla
             ) : (
                 <FormularioVentas
-                    irTablasVentas={setMostrarTablaVentas}
+                    irTablasVentas={setMostrarTablaVentas}  // prop para permitir renderizacion condicional del tabla ventas
                     funcionAgregarNuevaVenta={setVentas}   // prop para poder agregar ventas desde el formulario 
                     listaVentas={ventas} // necesito tambien la lista de formato json osea mis datos backend para poder agregrar esos y los nuevos 
                 />)}
@@ -255,9 +255,10 @@ const TablaVentas = ({ listaVentas }) => {
 
 
 const FormularioVentas = ({
-    irTablasVentas,
-    listaVentas,                       // props 
-    funcionAgregarNuevaVenta
+    // props 
+    irTablasVentas,  // funcion de modificacion estado usado para la renderizacion condicional
+    listaVentas,      // representa mis datos del backend, las ventas y  ventasDatosBackend
+    funcionAgregarNuevaVenta  // me permite modificar los datos del backend es decir la lista ventas 
 
 }) => {
 
@@ -332,10 +333,18 @@ const FormularioVentas = ({
 
     // }, [fecha])
 
-    const referenciaFomulario = useRef(null); //aun no se pero la idea es que me devuele una referencia apuntando al codigo html que le indique        
+    const referenciaFomulario = useRef(null); //aun no se pero la idea es que me devuelve una referencia apuntando al codigo html que le indique        
 
 
-    const submitFormulario = (evento) => {  // con esta funcion nos permite controlar mejor la validaciones 
+    const submitFormulario = (evento) => {  // con esta funcion nos permite controlar mejor la validaciones y no solo eso 
+        // subtmitFormulario es la funcion que se ejecuta cuando ocurre el evento onSubmit del formulario y es cuando el usurario
+        //da clic en el boton de enviar una venta o nuevo regirstro
+        // dentro de esta funcion tendremos las instrucciones o llamados a funciones o a demas funciones que controlen 
+        // validaciones, capture la data actual de la referencia hecha por el hook useRef, es decir aqui instanciamos el objeto
+        // FormData, que le pasamos como parmetro la referencia actual, este objeto me devuele la data de la venta
+        //  luego lo recorremos esta data con un foreach para acceder a las keys (name de los inputs) y valores(values de los inputs)
+        //  y las guardamos en un objeto vacio luego hacemos llamado a la funcion de renderizaciion de la tabla y a la lista 
+        //  le agregamos este nuevo objeto que tiene la data del nuevo registro  
 
         evento.preventDefault(); // nos permite tener mayor control sobre los inputs
 
@@ -349,9 +358,23 @@ const FormularioVentas = ({
         //  un conjunto de pares clave / valor que representan campos de formulario y sus valores, que luego se pueden enviar fácilmente mediante 
         //  el XMLHttpRequest.send()método. Utiliza el mismo formato que usaría un formulario si se configurara el tipo de codificación
         //   "multipart/form-data".
+        // necesita que los input tengan un name esta se usara de clave para relacionarla con el value de ese input 
+
+        // creamos una variable de tipo objeto, es decir un objeto que me contenga todos los datos de los input del formulario 
+        // es decir sera la venta, un objeto venta, nueva venta, me guarda los valores actuales que ingresan por los inputs
+        //y estan en la data .. 
+        const objetoNuevaVenta={};  //variable objeto la declaro vacia aqui estara mi objeto nueva venta que representa una venta 
+        // con todos los datos de los inputs actualmente registrados cada ves que se registra un nueva venta aqui se guarda y luego es añadida 
+
+
+
         claveValorDeValuesFomulario.forEach((valorDeCadaElementoDelFormData, claveDeCadaElementoDelFormData) => {
 
-            console.log(claveDeCadaElementoDelFormData, valorDeCadaElementoDelFormData)
+            console.log(claveDeCadaElementoDelFormData+' : ', valorDeCadaElementoDelFormData)
+
+            objetoNuevaVenta[claveDeCadaElementoDelFormData]=valorDeCadaElementoDelFormData; //lleno en objeto con los
+            // datos de una venta, la cual sus atributos son los datos entrados por los inputs que el usuario registro 
+            // en la interaccion con el formulario de la aplicacion 
 
             // todo esto con la finalidad de evitar el uso de un estado para cada input puesto que con el FormData me muestra todo los datos 
             // pero para usar esto primero usamos permitimos el evento onSubmit en el form y el boton debe ser type=submit luego referenciamos
@@ -360,15 +383,27 @@ const FormularioVentas = ({
             // foreach y mostramos la clave y el valor  
         })
 
+        irTablasVentas(true) // llamada de funcion que entro como prop al formulario y me muestra y permite modificar el estado usado para
+        // la renderizacion condicional y mostrar la tabla apenas ocurre el evenot onSubmit
+
+        funcionAgregarNuevaVenta ([...listaVentas,objetoNuevaVenta]);// permite primero con el operador ... agrega los datos anteriores o todos los
+        // que tiene la data o datos enviados y leidos desde el backend y luego le agrego al final de esta lista de objetos una nueva venta 
+
+
+        toast.success('Venta agregada con éxito', {
+            position: "bottom-center",
+            autoClose: 5000,
+        })
+
         console.log('datos del formulario enviados', claveValorDeValuesFomulario);// con referenciaFomulario.current me saca todo el codigo en 
         // bloque html del form .. formulario de la etiqueta <form> a la cual se puse de ref={referenciaFomulario} le puse el hook useRef()
         // me permite tener todo el bloque de este html como una variable y asi acceder al valor actual registrado por el usuario en cada uno de 
         // los inputs de este formulario que hemos referenciado con el hook useRef y nos sirve para provar cosas con el backend nos permita sacar 
         // esta infomacion en un formato super facil de manejar 
-    }
+    };
 
 
-    // realmente FormData me muestra los datos de los input relacionados donde la key es el name del input y el valor es el value
+    // realmente FormData me traer en un paquete (un objeto)  los datos de los input relacionados donde la key es el name del input y el valor es el value
     // estonces seri name : value  key: valor
 
     return (
@@ -390,11 +425,11 @@ const FormularioVentas = ({
                             type="date"
                             name='fecha'
                             required
-                            value={fecha}                       //---------------------------------------------------
-                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                //
-                                setFecha(evento.target.value);  //--------------------------------------------------
-                            }}
+                            // value={fecha}                       //---------------------------------------------------
+                            // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                            //     //                                    cuando se usa un estado para cada input
+                            //     setFecha(evento.target.value);  //--------------------------------------------------
+                            // }}
                         />
                     </label>
                     <label className='font-bold text-gray-800' htmlFor="codigoVenta">Codigo Venta
@@ -403,11 +438,11 @@ const FormularioVentas = ({
                             placeholder=''
                             name="codigoVenta"
                             required
-                            value={codigoVenta}                       //---------------------------------------------------
-                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                //
-                                setCodigoVenta(evento.target.value);  //--------------------------------------------------
-                            }}
+                            // value={codigoVenta}                       //---------------------------------------------------
+                            // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                            //     //                                        cuando se usa un estado para cada input
+                            //     setCodigoVenta(evento.target.value);  //--------------------------------------------------
+                            // }}
                         />
                     </label>
                 
@@ -416,11 +451,11 @@ const FormularioVentas = ({
                                 type="text"
                                 name='nombreVendedor'
                                 required
-                                value={nombreVendedor}                       //---------------------------------------------------
-                                onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                    //
-                                    setNombreVendedor(evento.target.value);  //--------------------------------------------------
-                                }}
+                                // value={nombreVendedor}                       //---------------------------------------------------
+                                // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //     //                        cuando se usa un estado para cada input
+                                //     setNombreVendedor(evento.target.value);  //--------------------------------------------------
+                                // }}
                             />
                         </label>
                         <label className='font-bold text-gray-800' htmlFor="identificacionVendedor">Indentificación
@@ -428,11 +463,11 @@ const FormularioVentas = ({
                                 type="text"
                                 name='identificacionVendedor'
                                 required
-                                value={identificacionVendedor}                       //---------------------------------------------------
-                                onChange={(evento) => {                                          //intrucciones necesarias para tener control del un input
-                                    //
-                                    setIdentificacionVendedor(evento.target.value);                                //--------------------------------------------------
-                                }}
+                                // value={identificacionVendedor}                       //---------------------------------------------------
+                                // onChange={(evento) => {                                          //intrucciones necesarias para tener control del un input
+                                //     //                                               cuando se usa un estado para cada input 
+                                //     setIdentificacionVendedor(evento.target.value);                                //--------------------------------------------------
+                                // }}
                             />
                         </label>
                     
@@ -442,11 +477,11 @@ const FormularioVentas = ({
                                 type="text"
                                 name='nombreCliente'
                                 required
-                                value={nombreCliente}                       //---------------------------------------------------
-                                onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                    //
-                                    setNombreCliente(evento.target.value);  //--------------------------------------------------
-                                }}
+                                // value={nombreCliente}                       //---------------------------------------------------
+                                // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //     //                                       cuando se usa un estado para cada input
+                                //     setNombreCliente(evento.target.value);  //--------------------------------------------------
+                                // }}
                             />
                         </label>
                         <label className='font-bold text-gray-800' htmlFor="identificacionCliente">Indentificación
@@ -454,11 +489,11 @@ const FormularioVentas = ({
                                 type="text"
                                 name='identificacionCliente'
                                 required
-                                value={identificacionCliente}                       //---------------------------------------------------
-                                onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                    //
-                                    setIdentificacionCliente(evento.target.value);  //--------------------------------------------------
-                                }}
+                                // value={identificacionCliente}                       //---------------------------------------------------
+                                // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //     //                                                    cuando se usa un estado para cada input
+                                //     setIdentificacionCliente(evento.target.value);  //--------------------------------------------------
+                                // }}
                             />
                         </label>
                     
@@ -467,11 +502,11 @@ const FormularioVentas = ({
                             type="text"
                             name='codigoProducto'
                             required
-                            value={codigoProducto}                       //---------------------------------------------------
-                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                //
-                                setCodigoProducto(evento.target.value);  //--------------------------------------------------
-                            }}
+                            // value={codigoProducto}                       //---------------------------------------------------
+                            // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                            //     //                                            cuando se usa un estado para cada input
+                            //     setCodigoProducto(evento.target.value);  //--------------------------------------------------
+                            // }}
                         />
                     </label>
                     <label className='font-bold text-gray-800' htmlFor="cantidadProducto">Cantidad Producto
@@ -479,11 +514,11 @@ const FormularioVentas = ({
                             type="text"
                             name='cantidadProducto'
                             required
-                            value={cantidadProducto}                       //---------------------------------------------------
-                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                //
-                                setCantidadProducto(evento.target.value);  //--------------------------------------------------
-                            }}
+                            // value={cantidadProducto}                       //---------------------------------------------------
+                            // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                            //     //                                    cuando se usa un estado para cada input
+                            //     setCantidadProducto(evento.target.value);  //--------------------------------------------------
+                            // }}
                         />
                     </label>
                     <label className='font-bold text-gray-800' htmlFor="precioUnitario">Precio Producto
@@ -491,33 +526,33 @@ const FormularioVentas = ({
                             type="text"
                             name='precioUnitario'
                             required
-                            value={precioUnitario}                       //---------------------------------------------------
-                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                //
-                                setPrecioUnitario(evento.target.value);  //--------------------------------------------------
-                            }}
+                            // value={precioUnitario}                       //---------------------------------------------------
+                            // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                            //     //                                    cuando se usa un estado para cada input
+                            //     setPrecioUnitario(evento.target.value);  //--------------------------------------------------
+                            // }}
                         />
                     </label>
                     <label className='font-bold text-gray-800' htmlFor="valorTotal">Valor Total
                         <input className=' block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='valorTotal'
-                            value={cantidadProducto * precioUnitario}                       //---------------------------------------------------
-                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                //
-                                setValorTotal(evento.target.value);  //--------------------------------------------------
-                            }}
+                            // value={cantidadProducto * precioUnitario}                       //---------------------------------------------------
+                            // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                            //     //                                    cuando se usa un estado para cada input
+                            //     setValorTotal(evento.target.value);  //--------------------------------------------------
+                            // }}
                         />
                     </label>
                 </div>
                     <button className=' text-3xl bg-blue-500 border border-gray-500 p-5 self-center m-3 
                 rounded-full  hover:bg-blue-900 text-gray-200'
                         type='submit'
-                        onClick={() => {
+                        // onClick={() => {                   //intrucciones necesarias para tener control del un input
+                        //     enviarAlBackend();            //    cuando se usa un estado para cada input
 
-                            enviarAlBackend();
-                        }
-                        }
+                        // }
+                        // }
                     >Registrar Venta</button>
             </form>
 

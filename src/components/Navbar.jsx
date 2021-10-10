@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import ImagenLogo from './componentesVentas/ImagenLogo'
+
 const Navbar = () => {
     return (
         <nav className='bg-blue-400'>
@@ -11,34 +12,16 @@ const Navbar = () => {
                     </Link>
                 </li>
                 <li className='text-2xl'>
-                    <Link to='/administracion/moduloproductos'>
-                        <span className='border rounded-xl border-gray-700 bg-blue-500 p-3  hover:bg-blue-700 '>
-                            Modulo Productos
-                        </span>
-                    </Link>
-
+                    <BotonRuta nombre='Productos'  ruta='/administracion/moduloproductos' />
                 </li>
                 <li className='text-2xl'>
-                    <Link to='/administracion/moduloventas'>
-                        <span className='border rounded-xl border-gray-700 bg-blue-500 p-3  hover:bg-blue-700 '>
-                            Módulo Ventas
-                        </span>
-                    </Link>
+                    <BotonRuta nombre='Ventas' incono='fas fa-money-bill' ruta='/administracion/moduloventas' />
                 </li>
                 <li className='text-2xl'>
-                    <Link to='/administracion/moduloUsuario'>
-                        <span className='border rounded-xl border-gray-700 bg-blue-500 p-3  hover:bg-blue-700 '>
-                            Modulo Usuario
-                        </span>
-                    </Link>
+                    <BotonRuta nombre='Usuarios' incono='fas fa-users' ruta='/administracion/moduloUsuario' />
                 </li>
                 <li className='text-2xl'>
-                    <Link to='/'>
-                        <span className='border rounded-xl border-gray-700 bg-blue-500 p-3  hover:bg-blue-700 '>
-                            Cerrar Sesion
-                        </span>
-                    </Link>
-
+                   < BotonRuta nombre='Cerrar Sesion' incono='fas fa-sign-out-alt' ruta='/'/>
                 </li>
             </ul>
 
@@ -46,4 +29,18 @@ const Navbar = () => {
     )
 }
 
-export default Navbar
+// componente 
+const BotonRuta = ({ incono, ruta, nombre }) => {
+    return (
+        <Link to={ruta}>
+            <button className='border rounded-xl border-gray-700 bg-blue-500 p-3  hover:bg-blue-700 '>
+                <i className={`${incono}`} /> {/*String literal* como meter una variable es un strig */}
+                <span className='pl-2'>
+                    {nombre}
+                </span>
+            </button>
+        </Link>
+    );
+};
+
+export default Navbar;
