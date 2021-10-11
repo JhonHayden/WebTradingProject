@@ -4,28 +4,31 @@ import ImagenLogo from './componentesVentas/ImagenLogo'
 
 const Navbar = () => {
     return (
-        <nav className='bg-blue-400'>
-            <ul className='flex justify-between m-1 ml-2 mr-2 text-white pt-2'>
-                <li className='text-2xl'>
-                    <Link to='/administracion'>
-                        <ImagenLogo />
-                    </Link>
-                </li>
-                <li className='text-2xl'>
-                    <BotonRuta nombre='Productos'  ruta='/administracion/moduloproductos' />
-                </li>
-                <li className='text-2xl'>
-                    <BotonRuta nombre='Ventas' incono='fas fa-money-bill' ruta='/administracion/moduloventas' />
-                </li>
-                <li className='text-2xl'>
-                    <BotonRuta nombre='Usuarios' incono='fas fa-users' ruta='/administracion/moduloUsuario' />
-                </li>
-                <li className='text-2xl'>
-                   < BotonRuta nombre='Cerrar Sesion' incono='fas fa-sign-out-alt' ruta='/'/>
-                </li>
-            </ul>
+        <div>
+            <nav className='bg-blue-400 '>
+                <ul className='hidden md:flex justify-between m-1 ml-2 mr-2 text-white pt-2'>
+                    <li className='text-2xl'>
+                        <Link to='/administracion'>
+                            <ImagenLogo />
+                        </Link>
+                    </li>
+                    <li className='text-2xl'>
+                        <BotonRuta nombre='Productos' ruta='/administracion/moduloproductos' />
+                    </li>
+                    <li className='text-2xl'>
+                        <BotonRuta nombre='Ventas' incono='fas fa-money-bill' ruta='/administracion/moduloventas' />
+                    </li>
+                    <li className='text-2xl'>
+                        <BotonRuta nombre='Usuarios' incono='fas fa-users' ruta='/administracion/moduloUsuario' />
+                    </li>
+                    <li className='text-2xl'>
+                        < BotonRuta nombre='Cerrar Sesion' incono='fas fa-sign-out-alt' ruta='/' />
+                    </li>
+                </ul>
 
-        </nav>
+            </nav>
+
+        </div>
     )
 }
 

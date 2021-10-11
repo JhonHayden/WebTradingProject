@@ -1,44 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
+import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 
-// datos que simularan ser traidos desde el backend
-const ventasDatosBackend = [{
 
-    codigoVenta: '123',
-    fecha: '15/2/2021',
-    codigoProducto: 'tarjeta electronica',
-    cantidadProducto: '50',
-    nombreVendedor: 'jhon',
-    nombreCliente: 'Jhonny',
-    precioUnitario: '150000',
-    valorTotal: ''
 
-},
-{
-
-    codigoVenta: '122',
-    fecha: '10/5/2021',
-    codigoProducto: 'Motor',
-    cantidadProducto: '10',
-    nombreVendedor: 'Oscar',
-    nombreCliente: 'Maria',
-    precioUnitario: '110000',
-    valorTotal: ''
-
-},
-{
-
-    codigoVenta: '121',
-    fecha: '11/2/2022',
-    codigoProducto: 'Rele electronico',
-    cantidadProducto: '30',
-    nombreVendedor: 'jhon',
-    nombreCliente: 'Luis',
-    precioUnitario: '170000',
-    valorTotal: ''
-
-},]
 
 const ModuloVentas = () => {
 
@@ -54,10 +20,12 @@ const ModuloVentas = () => {
 
 
     useEffect(() => {
-        // con estes useEffect vacio mas adelante traemos los datos desde el backend y la guardaremos 7
+        // con este useEffect vacio mas adelante traemos los datos desde el backend y la guardaremos 
         // en un estado y este sera el estado ventas
-        setVentas(ventasDatosBackend); // guardo en mi estado ventas los datos del backend
 
+        // aqui dentro haremos la peticion de GET de REST con axios para traer informacion de la API y la base de datos 
+         
+        setVentas([]); // tendremos una lista vacia en el inicio 
     }, [])
 
 
@@ -222,12 +190,12 @@ const TablaVentas = ({ listaVentas }) => {
                                             value={ventas.precioUnitario * ventas.cantidadProducto} /></td>
                                         {/* Drop-down list */}
                                         <td>
-                                            <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2 text-xl' 
-                                            type="text" 
-                                            name="" 
-                                            id=""
-                                            defaultValue={0}>
-                                                <option  value={0}>Seleccione una opción
+                                            <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2 text-xl'
+                                                type="text"
+                                                name=""
+                                                id=""
+                                                defaultValue={0}>
+                                                <option value={0}>Seleccione una opción
                                                 </option>
                                                 <option value="proceso">En Proceso
                                                 </option>
@@ -335,8 +303,9 @@ const FormularioVentas = ({
 
     const referenciaFomulario = useRef(null); //aun no se pero la idea es que me devuelve una referencia apuntando al codigo html que le indique        
 
-
-    const submitFormulario = (evento) => {  // con esta funcion nos permite controlar mejor la validaciones y no solo eso 
+    //la palabra async me indica que la funcion es asincrona que tiene que esperar respuesta antes de ejecutar y con esta palabra 
+    // me permite usar la palabra reservada await
+    const submitFormulario = async (evento) => {  // con esta funcion nos permite controlar mejor la validaciones y no solo eso 
         // subtmitFormulario es la funcion que se ejecuta cuando ocurre el evento onSubmit del formulario y es cuando el usurario
         //da clic en el boton de enviar una venta o nuevo regirstro
         // dentro de esta funcion tendremos las instrucciones o llamados a funciones o a demas funciones que controlen 
@@ -363,16 +332,16 @@ const FormularioVentas = ({
         // creamos una variable de tipo objeto, es decir un objeto que me contenga todos los datos de los input del formulario 
         // es decir sera la venta, un objeto venta, nueva venta, me guarda los valores actuales que ingresan por los inputs
         //y estan en la data .. 
-        const objetoNuevaVenta={};  //variable objeto la declaro vacia aqui estara mi objeto nueva venta que representa una venta 
+        const objetoNuevaVenta = {};  //variable objeto la declaro vacia aqui estara mi objeto nueva venta que representa una venta 
         // con todos los datos de los inputs actualmente registrados cada ves que se registra un nueva venta aqui se guarda y luego es añadida 
 
 
 
         claveValorDeValuesFomulario.forEach((valorDeCadaElementoDelFormData, claveDeCadaElementoDelFormData) => {
 
-            console.log(claveDeCadaElementoDelFormData+' : ', valorDeCadaElementoDelFormData)
+            console.log(claveDeCadaElementoDelFormData + ' : ', valorDeCadaElementoDelFormData)
 
-            objetoNuevaVenta[claveDeCadaElementoDelFormData]=valorDeCadaElementoDelFormData; //lleno en objeto con los
+            objetoNuevaVenta[claveDeCadaElementoDelFormData] = valorDeCadaElementoDelFormData; //lleno en objeto con los
             // datos de una venta, la cual sus atributos son los datos entrados por los inputs que el usuario registro 
             // en la interaccion con el formulario de la aplicacion 
 
@@ -383,17 +352,55 @@ const FormularioVentas = ({
             // foreach y mostramos la clave y el valor  
         })
 
-        irTablasVentas(true) // llamada de funcion que entro como prop al formulario y me muestra y permite modificar el estado usado para
+        // codigo que me trasnforma las peticiones de submit a formato REST en este caso estamos haciendo la peticion de crear venta
+        //o registrar venta y en REST se hace con POST.. pero para hacer esto debemos tener instalado axios la cual es la libreria
+        // que me transformara ese codigo en formato REST y porder hacer las peticiones al backend 
+
+        // la accion de ejecutar la peticion POST la hace el submit de formulario 
+        const options = {
+            method: 'POST', // tipo de peticion es crear nuevo registro 
+            url: 'https://vast-waters-45728.herokuapp.com/vehicle/create',// servidor donde enviare la peticion e informacion
+            headers: { 'Content-Type': 'application/json' },
+            data: {  // datos a enviar
+                fecha: objetoNuevaVenta.fecha, codigoVenta: objetoNuevaVenta.codigoVenta, nombreVendedor: objetoNuevaVenta.nombreVendedor,
+                identificacionVendedor: objetoNuevaVenta.identificacionVendedor,nombreCliente:objetoNuevaVenta.nombreCliente,
+                identificacionCliente:objetoNuevaVenta.identificacionCliente,codigoProducto: objetoNuevaVenta.codigoProducto,
+                 cantidadProducto:objetoNuevaVenta.cantidadProducto, precioUnitario:objetoNuevaVenta.precioUnitario,
+                  valorTotal:objetoNuevaVenta.valorTotal
+            },
+        };
+
+        await axios  // el await es para decirle que debe esperar una respuesta puesto que estas operaciones son asincronas se tiene que 
+        // esperar a obtener un resultado para esto mostraremos loading para mejorar la experiencia de usuario mietras espera 
+        // pero por eso se coloca await para que espere pero se debe colocar async la funcion que este use el await  
+        // cuando necesitemos o debemos que esperar a que una operacion ocurra debemos usar await para ayudarnos a esperar a que el 
+        // backend nos de una respuesta y por eso se usa await para esperar y luego ejecutar el resultado si de esta peticion si fue realizada
+        // con exito o no 
+
+        // axios esta funcion axios no se tienen que ejecutar sin el await por que no tendre como esperar a ver que paso 
+            .request(options)
+            .then(function (response) {
+                console.log(response.data);
+                toast.success('Venta agregada con éxito', {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                })
+            })
+            .catch(function (error) {
+                console.error(error);
+                toast.success('Error registrando venta', {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                })
+            });
+
+        // irTablasVentas(true) // llamada de funcion que entro como prop al formulario y me muestra y permite modificar el estado usado para
         // la renderizacion condicional y mostrar la tabla apenas ocurre el evenot onSubmit
 
-        funcionAgregarNuevaVenta ([...listaVentas,objetoNuevaVenta]);// permite primero con el operador ... agrega los datos anteriores o todos los
+        funcionAgregarNuevaVenta([...listaVentas, objetoNuevaVenta]);// permite primero con el operador ... agrega los datos anteriores o todos los
         // que tiene la data o datos enviados y leidos desde el backend y luego le agrego al final de esta lista de objetos una nueva venta 
 
 
-        toast.success('Venta agregada con éxito', {
-            position: "bottom-center",
-            autoClose: 5000,
-        })
 
         console.log('datos del formulario enviados', claveValorDeValuesFomulario);// con referenciaFomulario.current me saca todo el codigo en 
         // bloque html del form .. formulario de la etiqueta <form> a la cual se puse de ref={referenciaFomulario} le puse el hook useRef()
@@ -425,11 +432,11 @@ const FormularioVentas = ({
                             type="date"
                             name='fecha'
                             required
-                            // value={fecha}                       //---------------------------------------------------
-                            // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //     //                                    cuando se usa un estado para cada input
-                            //     setFecha(evento.target.value);  //--------------------------------------------------
-                            // }}
+                        // value={fecha}                       //---------------------------------------------------
+                        // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                        //     //                                    cuando se usa un estado para cada input
+                        //     setFecha(evento.target.value);  //--------------------------------------------------
+                        // }}
                         />
                     </label>
                     <label className='font-bold text-gray-800' htmlFor="codigoVenta">Codigo Venta
@@ -438,75 +445,75 @@ const FormularioVentas = ({
                             placeholder=''
                             name="codigoVenta"
                             required
-                            // value={codigoVenta}                       //---------------------------------------------------
-                            // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //     //                                        cuando se usa un estado para cada input
-                            //     setCodigoVenta(evento.target.value);  //--------------------------------------------------
-                            // }}
+                        // value={codigoVenta}                       //---------------------------------------------------
+                        // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                        //     //                                        cuando se usa un estado para cada input
+                        //     setCodigoVenta(evento.target.value);  //--------------------------------------------------
+                        // }}
                         />
                     </label>
-                
-                        <label className='font-bold text-gray-800' htmlFor="nombreVendedor">Nombre Vendedor
-                            <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                                type="text"
-                                name='nombreVendedor'
-                                required
-                                // value={nombreVendedor}                       //---------------------------------------------------
-                                // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                //     //                        cuando se usa un estado para cada input
-                                //     setNombreVendedor(evento.target.value);  //--------------------------------------------------
-                                // }}
-                            />
-                        </label>
-                        <label className='font-bold text-gray-800' htmlFor="identificacionVendedor">Indentificación
-                            <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                                type="text"
-                                name='identificacionVendedor'
-                                required
-                                // value={identificacionVendedor}                       //---------------------------------------------------
-                                // onChange={(evento) => {                                          //intrucciones necesarias para tener control del un input
-                                //     //                                               cuando se usa un estado para cada input 
-                                //     setIdentificacionVendedor(evento.target.value);                                //--------------------------------------------------
-                                // }}
-                            />
-                        </label>
-                    
-                
-                        <label className='font-bold text-gray-800' htmlFor="nombreCliente">Nombre Cliente
-                            <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                                type="text"
-                                name='nombreCliente'
-                                required
-                                // value={nombreCliente}                       //---------------------------------------------------
-                                // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                //     //                                       cuando se usa un estado para cada input
-                                //     setNombreCliente(evento.target.value);  //--------------------------------------------------
-                                // }}
-                            />
-                        </label>
-                        <label className='font-bold text-gray-800' htmlFor="identificacionCliente">Indentificación
-                            <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                                type="text"
-                                name='identificacionCliente'
-                                required
-                                // value={identificacionCliente}                       //---------------------------------------------------
-                                // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                //     //                                                    cuando se usa un estado para cada input
-                                //     setIdentificacionCliente(evento.target.value);  //--------------------------------------------------
-                                // }}
-                            />
-                        </label>
-                    
+
+                    <label className='font-bold text-gray-800' htmlFor="nombreVendedor">Nombre Vendedor
+                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                            type="text"
+                            name='nombreVendedor'
+                            required
+                        // value={nombreVendedor}                       //---------------------------------------------------
+                        // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                        //     //                        cuando se usa un estado para cada input
+                        //     setNombreVendedor(evento.target.value);  //--------------------------------------------------
+                        // }}
+                        />
+                    </label>
+                    <label className='font-bold text-gray-800' htmlFor="identificacionVendedor">Indentificación
+                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                            type="text"
+                            name='identificacionVendedor'
+                            required
+                        // value={identificacionVendedor}                       //---------------------------------------------------
+                        // onChange={(evento) => {                                          //intrucciones necesarias para tener control del un input
+                        //     //                                               cuando se usa un estado para cada input 
+                        //     setIdentificacionVendedor(evento.target.value);                                //--------------------------------------------------
+                        // }}
+                        />
+                    </label>
+
+
+                    <label className='font-bold text-gray-800' htmlFor="nombreCliente">Nombre Cliente
+                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                            type="text"
+                            name='nombreCliente'
+                            required
+                        // value={nombreCliente}                       //---------------------------------------------------
+                        // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                        //     //                                       cuando se usa un estado para cada input
+                        //     setNombreCliente(evento.target.value);  //--------------------------------------------------
+                        // }}
+                        />
+                    </label>
+                    <label className='font-bold text-gray-800' htmlFor="identificacionCliente">Indentificación
+                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                            type="text"
+                            name='identificacionCliente'
+                            required
+                        // value={identificacionCliente}                       //---------------------------------------------------
+                        // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                        //     //                                                    cuando se usa un estado para cada input
+                        //     setIdentificacionCliente(evento.target.value);  //--------------------------------------------------
+                        // }}
+                        />
+                    </label>
+
                     <label className='font-bold text-gray-800' htmlFor="codigoProducto">Codigo Producto
                         <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='codigoProducto'
                             required
-                            // value={codigoProducto}                       //---------------------------------------------------
-                            // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //     //                                            cuando se usa un estado para cada input
-                            //     setCodigoProducto(evento.target.value);  //--------------------------------------------------
-                            // }}
+                        // value={codigoProducto}                       //---------------------------------------------------
+                        // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                        //     //                                            cuando se usa un estado para cada input
+                        //     setCodigoProducto(evento.target.value);  //--------------------------------------------------
+                        // }}
                         />
                     </label>
                     <label className='font-bold text-gray-800' htmlFor="cantidadProducto">Cantidad Producto
@@ -514,11 +521,11 @@ const FormularioVentas = ({
                             type="text"
                             name='cantidadProducto'
                             required
-                            // value={cantidadProducto}                       //---------------------------------------------------
-                            // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //     //                                    cuando se usa un estado para cada input
-                            //     setCantidadProducto(evento.target.value);  //--------------------------------------------------
-                            // }}
+                        // value={cantidadProducto}                       //---------------------------------------------------
+                        // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                        //     //                                    cuando se usa un estado para cada input
+                        //     setCantidadProducto(evento.target.value);  //--------------------------------------------------
+                        // }}
                         />
                     </label>
                     <label className='font-bold text-gray-800' htmlFor="precioUnitario">Precio Producto
@@ -526,34 +533,34 @@ const FormularioVentas = ({
                             type="text"
                             name='precioUnitario'
                             required
-                            // value={precioUnitario}                       //---------------------------------------------------
-                            // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //     //                                    cuando se usa un estado para cada input
-                            //     setPrecioUnitario(evento.target.value);  //--------------------------------------------------
-                            // }}
+                        // value={precioUnitario}                       //---------------------------------------------------
+                        // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                        //     //                                    cuando se usa un estado para cada input
+                        //     setPrecioUnitario(evento.target.value);  //--------------------------------------------------
+                        // }}
                         />
                     </label>
                     <label className='font-bold text-gray-800' htmlFor="valorTotal">Valor Total
                         <input className=' block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='valorTotal'
-                            // value={cantidadProducto * precioUnitario}                       //---------------------------------------------------
-                            // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                            //     //                                    cuando se usa un estado para cada input
-                            //     setValorTotal(evento.target.value);  //--------------------------------------------------
-                            // }}
+                        // value={cantidadProducto * precioUnitario}                       //---------------------------------------------------
+                        // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                        //     //                                    cuando se usa un estado para cada input
+                        //     setValorTotal(evento.target.value);  //--------------------------------------------------
+                        // }}
                         />
                     </label>
                 </div>
-                    <button className=' text-3xl bg-blue-500 border border-gray-500 p-5 self-center m-3 
+                <button className=' text-3xl bg-blue-500 border border-gray-500 p-5 self-center m-3 
                 rounded-full  hover:bg-blue-900 text-gray-200'
-                        type='submit'
-                        // onClick={() => {                   //intrucciones necesarias para tener control del un input
-                        //     enviarAlBackend();            //    cuando se usa un estado para cada input
+                    type='submit'
+                // onClick={() => {                   //intrucciones necesarias para tener control del un input
+                //     enviarAlBackend();            //    cuando se usa un estado para cada input
 
-                        // }
-                        // }
-                    >Registrar Venta</button>
+                // }
+                // }
+                >Registrar Venta</button>
             </form>
 
 
