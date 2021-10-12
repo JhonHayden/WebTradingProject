@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
+import { nanoid } from 'nanoid'; // me permite tener id 
 
 
 
@@ -12,21 +13,68 @@ const ModuloVentas = () => {
     //y elemento de html de mi aplicacion sobre todos los componente relacionado a eventos, para esto de el 
     // almacenamiento se usa el hook useState()
 
-    const [mostrarTablaVentas, setMostrarTablaVentas] = useState(false);
+    const [mostrarTablaVentas, setMostrarTablaVentas] = useState(false);// estado usado para renderizar la tabla o el formulario dependiendo 
+    // de si es true (tabla) o false (formulario) 
     // // const [fecha, setFecha] = useState('dd/mm/aa');
     const [cambiarNombreBoton, setCambiarNombreBoton] = useState('Registrar Venta');
 
     const [ventas, setVentas] = useState([]); // estado o variable que me almacena los datos del backend en formato .json
 
 
+    // crearemos otro estado que me permita ejecutar la consulta GET para traer informacion del backend y actualizar mi frontend 
+    // cada ves que edito creo o elimino un registro del backend
+    const [ejecutarConsultaGET, setEjecutarConsultaGET] = useState(true);
+//luego setEjecutarConsultaGET la pasamos como prop a la tabla y luego a la filaVenta para que los botones iconos de eliminar y editar 
+// puedan ejecutar esta consulta y se actualice la informacion en el frontend y se muetre el cambio en edicion y eliminacion de un registro
+
+
+    // escucharemos con el useEffect el valor de ejecutarConsultaGET si esta cambia se ejecuta las instrucciones del useEffect siguiente
     useEffect(() => {
         // con este useEffect vacio mas adelante traemos los datos desde el backend y la guardaremos 
         // en un estado y este sera el estado ventas
 
         // aqui dentro haremos la peticion de GET de REST con axios para traer informacion de la API y la base de datos 
-         
-        setVentas([]); // tendremos una lista vacia en el inicio 
-    }, [])
+        // necesitamos una funcion async para la peticion GET por que useEffect no permite ser async 
+        const obtenerVentasDelBackend = async () => {
+            // dentro ponemos la peticion GET
+            const options = { method: 'GET', url: 'https://vast-waters-45728.herokuapp.com/vehicle/' };
+            await axios
+                .request(options)
+                .then(function (response) { // si recibo respuesta entonces guardo la data en mi estado ventas la lista de ventas
+                    // que mostrare en el mi tabla ventas del frontend
+                    setVentas(response.data);
+
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        };
+
+        if(ejecutarConsultaGET){
+
+            obtenerVentasDelBackend(); // si se ejecuta la consulta es porque el estado de ejecutarConsultaGET es true por ende ejecutaremos la
+            // funcion que ejecuta la peticion GET .. obtenerVentasDelBackend 
+             
+            // luego de consultar le retornamos el valor a false para estar lista para solicitarla de nuevo 
+
+            setEjecutarConsultaGET(false);
+
+        }
+        
+    }, [ejecutarConsultaGET]) // supervisamos esta variable o estado  de ejecutarConsultaGET 
+
+
+    useEffect(() => {
+        
+
+        if (mostrarTablaVentas) {   // si estamos en la pagina de la tabla ventas ejecute la funcion de obtenerVentasDelBackend 
+            // esto con el proposito que siempre me traiga los datos del backend a la tabla 
+            setEjecutarConsultaGET(true)// su muestro la tabla ejecuto la consulta GET y traigo los datos del Backend
+        }
+
+        // setVentas([]); // tendremos una lista vacia en el inicio 
+    }, [mostrarTablaVentas])//apenas sucede un cambio en el estado mostrar tabla se hace la peticion traer informacion 
+    // GET
 
 
 
@@ -51,9 +99,9 @@ const ModuloVentas = () => {
             {/* el props que le paso al componente TablaVentas es mi estado donde esta 
                                                 almacenado las ventas desde el backend */}
             {mostrarTablaVentas ? (
-                <TablaVentas listaVentas={ventas} /> // prop lista de las ventas es decir los datos del backend para que se muestren en la tabla
+                <TablaVentas listaVentas={ventas}  setEjecutarConsultaGET={setEjecutarConsultaGET} /> // prop lista de las ventas es decir los datos del backend para que se muestren en la tabla
             ) : (
-                <FormularioVentas
+                <FormularioCreacionVentas
                     irTablasVentas={setMostrarTablaVentas}  // prop para permitir renderizacion condicional del tabla ventas
                     funcionAgregarNuevaVenta={setVentas}   // prop para poder agregar ventas desde el formulario 
                     listaVentas={ventas} // necesito tambien la lista de formato json osea mis datos backend para poder agregrar esos y los nuevos 
@@ -72,10 +120,15 @@ const ModuloVentas = () => {
 
 }
 
-// por medio de los props le envio mis datos del backend al componente TablaVentas para que el lo muestre
+// por medio de los props le envio mis datos del backend al componente TablaVentas para que el lo muestre  
 // ese props o input para el componente TablaVentas se llamara listaVentas y este es mi estado ventas por ende debo usar 
 // un useEffect para escuchar ese estado 
-const TablaVentas = ({ listaVentas }) => {
+
+// tambien le pasamos como prop la modificacion del estado que me permite ejecutar la consulta GET para actulizar la informacion de backend
+// cuando se modifica elimina un registro del backend con los botones de edicion y eliminacion de la tabla de ventas puesto que si no se lo pasamos
+// no se actualizara la informacion en en front a menos que le demos refrescar a la pagina web con f5 pero no tiene sentido eso tiene que 
+// actualizar solo por eso se le pasa el prop ejecutarConsultaGET
+const TablaVentas = ({ listaVentas, ejecutarConsultaGET }) => {
 
 
     useEffect(() => {
@@ -112,7 +165,7 @@ const TablaVentas = ({ listaVentas }) => {
 
                 </div>
                 <div>
-                    <table >
+                    <table className='tabla'>
                         <thead >
                             <tr >
                                 <th className='text-3xl  bg-blue-500 rounded-xl p-1 '>Codigo Venta</th>
@@ -124,6 +177,8 @@ const TablaVentas = ({ listaVentas }) => {
                                 <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Precio Unitario</th>
                                 <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Valor Venta</th>
                                 <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Estado Venta</th>
+                                {/* agregaremos un nuevo header para las acciones del crud */}
+                                <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Acciones</th>
                             </tr>
                             {/* codigoVenta: '123',
                                 fecha: '15/2/2021',
@@ -140,72 +195,18 @@ const TablaVentas = ({ listaVentas }) => {
                             es un array y para mostrarlos en cada uno  las celdas correpondientes debemos recorrerlo
                             el array con el siguiente codigo en javaScript justo aqui donde arriba de las celdas al
                             inicion de tbody */}
-                            {listaVentas.map((ventas) => {  // como parametro de entrada le paso el estado que me tiene guardado 
-                                // el arreglo y los datos en formato .json de mi datos del backend
+                            {listaVentas.map((venta) => {  // ejecuto al arreglo el metodo .map y el me entrega un  parametro de entrada  un objeto de venta
+                                // el arreglo y los datos en formato .json de mi datos del backend 
 
                                 return (
                                     // en el retorno pongo el html relacionada con el arreglo de mi informacion 
-                                    <tr>
-                                        <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                                            type="text"
-                                            name="codigoVenta"
-                                            id=""
-                                            value={ventas.codigoVenta} />
-                                        </td>
-                                        <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                                            type="text"
-                                            name="fecha"
-                                            id=""
-                                            value={ventas.fecha} />
-                                        </td>
-                                        <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                                            type="text"
-                                            name="codigoProducto"
-                                            id=""
-                                            value={ventas.codigoProducto} /></td>
-                                        <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                                            type="text"
-                                            name="cantidadProducto"
-                                            id=""
-                                            value={ventas.cantidadProducto} /></td>
-                                        <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                                            type="text"
-                                            name="nombreVendedor"
-                                            id=""
-                                            value={ventas.nombreVendedor} /></td>
-                                        <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                                            type="text"
-                                            name="nombreCliente"
-                                            id=""
-                                            value={ventas.nombreCliente} /></td>
-                                        <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                                            type="text"
-                                            name="precioUnitario"
-                                            id=""
-                                            value={ventas.precioUnitario} /></td>
-                                        <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                                            type="text"
-                                            name="valorTotal"
-                                            id=""
-                                            value={ventas.precioUnitario * ventas.cantidadProducto} /></td>
-                                        {/* Drop-down list */}
-                                        <td>
-                                            <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2 text-xl'
-                                                type="text"
-                                                name=""
-                                                id=""
-                                                defaultValue={0}>
-                                                <option value={0}>Seleccione una opción
-                                                </option>
-                                                <option value="proceso">En Proceso
-                                                </option>
-                                                <option value="entregada">Entregada
-                                                </option>
-                                                <option value="cancelada">Cancelada
-                                                </option>
-                                            </select>
-                                        </td>
-                                    </tr>
+                                    // componente FilaVenta me representa las fila de la tabla ventas
+                                    // le pasamos el prop de  ejecutarConsultaGET
+                                    <FilaVenta 
+                                    key={nanoid()} 
+                                    venta={venta}  
+                                    ejecutarConsultaGET={ejecutarConsultaGET} />/*ELEMENTO PADRE DEL .MAP DEBE TENER UN ID O KEY UNICO con nanoid me resuelve esto
+                                    me pone un id unico para cada elemento*/
                                 );
                             })}{/* este codigo me transforma un array de tipo json en un array
                              de tipo html y es con .map me recorre el estado listaVentas */}
@@ -220,9 +221,260 @@ const TablaVentas = ({ listaVentas }) => {
     )
 }
 
+// creamos nuevo componente para la fila de cada venta de la TablaVentas para poder hacer las acciones de eliminar y editar mucho msa facil 
+// le pasamos el prop a FilaVenta puesto que en este componente estan los botones de eliminacion y ediccion de los registros 
+// entonces deben de poder actualizar la informacion en en frontend para visualizar dinamicamente la modificiacion o eliminacion de un regristro
+// de la base de datos
+const FilaVenta = ({ venta, ejecutarConsultaGET }) => {
+    console.log(venta); //imprime mi ventas traidas del backend 
+    // creamos un estado de tipo boolean para hacer la renderizacion condicional del cambio de campos de tabla 
+    // a campos de input de fomulario para poder editar los datos
+    const [permitirEditar, setPermitirEditar] = useState(false) // estado de control de permitir ediccion si es true se puede editar si es falso no 
+    // si es true me pinta los inputs del formulario si es false me pinta las celdas de la tabla normal, ese estado me lo cambia de valor el icono 
+    // de editar con el evento onclick
+    const [infoNuevaVenta, setInfoNuevaVenta] = useState({ // estado que me tiene la informacion de una venta de cualquier fila que elija
+        // para editar  algun campo 
+
+        codigoVenta: venta.codigoVenta,
+        fecha: venta.fecha,
+        codigoProducto: venta.codigoProducto,
+        cantidadProducto: venta.cantidadProducto,
+        nombreVendedor: venta.nombreVendedor,
+        nombreCliente: venta.nombreCliente,
+        precioUnitario: venta.precioUnitario,
+        valorTotal: venta.valorTotal
+
+    })
+    const actualizarVenta = async () => { // debe ser asyncrona 
+        console.log(infoNuevaVenta);
+
+        // enviar al backend la actualizacion de una venta
+        // aqui pongo la operacion PATCH para hacer la perticion de actualizar los campos de un registro de una venta
+
+        const options = {
+            method: 'PATCH', // metodo actualizar 
+            url: 'https://vast-waters-45728.herokuapp.com/vehicle/update', // url de mi api servidor backend
+            headers: { 'Content-Type': 'application/json' },
+            data: { ...infoNuevaVenta, id: venta._id }, // datos a actualizar tiene toda la venta mas necesitamos pasarle 
+            // el id del la fila que quiero actualizar del dato o venta que estoy actualizando 
+            // ese id me representa la fila y venta que voy a actualizar 
+
+        };
+
+        await axios
+            .request(options)
+            .then(function (response) {
+                console.log(response.data);
+                toast.success('Venta actualizada con éxito', {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                })
+                ejecutarConsultaGET(true);
+                setPermitirEditar(false);
+            })
+            .catch(function (error) {
+                console.log(error);
+                toast.error('Error modificando venta', {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                })
+            });
+    };
+
+    const eliminarVenta = async () => { // funcion de eliminar venta esta me ejecuta la peticion DELETE al servidor
+
+        const options = {
+            method: 'DELETE', // metodo de eliminar
+            url: 'https://vast-waters-45728.herokuapp.com/vehicle/delete', // url de mi api servidor backend y la instruccion delete en el 
+            // final de la url
+            headers: { 'Content-Type': 'application/json' },
+            data: { id: venta._id }, // le tengo que pasar el id del dato o registro a eliminar y lo saco del prop que entro al componente filaVenta puesto 
+            // que este prop me tiene las filas selecionada de la ventas
+
+        };
+
+        await axios
+            .request(options)
+            .then(function (response) {
+                console.log(response.data);
+                toast.success('Venta eliminada con éxito', {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                })
+                ejecutarConsultaGET(true); // si elimino con exito actualiza la tabla con esta funcion de ejecutarConsultaGET en true por que 
+                // me ejecuta la consulta GET y me trae la informacion y la muestra en el frontend
+                // irTablasVentas(true);
+                // setPermitirEditar(false)
+            })
+            .catch(function (error) {
+                console.log(error);
+                toast.error('Error eliminando venta', {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                })
+            });
 
 
-const FormularioVentas = ({
+    };
+
+
+    return (
+        <tr > {permitirEditar ? (<>
+            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full'
+                type="text"
+                name="codigoVenta"
+                id=""
+                value={infoNuevaVenta.codigoVenta}
+                onChange={(evento) => {
+                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
+                }} />
+            </td>
+            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full'
+                type="text"
+                name="fecha"
+                id=""
+                value={infoNuevaVenta.fecha}
+                onChange={(evento) => {
+                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
+                }} />
+            </td>
+            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                type="text"
+                name="codigoProducto"
+                id=""
+                value={infoNuevaVenta.codigoProducto}
+                onChange={(evento) => {
+                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
+                }} /></td>
+            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                type="text"
+                name="cantidadProducto"
+                id=""
+                value={infoNuevaVenta.cantidadProducto}
+                onChange={(evento) => {
+                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
+                }} /></td>
+            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                type="text"
+                name="nombreVendedor"
+                id=""
+                value={infoNuevaVenta.nombreVendedor}
+                onChange={(evento) => {
+                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
+                }} /></td>
+            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                type="text"
+                name="nombreCliente"
+                id=""
+                value={infoNuevaVenta.nombreCliente}
+                onChange={(evento) => {
+                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
+                }} /></td>
+            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                type="text"
+                name="precioUnitario"
+                id=""
+                value={infoNuevaVenta.precioUnitario}
+                onChange={(evento) => {
+                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
+                }} /></td>
+            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                type="text"
+                name="valorTotal"
+                id=""
+                value={infoNuevaVenta.precioUnitario * infoNuevaVenta.cantidadProducto}
+                onChange={(evento) => {
+                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
+                }} /></td>
+            {/* Drop-down list */}
+            <td>
+                <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg  text-xl'
+                    type="text"
+                    name=""
+                    id=""
+                    defaultValue={0}>
+                    <option defaultValue={0}>Seleccione una opción
+                    </option>
+                    <option defaultValue="proceso">En Proceso
+                    </option>
+                    <option defaultValue="entregada">Entregada
+                    </option>
+                    <option defaultValue="cancelada">Cancelada
+                    </option>
+                </select>
+            </td>
+        </>) : (<>
+            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl '>
+                {venta.codigoVenta}
+            </td>
+            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                {venta.fecha}
+            </td>
+            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                {venta.codigoProducto}
+            </td>
+            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                {venta.cantidadProducto}
+            </td>
+            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                {venta.nombreVendedor}
+            </td>
+            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                {venta.nombreCliente}
+            </td>
+            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                {venta.nombreVendedor}
+            </td>
+            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                {venta.precioUnitario}
+            </td>
+            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                {venta.precioUnitario * venta.cantidadProducto}
+            </td>
+        </>
+        )
+
+
+        }
+            {/* agregaremos un nuevo boton que me hara las acciones del crud */}
+            <td><div className='flex w-full justify-around '>
+                {/* elemento icono de editar, con este edito  */}
+                {permitirEditar ? (<i class="fas fa-check text-green-500 hover:text-green-800 ml-5"
+                    onClick={
+                        () => {
+                            // setPermitirEditar(!permitirEditar);// me cambia el estado actual  por el contrario si estaba en true lo pone falso 
+                            actualizarVenta();
+                            // y si estaba falso lo pone true
+                        }
+                    } />) : (
+
+                    <i class="fas fa-edit text-yellow-700 hover:text-yellow-500 ml-5"
+                        onClick={
+                            () => {
+                                setPermitirEditar(!permitirEditar);// me cambia el estado actual  por el contrario si estaba en true lo pone falso 
+                                // y si estaba falso lo pone true
+                            }
+                        } />)
+                }
+                {/* elemento icono de eliminar, con este elimino  */}
+                <i class="fas fa-trash-alt text-red-800 hover:text-red-600 ml-2"
+                    onClick={() => {
+                        eliminarVenta(); // cuando ocurre el evento onClick en el boton icono de trash de eliminar se ejecuta esta funcion 
+
+                    }} />
+                <button>
+
+                </button>
+            </div>
+            </td>
+        </tr>
+
+
+    )
+
+}
+
+const FormularioCreacionVentas = ({
     // props 
     irTablasVentas,  // funcion de modificacion estado usado para la renderizacion condicional
     listaVentas,      // representa mis datos del backend, las ventas y  ventasDatosBackend
@@ -357,38 +609,46 @@ const FormularioVentas = ({
         // que me transformara ese codigo en formato REST y porder hacer las peticiones al backend 
 
         // la accion de ejecutar la peticion POST la hace el submit de formulario 
-        const options = {
+        // operacion de tipo POST
+        const options = { // variable de tipo lista que lleva la informacion del metodo REST a ejecutar, la url de la api, los 
+            // headers, y la data toda la informacion a enviar en formato clave valor. donde cada clave son los campos o atributos de 
+            // la base de datos y el valor es el registrado en los inpust del formulario 
             method: 'POST', // tipo de peticion es crear nuevo registro 
             url: 'https://vast-waters-45728.herokuapp.com/vehicle/create',// servidor donde enviare la peticion e informacion
             headers: { 'Content-Type': 'application/json' },
             data: {  // datos a enviar
                 fecha: objetoNuevaVenta.fecha, codigoVenta: objetoNuevaVenta.codigoVenta, nombreVendedor: objetoNuevaVenta.nombreVendedor,
-                identificacionVendedor: objetoNuevaVenta.identificacionVendedor,nombreCliente:objetoNuevaVenta.nombreCliente,
-                identificacionCliente:objetoNuevaVenta.identificacionCliente,codigoProducto: objetoNuevaVenta.codigoProducto,
-                 cantidadProducto:objetoNuevaVenta.cantidadProducto, precioUnitario:objetoNuevaVenta.precioUnitario,
-                  valorTotal:objetoNuevaVenta.valorTotal
+                identificacionVendedor: objetoNuevaVenta.identificacionVendedor, nombreCliente: objetoNuevaVenta.nombreCliente,
+                identificacionCliente: objetoNuevaVenta.identificacionCliente, codigoProducto: objetoNuevaVenta.codigoProducto,
+                cantidadProducto: objetoNuevaVenta.cantidadProducto, precioUnitario: objetoNuevaVenta.precioUnitario,
+                valorTotal: objetoNuevaVenta.valorTotal
             },
         };
 
-        await axios  // el await es para decirle que debe esperar una respuesta puesto que estas operaciones son asincronas se tiene que 
-        // esperar a obtener un resultado para esto mostraremos loading para mejorar la experiencia de usuario mietras espera 
-        // pero por eso se coloca await para que espere pero se debe colocar async la funcion que este use el await  
-        // cuando necesitemos o debemos que esperar a que una operacion ocurra debemos usar await para ayudarnos a esperar a que el 
-        // backend nos de una respuesta y por eso se usa await para esperar y luego ejecutar el resultado si de esta peticion si fue realizada
-        // con exito o no 
 
-        // axios esta funcion axios no se tienen que ejecutar sin el await por que no tendre como esperar a ver que paso 
-            .request(options)
-            .then(function (response) {
+        // ahora con axios ejecutaremos la peticion le enviaremos como parametro de entrada la varible con la informacion
+        await axios  // el await es para decirle que debe esperar una respuesta puesto que estas operaciones son asincronas se tiene que 
+            // esperar a obtener un resultado para esto mostraremos loading para mejorar la experiencia de usuario mietras espera 
+            // pero por eso se coloca await para que espere pero se debe colocar async la funcion que este use el await  
+            // cuando necesitemos o debemos que esperar a que una operacion ocurra debemos usar await para ayudarnos a esperar a que el 
+            // backend nos de una respuesta y por eso se usa await para esperar y luego ejecutar el resultado si de esta peticion si fue realizada
+            // con exito o no 
+
+            // axios esta funcion axios no se tienen que ejecutar sin el await por que no tendre como esperar a ver que paso 
+            .request(options)// peticion funcion de peticion con el argumento de entrada la variable con la informacion la data 
+            // y los procesos a ejecutar 
+            .then(function (response) {// si se recibe respuesta se ejecuta el mensaje response es palabra reservada 
+                // si se recibe respuesta entonces se hace eso signifa el .then entonces
                 console.log(response.data);
                 toast.success('Venta agregada con éxito', {
                     position: "bottom-center",
                     autoClose: 5000,
                 })
+                irTablasVentas(true);
             })
-            .catch(function (error) {
+            .catch(function (error) { // si se recibe error se ejecuta el mensaje de error 
                 console.error(error);
-                toast.success('Error registrando venta', {
+                toast.error('Error registrando venta', {
                     position: "bottom-center",
                     autoClose: 5000,
                 })

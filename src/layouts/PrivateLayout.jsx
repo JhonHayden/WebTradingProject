@@ -10,7 +10,7 @@ const PrivateLayout = ({children}) => {
             <NavBarResponsive/>
             
             <div className='h-full'>
-                <main className='h-full flex justify-center bg-blue-200'>
+                <main className='h-full flex justify-center bg-white'>
                     {children}  
                 </main>
                 <Footer/>
