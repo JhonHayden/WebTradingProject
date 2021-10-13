@@ -3,6 +3,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid'; // me permite tener id 
+// import { Tooltip } from '@mui/material';
+import { Dialog, Tooltip } from '@material-ui/core';
+// import Tooltip from '@mui/material/Tooltip'
 
 
 
@@ -24,8 +27,8 @@ const ModuloVentas = () => {
     // crearemos otro estado que me permita ejecutar la consulta GET para traer informacion del backend y actualizar mi frontend 
     // cada ves que edito creo o elimino un registro del backend
     const [ejecutarConsultaGET, setEjecutarConsultaGET] = useState(true);
-//luego setEjecutarConsultaGET la pasamos como prop a la tabla y luego a la filaVenta para que los botones iconos de eliminar y editar 
-// puedan ejecutar esta consulta y se actualice la informacion en el frontend y se muetre el cambio en edicion y eliminacion de un registro
+    //luego setEjecutarConsultaGET la pasamos como prop a la tabla y luego a la filaVenta para que los botones iconos de eliminar y editar 
+    // puedan ejecutar esta consulta y se actualice la informacion en el frontend y se muetre el cambio en edicion y eliminacion de un registro
 
 
     // escucharemos con el useEffect el valor de ejecutarConsultaGET si esta cambia se ejecuta las instrucciones del useEffect siguiente
@@ -43,29 +46,34 @@ const ModuloVentas = () => {
                 .then(function (response) { // si recibo respuesta entonces guardo la data en mi estado ventas la lista de ventas
                     // que mostrare en el mi tabla ventas del frontend
                     setVentas(response.data);
+                    // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
+                    console.log('SI.........FUNCIONO LA PETICION GET!!! !!!')
+
 
                 })
                 .catch(function (error) {
                     console.error(error);
+                    // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
+                    console.log('SI.........FUNCIONO LA PETICION GET!!! !!!')
                 });
         };
 
-        if(ejecutarConsultaGET){
+        if (ejecutarConsultaGET) {
 
             obtenerVentasDelBackend(); // si se ejecuta la consulta es porque el estado de ejecutarConsultaGET es true por ende ejecutaremos la
             // funcion que ejecuta la peticion GET .. obtenerVentasDelBackend 
-             
+
             // luego de consultar le retornamos el valor a false para estar lista para solicitarla de nuevo 
 
             setEjecutarConsultaGET(false);
 
         }
-        
+
     }, [ejecutarConsultaGET]) // supervisamos esta variable o estado  de ejecutarConsultaGET 
 
 
     useEffect(() => {
-        
+
 
         if (mostrarTablaVentas) {   // si estamos en la pagina de la tabla ventas ejecute la funcion de obtenerVentasDelBackend 
             // esto con el proposito que siempre me traiga los datos del backend a la tabla 
@@ -99,7 +107,7 @@ const ModuloVentas = () => {
             {/* el props que le paso al componente TablaVentas es mi estado donde esta 
                                                 almacenado las ventas desde el backend */}
             {mostrarTablaVentas ? (
-                <TablaVentas listaVentas={ventas}  setEjecutarConsultaGET={setEjecutarConsultaGET} /> // prop lista de las ventas es decir los datos del backend para que se muestren en la tabla
+                <TablaVentas listaVentas={ventas} setEjecutarConsultaGET={setEjecutarConsultaGET} /> // prop lista de las ventas es decir los datos del backend para que se muestren en la tabla
             ) : (
                 <FormularioCreacionVentas
                     irTablasVentas={setMostrarTablaVentas}  // prop para permitir renderizacion condicional del tabla ventas
@@ -131,10 +139,52 @@ const ModuloVentas = () => {
 const TablaVentas = ({ listaVentas, ejecutarConsultaGET }) => {
 
 
-    useEffect(() => {
-        console.log(listaVentas)
+    // creamos un estado para hacer busqueda me guarda el dato entrado por el input de busqueda y luego lo uso para hacer el
+    //el filtro
+    const [datoInputBusqueda, setDatoInputBusqueda] = useState('');// inicializamos en vacio 
+    // necesito un estado para almacenar la lista filtadra que me retorna el .filter y asi luego pasarla al .map de 
+    // la renderizacion de las filas de la tabla y muestre dinamicamente las filas del resultado de la busqueda
+    const [listaFiltradaResultadoBusqueda, setListaFiltradaResultadoBusqueda] = useState(listaVentas);// evidentemente 
+    // su valor inicial debe ser la listaventas traida del backend 
+    // la funcion setListaFiltradaResultadoBusqueda le pasare la lista filtrada resultado de la busqueda
 
-    }, [listaVentas])
+
+    useEffect(() => {
+        console.log('valor almacenado en el estado busqueda : ', datoInputBusqueda); //imprimiremos lo que tiene el input busqueda la idea es almacenar
+        //   el dato o robar el dato del input de buscar venta y guardarlo en el estado busqueda para luego trabajar con este dato y buscarlo en la 
+        //   tabla
+        console.log("lista original", listaVentas)
+        setListaFiltradaResultadoBusqueda( // modifico el estdado listaFiltradaResultadoBusqueda, con el resultado de la busqueda
+            // es decir la listafiltrada con los criterios de busqueda, conicidencia el letras con el texto del input buscar venta
+
+            listaVentas.filter((objetoDeLaListaVentas) => {
+
+                console.log("objetoDeLaListaVentas", objetoDeLaListaVentas);
+                return JSON.stringify(objetoDeLaListaVentas).toLowerCase().includes(datoInputBusqueda.toLowerCase()); // me permite
+                // primero con JSON.stringify() transformo todo el objetoDeLaListaVentas en string luego con 
+                // toLowerCase() convierto ese string en minusculas y luevo con includes busco en ese string coincidencia
+                // en letras o palabras con el datoInputBusqueda que tambien lo converti en minusculas y retorno esas coincidencisa
+                // y asi se hace la busqueda filter me devuelve una lista de objetos con la coincidencia  NO TENGO EL BACKEND POR ESO NO ME IMPRIME NADA
+            })) // con .filter busco dentro de un lista de objetos las conin
+        // dencias deacuerdo a lo que le especifique tengo que dentro de los parentesis entregarle una arrow funcion con 
+        // parametro cada elementto de la lista de obejtos es decir cada objeto
+        // console.log("lista Filtrada",listaVentas.filter((objetoDeLaListaVentas) => {
+
+        //     console.log("objetoDeLaListaVentas",objetoDeLaListaVentas);
+        //     return JSON.stringify(objetoDeLaListaVentas).toLowerCase().includes(datoInputBusqueda.toLowerCase()); // me permite
+        //     // primero con JSON.stringify() transformo todo el objetoDeLaListaVentas en string luego con 
+        //     // toLowerCase() convierto ese string en minusculas y luevo con includes busco en ese string coincidencia
+        //     // en letras o palabras con el datoInputBusqueda que tambien lo converti en minusculas y retorno esas coincidencisa
+        //     // y asi se hace la busqueda filter me devuelve una lista de objetos con la coincidencia  NO TENGO EL BACKEND POR ESO NO ME IMPRIME NADA
+        // })) // con .filter busco dentro de un lista de objetos las conin
+        // // dencias deacuerdo a lo que le especifique tengo que dentro de los parentesis entregarle una arrow funcion con 
+        // // parametro cada elementto de la lista de obejtos es decir cada objeto
+    }, [datoInputBusqueda, listaVentas]);
+
+    // useEffect(() => {
+    //     console.log("lista ventas en mi componente tabla:  ",listaVentas)
+
+    // }, [listaVentas])
 
     return (
         <div>
@@ -148,10 +198,17 @@ const TablaVentas = ({ listaVentas, ejecutarConsultaGET }) => {
                         <div className='bg-blue-500 w-max p-3 rounded-xl'>
                             <label className='font-bold' htmlFor="buscar">
                                 Buscar Venta
-                                <input name='buscar'
+                                <input
+                                    className='bg-gray-50 border border-gray-300 p-2 rounded-lg ml-5 focus:outline-none'
+                                    name='buscar'
                                     id="buscar"
+                                    placeholder='Buscar'
                                     type="text"
-                                    className='bg-gray-50 border border-gray-300 p-2 rounded-lg ml-5'
+                                    value={datoInputBusqueda} //le asignamos el estado a valor del input
+                                    onChange={(evento) => {
+                                        setDatoInputBusqueda(evento.target.value); // cada ves que se registre (cambio) un dato en el input
+                                        // busqueda lo guardo en el estado datoInputBusqueda
+                                    }}
                                 />
 
                             </label>
@@ -195,17 +252,19 @@ const TablaVentas = ({ listaVentas, ejecutarConsultaGET }) => {
                             es un array y para mostrarlos en cada uno  las celdas correpondientes debemos recorrerlo
                             el array con el siguiente codigo en javaScript justo aqui donde arriba de las celdas al
                             inicion de tbody */}
-                            {listaVentas.map((venta) => {  // ejecuto al arreglo el metodo .map y el me entrega un  parametro de entrada  un objeto de venta
+                            {listaFiltradaResultadoBusqueda.map((venta) => {// le paso la lista filtrada al .map para que me lo convierta
+                            // a una lista de elementos de html y los muestre en la table los td y filas de la tabla
+                                  // ejecuto al arreglo el metodo .map y el me entrega un  parametro de entrada  un objeto de venta
                                 // el arreglo y los datos en formato .json de mi datos del backend 
 
                                 return (
                                     // en el retorno pongo el html relacionada con el arreglo de mi informacion 
                                     // componente FilaVenta me representa las fila de la tabla ventas
                                     // le pasamos el prop de  ejecutarConsultaGET
-                                    <FilaVenta 
-                                    key={nanoid()} 
-                                    venta={venta}  
-                                    ejecutarConsultaGET={ejecutarConsultaGET} />/*ELEMENTO PADRE DEL .MAP DEBE TENER UN ID O KEY UNICO con nanoid me resuelve esto
+                                    <FilaVenta
+                                        key={nanoid()}
+                                        venta={venta}
+                                        ejecutarConsultaGET={ejecutarConsultaGET} />/*ELEMENTO PADRE DEL .MAP DEBE TENER UN ID O KEY UNICO con nanoid me resuelve esto
                                     me pone un id unico para cada elemento*/
                                 );
                             })}{/* este codigo me transforma un array de tipo json en un array
@@ -226,7 +285,7 @@ const TablaVentas = ({ listaVentas, ejecutarConsultaGET }) => {
 // entonces deben de poder actualizar la informacion en en frontend para visualizar dinamicamente la modificiacion o eliminacion de un regristro
 // de la base de datos
 const FilaVenta = ({ venta, ejecutarConsultaGET }) => {
-    console.log(venta); //imprime mi ventas traidas del backend 
+    //console.log(venta); //imprime mi ventas traidas del backend 
     // creamos un estado de tipo boolean para hacer la renderizacion condicional del cambio de campos de tabla 
     // a campos de input de fomulario para poder editar los datos
     const [permitirEditar, setPermitirEditar] = useState(false) // estado de control de permitir ediccion si es true se puede editar si es falso no 
@@ -245,8 +304,10 @@ const FilaVenta = ({ venta, ejecutarConsultaGET }) => {
         valorTotal: venta.valorTotal
 
     })
+
+    const [mostrarDialog, setMostrarDialog] = useState(false)// muestra dialog para confirmar accion delete 
     const actualizarVenta = async () => { // debe ser asyncrona 
-        console.log(infoNuevaVenta);
+        // console.log(infoNuevaVenta);
 
         // enviar al backend la actualizacion de una venta
         // aqui pongo la operacion PATCH para hacer la perticion de actualizar los campos de un registro de una venta
@@ -265,6 +326,8 @@ const FilaVenta = ({ venta, ejecutarConsultaGET }) => {
             .request(options)
             .then(function (response) {
                 console.log(response.data);
+                // alert('SI.........FUNCIONO LA PETICION PATCH!!! !!!')
+                console.log('SI.........FUNCIONO LA PETICION PATCH!!! !!!')
                 toast.success('Venta actualizada con éxito', {
                     position: "bottom-center",
                     autoClose: 5000,
@@ -274,10 +337,14 @@ const FilaVenta = ({ venta, ejecutarConsultaGET }) => {
             })
             .catch(function (error) {
                 console.log(error);
+                // alert('NO.........FUNCIONO LA PETICION PATCH!!! !!!')
+
+                console.log('NO.......funciono LA PETICION PATCH!!!')
                 toast.error('Error modificando venta', {
                     position: "bottom-center",
                     autoClose: 5000,
                 })
+                setPermitirEditar(false);// APENAS FUNCIONE SE LO QUITO AUN NO SE HACE EL BACKEND POR ESO MO FUNCIONA TODAVIA
             });
     };
 
@@ -297,6 +364,9 @@ const FilaVenta = ({ venta, ejecutarConsultaGET }) => {
             .request(options)
             .then(function (response) {
                 console.log(response.data);
+                // alert('SI.........FUNCIONO LA PETICION DELETE!!! !!!')
+                console.log('SI.........FUNCIONO LA PETICION DELETE!!! !!!')
+
                 toast.success('Venta eliminada con éxito', {
                     position: "bottom-center",
                     autoClose: 5000,
@@ -308,11 +378,14 @@ const FilaVenta = ({ venta, ejecutarConsultaGET }) => {
             })
             .catch(function (error) {
                 console.log(error);
+                console.log('NO.........FUNCIONO LA PETICION DELETE!!! !!!')
+                // alert('NO.........FUNCIONO LA PETICION DELETE!!! !!!')
                 toast.error('Error eliminando venta', {
                     position: "bottom-center",
                     autoClose: 5000,
                 })
             });
+        setMostrarDialog(false); // despues de eliminar cerramos el dialog 
 
 
     };
@@ -439,40 +512,78 @@ const FilaVenta = ({ venta, ejecutarConsultaGET }) => {
             {/* agregaremos un nuevo boton que me hara las acciones del crud */}
             <td><div className='flex w-full justify-around '>
                 {/* elemento icono de editar, con este edito  */}
-                {permitirEditar ? (<i class="fas fa-check text-green-500 hover:text-green-800 ml-5"
-                    onClick={
-                        () => {
-                            // setPermitirEditar(!permitirEditar);// me cambia el estado actual  por el contrario si estaba en true lo pone falso 
-                            actualizarVenta();
-                            // y si estaba falso lo pone true
-                        }
-                    } />) : (
+                {permitirEditar ? (
+                    <>
+                        <Tooltip title='Actualizar venta' arrow>
+                            <i className="fas fa-check text-green-500 hover:text-green-800 ml-5"
+                                onClick={
+                                    () => {
+                                        // setPermitirEditar(!permitirEditar);// me cambia el estado actual  por el contrario si estaba en true lo pone falso 
+                                        actualizarVenta();
+                                        // y si estaba falso lo pone true
+                                    }
+                                } />
+                        </Tooltip>
+                        <Tooltip title='Cancelar' arrow>
+                            <i className="fas fa-window-close text-yellow-700 hover:text-yellow-500 ml-5"
+                                onClick={
+                                    () => {
+                                        setPermitirEditar(!permitirEditar);// me cambia el estado actual  por el contrario si estaba en true lo pone falso 
+                                        // y si estaba falso lo pone true
+                                    }
+                                } />
+                        </Tooltip>
+                    </>
 
-                    <i class="fas fa-edit text-yellow-700 hover:text-yellow-500 ml-5"
-                        onClick={
-                            () => {
-                                setPermitirEditar(!permitirEditar);// me cambia el estado actual  por el contrario si estaba en true lo pone falso 
-                                // y si estaba falso lo pone true
-                            }
-                        } />)
+                ) : (
+                    <>
+                        {/* //agregamos tooltip mensaje que sale al pasar por encima de un boton y me indica que accion hace ese boton */}
+                        <Tooltip title='Editar venta' arrow>
+                            <i className="fas fa-edit text-yellow-700 hover:text-yellow-500 ml-5"
+                                onClick={
+                                    () => {
+                                        setPermitirEditar(!permitirEditar);// me cambia el estado actual  por el contrario si estaba en true lo pone falso 
+                                        // y si estaba falso lo pone true
+                                    }
+                                } />
+                        </Tooltip>
+                        {/* /* elemento icono de eliminar, con este elimino  */}
+
+                        {/* /* agregamos tooltip mensaje que sale al pasar por encima de un boton y me indica que accion hace ese boton  */}
+
+                        <Tooltip title='Eliminar venta' arrow>
+
+                            <i className="fas fa-trash-alt text-red-800 hover:text-red-600 ml-2"
+                                onClick={() => {
+                                    setMostrarDialog(true)
+                                    // eliminarVenta(); // cuando ocurre el evento onClick en el boton icono de trash de eliminar se ejecuta esta funcion 
+
+                                }}
+                            />
+                        </Tooltip >
+                    </>
+                )
                 }
-                {/* elemento icono de eliminar, con este elimino  */}
-                <i class="fas fa-trash-alt text-red-800 hover:text-red-600 ml-2"
-                    onClick={() => {
-                        eliminarVenta(); // cuando ocurre el evento onClick en el boton icono de trash de eliminar se ejecuta esta funcion 
-
-                    }} />
-                <button>
-
-                </button>
             </div>
+                <Dialog open={mostrarDialog}>
+                    <div className='bg-blue-200 p-4'>
+                        <h1 className='font-extrabold m-3 '>¿Está seguro de querer eliminar la venta?</h1>
+                        <div className='flex justify-center text-xl '>
+                            <button
+                                className='bg-green-500 p-3 m-1 px-4 hover:bg-green-700  text-white'
+                                onClick={() => eliminarVenta()}>
+                                Si</button>
+                            <button
+                                className='bg-red-600 p-3 m-1 hover:bg-red-800 text-white'
+                                onClick={() => setMostrarDialog(false)}> No</button>
+                        </div>
+                    </div>
+
+                </Dialog>
             </td>
         </tr>
-
-
-    )
-
-}
+    );
+};
 
 const FormularioCreacionVentas = ({
     // props 
@@ -501,9 +612,9 @@ const FormularioCreacionVentas = ({
     const enviarAlBackend = () => {
 
 
-        console.log('fecha:', fecha, 'codigoVenta:', codigoVenta, 'nombreVendedor:', nombreVendedor, 'identificacionVendedor:',
-            identificacionVendedor, 'nombreCliente:', nombreCliente, 'identificacionCliente:', identificacionCliente, 'cantidadProducto:',
-            cantidadProducto, 'codigoProducto:', codigoProducto, 'precioUnitario:', precioUnitario, 'valorTotal:', valorTotal);
+        // console.log('fecha:', fecha, 'codigoVenta:', codigoVenta, 'nombreVendedor:', nombreVendedor, 'identificacionVendedor:',
+        //     identificacionVendedor, 'nombreCliente:', nombreCliente, 'identificacionCliente:', identificacionCliente, 'cantidadProducto:',
+        //     cantidadProducto, 'codigoProducto:', codigoProducto, 'precioUnitario:', precioUnitario, 'valorTotal:', valorTotal);
 
         //codigo para evitar que se envie una casilla vacia usando condicional if existe otra mejor forma y es usando html los atributos required de 
         // los input y el boton asociado al formulario ponerlo de tipo submit
@@ -591,7 +702,7 @@ const FormularioCreacionVentas = ({
 
         claveValorDeValuesFomulario.forEach((valorDeCadaElementoDelFormData, claveDeCadaElementoDelFormData) => {
 
-            console.log(claveDeCadaElementoDelFormData + ' : ', valorDeCadaElementoDelFormData)
+            // console.log(claveDeCadaElementoDelFormData + ' : ', valorDeCadaElementoDelFormData)
 
             objetoNuevaVenta[claveDeCadaElementoDelFormData] = valorDeCadaElementoDelFormData; //lleno en objeto con los
             // datos de una venta, la cual sus atributos son los datos entrados por los inputs que el usuario registro 
@@ -643,15 +754,19 @@ const FormularioCreacionVentas = ({
                 toast.success('Venta agregada con éxito', {
                     position: "bottom-center",
                     autoClose: 5000,
-                })
-                irTablasVentas(true);
+                });
+                // alert('SI.........FUNCIONO LA PETICION POST!!! !!!');
+                console.log('SI.........FUNCIONO LA PETICION POST!!! !!!');
+                // irTablasVentas(true);
             })
             .catch(function (error) { // si se recibe error se ejecuta el mensaje de error 
                 console.error(error);
                 toast.error('Error registrando venta', {
                     position: "bottom-center",
                     autoClose: 5000,
-                })
+                });
+                // alert('NO.........FUNCIONO LA PETICION POST!!! !!!');
+                console.log('NO.........FUNCIONO LA PETICION POST!!! !!!');
             });
 
         // irTablasVentas(true) // llamada de funcion que entro como prop al formulario y me muestra y permite modificar el estado usado para
@@ -662,7 +777,7 @@ const FormularioCreacionVentas = ({
 
 
 
-        console.log('datos del formulario enviados', claveValorDeValuesFomulario);// con referenciaFomulario.current me saca todo el codigo en 
+        // console.log('datos del formulario enviados', claveValorDeValuesFomulario);// con referenciaFomulario.current me saca todo el codigo en 
         // bloque html del form .. formulario de la etiqueta <form> a la cual se puse de ref={referenciaFomulario} le puse el hook useRef()
         // me permite tener todo el bloque de este html como una variable y asi acceder al valor actual registrado por el usuario en cada uno de 
         // los inputs de este formulario que hemos referenciado con el hook useRef y nos sirve para provar cosas con el backend nos permita sacar 

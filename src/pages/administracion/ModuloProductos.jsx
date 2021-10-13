@@ -98,7 +98,7 @@ const TablaProductos = ({ listaProductos }) => {
 
 
     useEffect(() => {
-        console.log(listaProductos)
+        // console.log(listaProductos)
 
     }, [listaProductos])
 
@@ -230,7 +230,7 @@ const FormularioProductos = ({
     const enviarAlBackend = () => {
 
 
-        console.log('codigoProducto:', codigoProducto, 'descripcionProducto:', descripcionProducto, 'precioUnitario:', precioUnitario, 'estadoProducto:', estadoProducto);
+        // console.log('codigoProducto:', codigoProducto, 'descripcionProducto:', descripcionProducto, 'precioUnitario:', precioUnitario, 'estadoProducto:', estadoProducto);
 
         //codigo para evitar que se envie una casilla vacia usando condicional if existe otra mejor forma y es usando html los atributos required de 
         // los input y el boton asociado al formulario ponerlo de tipo submit
@@ -289,7 +289,7 @@ const FormularioProductos = ({
         //   "multipart/form-data".
         claveValorDeValuesFomulario.forEach((valorDeCadaElementoDelFormData, claveDeCadaElementoDelFormData) => {
 
-            console.log(claveDeCadaElementoDelFormData, valorDeCadaElementoDelFormData)
+            // console.log(claveDeCadaElementoDelFormData, valorDeCadaElementoDelFormData)
 
             // todo esto con la finalidad de evitar el uso de un estado para cada input puesto que con el FormData me muestra todo los datos 
             // pero para usar esto primero usamos permitimos el evento onSubmit en el form y el boton debe ser type=submit luego referenciamos
@@ -298,7 +298,7 @@ const FormularioProductos = ({
             // foreach y mostramos la clave y el valor  
         })
 
-        console.log('datos del formulario enviados', claveValorDeValuesFomulario);// con referenciaFomulario.current me saca todo el codigo en 
+        // console.log('datos del formulario enviados', claveValorDeValuesFomulario);// con referenciaFomulario.current me saca todo el codigo en 
         // bloque html del form .. formulario de la etiqueta <form> a la cual se puse de ref={referenciaFomulario} le puse el hook useRef()
         // me permite tener todo el bloque de este html como una variable y asi acceder al valor actual registrado por el usuario en cada uno de 
         // los inputs de este formulario que hemos referenciado con el hook useRef y nos sirve para provar cosas con el backend nos permita sacar 
