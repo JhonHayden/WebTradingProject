@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
-import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid'; // me permite tener id 
-// import { Tooltip } from '@mui/material';
 import { Dialog, Tooltip } from '@material-ui/core';
-// import Tooltip from '@mui/material/Tooltip'
-
-
+import { obtenerVentasDelBackend } from 'utils/api';
+import { crearVenta } from 'utils/api';
+import { editarVenta } from 'utils/api';
+import { deleteVenta } from 'utils/api';
 
 
 const ModuloVentas = () => {
@@ -21,7 +20,8 @@ const ModuloVentas = () => {
     // // const [fecha, setFecha] = useState('dd/mm/aa');
     const [cambiarNombreBoton, setCambiarNombreBoton] = useState('Registrar Venta');
 
-    const [ventas, setVentas] = useState([]); // estado o variable que me almacena los datos del backend en formato .json
+    const [ventas, setVentas] = useState([]); // estado o variable que me almacena los datos del backend en formato .json --> este 
+    // estado se pasa como prop al componente tablaVentas para que lo muestre en la tabla por medio de .map
 
 
     // crearemos otro estado que me permita ejecutar la consulta GET para traer informacion del backend y actualizar mi frontend 
@@ -33,40 +33,64 @@ const ModuloVentas = () => {
 
     // escucharemos con el useEffect el valor de ejecutarConsultaGET si esta cambia se ejecuta las instrucciones del useEffect siguiente
     useEffect(() => {
+
+        // console.log("consulta", ejecutarConsultaGET);
         // con este useEffect vacio mas adelante traemos los datos desde el backend y la guardaremos 
         // en un estado y este sera el estado ventas
 
         // aqui dentro haremos la peticion de GET de REST con axios para traer informacion de la API y la base de datos 
         // necesitamos una funcion async para la peticion GET por que useEffect no permite ser async 
-        const obtenerVentasDelBackend = async () => {
-            // dentro ponemos la peticion GET
-            const options = { method: 'GET', url: 'https://vast-waters-45728.herokuapp.com/vehicle/' };
-            await axios
-                .request(options)
-                .then(function (response) { // si recibo respuesta entonces guardo la data en mi estado ventas la lista de ventas
-                    // que mostrare en el mi tabla ventas del frontend
-                    setVentas(response.data);
-                    // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
-                    console.log('SI.........FUNCIONO LA PETICION GET!!! !!!')
+        // const obtenerVentasDelBackend = async () => {
+        //     // dentro ponemos la peticion GET
+        //     const options = { method: 'GET', url: 'https://vast-waters-45728.herokuapp.com/vehicle/' };
+        //     await axios
+        //         .request(options)
+        //         .then(function (response) { // si recibo respuesta entonces guardo la data en mi estado ventas la lista de ventas
+        //             // que mostrare en el mi tabla ventas del frontend
+        //             setVentas(response.data);
+        //             // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
+        //             console.log('SI.........FUNCIONO LA PETICION GET!!! !!!')
 
 
-                })
-                .catch(function (error) {
-                    console.error(error);
-                    // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
-                    console.log('SI.........FUNCIONO LA PETICION GET!!! !!!')
-                });
-        };
+        //         })
+        //         .catch(function (error) {
+        //             console.error(error);
+        //             // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
+        //             console.log('SI.........FUNCIONO LA PETICION GET!!! !!!')
+        //         });
+        //     setEjecutarConsultaGET(false);
+
+        // };
 
         if (ejecutarConsultaGET) {
 
-            obtenerVentasDelBackend(); // si se ejecuta la consulta es porque el estado de ejecutarConsultaGET es true por ende ejecutaremos la
+            //                      parametro para la funcion que tengo en api y hace la peticion GET
+            obtenerVentasDelBackend(
+                // esta funcion siguiente es una funcion anonima que se ejecuta despues de un evento y el evento es 
+                // la peticion get, cuando el servidor devuelve una respuesta a esta peticion la instruccion .then revisa esta respuesta y 
+                // ejecuta alguna de las dos funciones anonimas siguientes si la respuesta es positiva ejecuta la siguiente si no es 
+                // positiva ejecuta el .catch 
+                // function (response) { // si recibo respuesta entonces guardo la data en mi estado ventas la lista de ventas
+                // que mostrare en el mi tabla ventas del frontend 
+
+
+                // las siguientes dos funciones son callback por que se ejecutan depues que sucede un evento (la peticion get --> obtenerVentasDelBackend)
+                (response) => { // esta funcion es equivalente a la anterior function (response) { solo que esta escrita como arrow function
+                    setVentas(response.data); // response es la respuesta del backend a la peticion get es decir trae toda la trama de la respuesta
+                    // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
+                    console.log('SI.........FUNCIONO LA PETICION GET!!! !!!');
+                },
+                (error) => {  // esta funcion es equivalente a la anterior function (error) { solo que esta escrita como arrow function
+                    console.error(error);
+                    // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
+                    console.log('NO.........FUNCIONO LA PETICION GET!!! !!!');
+                }
+            ); // si se ejecuta la consulta es porque el estado de ejecutarConsultaGET es true por ende ejecutaremos la
             // funcion que ejecuta la peticion GET .. obtenerVentasDelBackend 
 
             // luego de consultar le retornamos el valor a false para estar lista para solicitarla de nuevo 
 
             setEjecutarConsultaGET(false);
-
         }
 
     }, [ejecutarConsultaGET]) // supervisamos esta variable o estado  de ejecutarConsultaGET 
@@ -136,7 +160,7 @@ const ModuloVentas = () => {
 // cuando se modifica elimina un registro del backend con los botones de edicion y eliminacion de la tabla de ventas puesto que si no se lo pasamos
 // no se actualizara la informacion en en front a menos que le demos refrescar a la pagina web con f5 pero no tiene sentido eso tiene que 
 // actualizar solo por eso se le pasa el prop ejecutarConsultaGET
-const TablaVentas = ({ listaVentas, ejecutarConsultaGET }) => {
+const TablaVentas = ({ listaVentas, setEjecutarConsultaGET }) => {
 
 
     // creamos un estado para hacer busqueda me guarda el dato entrado por el input de busqueda y luego lo uso para hacer el
@@ -150,16 +174,16 @@ const TablaVentas = ({ listaVentas, ejecutarConsultaGET }) => {
 
 
     useEffect(() => {
-        console.log('valor almacenado en el estado busqueda : ', datoInputBusqueda); //imprimiremos lo que tiene el input busqueda la idea es almacenar
+        // console.log('valor almacenado en el estado busqueda : ', datoInputBusqueda); //imprimiremos lo que tiene el input busqueda la idea es almacenar
         //   el dato o robar el dato del input de buscar venta y guardarlo en el estado busqueda para luego trabajar con este dato y buscarlo en la 
         //   tabla
-        console.log("lista original", listaVentas)
+        // console.log("lista original", listaVentas)
         setListaFiltradaResultadoBusqueda( // modifico el estdado listaFiltradaResultadoBusqueda, con el resultado de la busqueda
             // es decir la listafiltrada con los criterios de busqueda, conicidencia el letras con el texto del input buscar venta
 
             listaVentas.filter((objetoDeLaListaVentas) => {
 
-                console.log("objetoDeLaListaVentas", objetoDeLaListaVentas);
+                // console.log("objetoDeLaListaVentas", objetoDeLaListaVentas);
                 return JSON.stringify(objetoDeLaListaVentas).toLowerCase().includes(datoInputBusqueda.toLowerCase()); // me permite
                 // primero con JSON.stringify() transformo todo el objetoDeLaListaVentas en string luego con 
                 // toLowerCase() convierto ese string en minusculas y luevo con includes busco en ese string coincidencia
@@ -221,10 +245,10 @@ const TablaVentas = ({ listaVentas, ejecutarConsultaGET }) => {
                     >Actualizar Estado</button>
 
                 </div>
-                <div>
+                <div className=' hidden md:flex w-full'>
                     <table className='tabla'>
-                        <thead >
-                            <tr >
+                        <thead>
+                            <tr>
                                 <th className='text-3xl  bg-blue-500 rounded-xl p-1 '>Codigo Venta</th>
                                 <th className='text-3xl bg-blue-500 rounded-xl p-1 ' >Fecha</th>
                                 <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Producto</th>
@@ -252,19 +276,19 @@ const TablaVentas = ({ listaVentas, ejecutarConsultaGET }) => {
                             es un array y para mostrarlos en cada uno  las celdas correpondientes debemos recorrerlo
                             el array con el siguiente codigo en javaScript justo aqui donde arriba de las celdas al
                             inicion de tbody */}
-                            {listaFiltradaResultadoBusqueda.map((venta) => {// le paso la lista filtrada al .map para que me lo convierta
-                            // a una lista de elementos de html y los muestre en la table los td y filas de la tabla
-                                  // ejecuto al arreglo el metodo .map y el me entrega un  parametro de entrada  un objeto de venta
+                            {listaFiltradaResultadoBusqueda.map((elementoventa) => {// le paso la lista filtrada al .map para que me lo convierta
+                                // a una lista de elementos de html y los muestre en la table los td y filas de la tabla
+                                // ejecuto al arreglo el metodo .map y el me entrega un  parametro de entrada  un objeto de venta
                                 // el arreglo y los datos en formato .json de mi datos del backend 
 
                                 return (
                                     // en el retorno pongo el html relacionada con el arreglo de mi informacion 
                                     // componente FilaVenta me representa las fila de la tabla ventas
-                                    // le pasamos el prop de  ejecutarConsultaGET
+                                    // le pasamos el prop de  setEjecutarConsultaGET
                                     <FilaVenta
                                         key={nanoid()}
-                                        venta={venta}
-                                        ejecutarConsultaGET={ejecutarConsultaGET} />/*ELEMENTO PADRE DEL .MAP DEBE TENER UN ID O KEY UNICO con nanoid me resuelve esto
+                                        venta={elementoventa}
+                                        setEjecutarConsultaGET={setEjecutarConsultaGET} />/*ELEMENTO PADRE DEL .MAP DEBE TENER UN ID O KEY UNICO con nanoid me resuelve esto
                                     me pone un id unico para cada elemento*/
                                 );
                             })}{/* este codigo me transforma un array de tipo json en un array
@@ -272,11 +296,32 @@ const TablaVentas = ({ listaVentas, ejecutarConsultaGET }) => {
                         </tbody>
 
                     </table>
+                </div>
+                <div className='flex flex-col w-full md:hidden'>
 
+                    {listaFiltradaResultadoBusqueda.map((elemento) => { // me retorna todos los elementos de la lista en formato html 
+
+                        return (
+                            < div className='bg-blue-300 m-2 shadow-xl  flex flex-col border border-red-800 p-4 rounded-xl text-gray-700 '
+                                key={nanoid()}  >
+                                <span className='bg-blue-50'>{elemento.codigoVenta}</span>
+                                <span className='bg-blue-50'>{elemento.fecha}</span>
+                                <span className='bg-blue-50'>{elemento.codigoProducto}</span>
+                                <span className='bg-blue-50'>{elemento.cantidadProducto}</span>
+                                <span className='bg-blue-50'>{elemento.nombreVendedor}</span>
+                                <span className='bg-blue-50'>{elemento.nombreCliente}</span>
+                                <span className='bg-blue-50'>{elemento.precioUnitario}</span>
+                                <span className='bg-blue-50'>{elemento.valorTotal}</span>
+                            </div>
+                        )
+                    })}
+                    <div>
+
+                    </div>
                 </div>
             </div>
 
-        </div>
+        </div >
     )
 }
 
@@ -284,7 +329,7 @@ const TablaVentas = ({ listaVentas, ejecutarConsultaGET }) => {
 // le pasamos el prop a FilaVenta puesto que en este componente estan los botones de eliminacion y ediccion de los registros 
 // entonces deben de poder actualizar la informacion en en frontend para visualizar dinamicamente la modificiacion o eliminacion de un regristro
 // de la base de datos
-const FilaVenta = ({ venta, ejecutarConsultaGET }) => {
+const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
     //console.log(venta); //imprime mi ventas traidas del backend 
     // creamos un estado de tipo boolean para hacer la renderizacion condicional del cambio de campos de tabla 
     // a campos de input de fomulario para poder editar los datos
@@ -301,210 +346,281 @@ const FilaVenta = ({ venta, ejecutarConsultaGET }) => {
         nombreVendedor: venta.nombreVendedor,
         nombreCliente: venta.nombreCliente,
         precioUnitario: venta.precioUnitario,
-        valorTotal: venta.valorTotal
+        valorTotal: venta.valorTotal,
+        estadoVenta: venta.estadoVenta
 
     })
 
     const [mostrarDialog, setMostrarDialog] = useState(false)// muestra dialog para confirmar accion delete 
+
+
     const actualizarVenta = async () => { // debe ser asyncrona 
         // console.log(infoNuevaVenta);
+        await editarVenta(
+            venta._id,
 
-        // enviar al backend la actualizacion de una venta
-        // aqui pongo la operacion PATCH para hacer la perticion de actualizar los campos de un registro de una venta
+            infoNuevaVenta,
 
-        const options = {
-            method: 'PATCH', // metodo actualizar 
-            url: 'https://vast-waters-45728.herokuapp.com/vehicle/update', // url de mi api servidor backend
-            headers: { 'Content-Type': 'application/json' },
-            data: { ...infoNuevaVenta, id: venta._id }, // datos a actualizar tiene toda la venta mas necesitamos pasarle 
-            // el id del la fila que quiero actualizar del dato o venta que estoy actualizando 
-            // ese id me representa la fila y venta que voy a actualizar 
+            (response) => {
 
-        };
-
-        await axios
-            .request(options)
-            .then(function (response) {
                 console.log(response.data);
+                // console.log(response.data);
                 // alert('SI.........FUNCIONO LA PETICION PATCH!!! !!!')
                 console.log('SI.........FUNCIONO LA PETICION PATCH!!! !!!')
                 toast.success('Venta actualizada con éxito', {
                     position: "bottom-center",
                     autoClose: 5000,
-                })
-                ejecutarConsultaGET(true);
+                });
                 setPermitirEditar(false);
-            })
-            .catch(function (error) {
-                console.log(error);
+                setEjecutarConsultaGET(true);
+            },
+            (error) => {
+                console.error(error);
                 // alert('NO.........FUNCIONO LA PETICION PATCH!!! !!!')
 
-                console.log('NO.......funciono LA PETICION PATCH!!!')
+                console.log('NO.......funciono LA PETICION PATCH!!!');
                 toast.error('Error modificando venta', {
                     position: "bottom-center",
                     autoClose: 5000,
-                })
-                setPermitirEditar(false);// APENAS FUNCIONE SE LO QUITO AUN NO SE HACE EL BACKEND POR ESO MO FUNCIONA TODAVIA
-            });
+                });
+                // setPermitirEditar(false);// APENAS FUNCIONE SE LO QUITO AUN NO SE HACE EL BACKEND POR ESO MO FUNCIONA TODAVIA
+            }
+
+        )
+
+        // enviar al backend la actualizacion de una venta
+        // aqui pongo la operacion PATCH para hacer la perticion de actualizar los campos de un registro de una venta
+
+        // const options = {
+        //     method: 'PATCH', // metodo actualizar 
+        //     url: `http://localhost:5000/ventas/${venta._id}/`, // url de mi api servidor backend
+        //     headers: { 'Content-Type': 'application/json' },
+        //     data: { ...infoNuevaVenta }, // datos a actualizar tiene toda la venta mas necesitamos pasarle 
+        //     // el id del la fila que quiero actualizar del dato o venta que estoy actualizando 
+        //     // ese id me representa la fila y venta que voy a actualizar 
+
+        // };
+
+        // await axios
+        //     .request(options)
+        //     .then(function (response) {
+        //         console.log(response.data);
+        //         // alert('SI.........FUNCIONO LA PETICION PATCH!!! !!!')
+        //         console.log('SI.........FUNCIONO LA PETICION PATCH!!! !!!')
+        //         toast.success('Venta actualizada con éxito', {
+        //             position: "bottom-center",
+        //             autoClose: 5000,
+        //         })
+        //         setPermitirEditar(false);
+        //         setEjecutarConsultaGET(true);
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //         // alert('NO.........FUNCIONO LA PETICION PATCH!!! !!!')
+
+        //         console.log('NO.......funciono LA PETICION PATCH!!!')
+        //         toast.error('Error modificando venta', {
+        //             position: "bottom-center",
+        //             autoClose: 5000,
+        //         })
+        //         // setPermitirEditar(false);// APENAS FUNCIONE SE LO QUITO AUN NO SE HACE EL BACKEND POR ESO MO FUNCIONA TODAVIA
+        //     });
     };
 
     const eliminarVenta = async () => { // funcion de eliminar venta esta me ejecuta la peticion DELETE al servidor
 
-        const options = {
-            method: 'DELETE', // metodo de eliminar
-            url: 'https://vast-waters-45728.herokuapp.com/vehicle/delete', // url de mi api servidor backend y la instruccion delete en el 
-            // final de la url
-            headers: { 'Content-Type': 'application/json' },
-            data: { id: venta._id }, // le tengo que pasar el id del dato o registro a eliminar y lo saco del prop que entro al componente filaVenta puesto 
-            // que este prop me tiene las filas selecionada de la ventas
+        await deleteVenta(
 
-        };
+            venta._id,
 
-        await axios
-            .request(options)
-            .then(function (response) {
+            { id: venta._id },
+
+            (response) => {
                 console.log(response.data);
                 // alert('SI.........FUNCIONO LA PETICION DELETE!!! !!!')
-                console.log('SI.........FUNCIONO LA PETICION DELETE!!! !!!')
+                console.log('SI.........FUNCIONO LA PETICION DELETE!!! !!!');
 
                 toast.success('Venta eliminada con éxito', {
                     position: "bottom-center",
                     autoClose: 5000,
-                })
-                ejecutarConsultaGET(true); // si elimino con exito actualiza la tabla con esta funcion de ejecutarConsultaGET en true por que 
-                // me ejecuta la consulta GET y me trae la informacion y la muestra en el frontend
-                // irTablasVentas(true);
-                // setPermitirEditar(false)
-            })
-            .catch(function (error) {
-                console.log(error);
+                });
+                setEjecutarConsultaGET(true); // si elimino con exito actualiza la tabla con esta funcion de setEjecutarConsultaGET en true por que 
+                //         // me ejecuta la consulta GET y me trae la informacion y la muestra en el frontend
+                //         // irTablasVentas(true);
+                //         // setPermitirEditar(false)
+            },
+
+            (error) => {
+                console.error(error);
                 console.log('NO.........FUNCIONO LA PETICION DELETE!!! !!!')
                 // alert('NO.........FUNCIONO LA PETICION DELETE!!! !!!')
                 toast.error('Error eliminando venta', {
                     position: "bottom-center",
                     autoClose: 5000,
                 })
-            });
+            }
+        );
+
         setMostrarDialog(false); // despues de eliminar cerramos el dialog 
+
+        // const options = {
+        //     method: 'DELETE', // metodo de eliminar
+        //     url: `http://localhost:5000/ventas/${venta._id}/`, // url de mi api servidor backend y la instruccion delete en el 
+        //     // final de la url
+        //     headers: { 'Content-Type': 'application/json' },
+        //     data: { id: venta._id }, // le tengo que pasar el id del dato o registro a eliminar y lo saco del prop que entro al componente filaVenta puesto 
+        //     // que este prop me tiene las filas selecionada de la ventas
+
+        // };
+
+        // await axios
+        //     .request(options)
+        //     .then(function (response) {
+        //         console.log(response.data);
+        //         // alert('SI.........FUNCIONO LA PETICION DELETE!!! !!!')
+        //         console.log('SI.........FUNCIONO LA PETICION DELETE!!! !!!')
+
+        //         toast.success('Venta eliminada con éxito', {
+        //             position: "bottom-center",
+        //             autoClose: 5000,
+        //         })
+        //         setEjecutarConsultaGET(true); // si elimino con exito actualiza la tabla con esta funcion de setEjecutarConsultaGET en true por que 
+        //         // me ejecuta la consulta GET y me trae la informacion y la muestra en el frontend
+        //         // irTablasVentas(true);
+        //         // setPermitirEditar(false)
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //         console.log('NO.........FUNCIONO LA PETICION DELETE!!! !!!')
+        //         // alert('NO.........FUNCIONO LA PETICION DELETE!!! !!!')
+        //         toast.error('Error eliminando venta', {
+        //             position: "bottom-center",
+        //             autoClose: 5000,
+        //         })
+        //     });
+        // setMostrarDialog(false); // despues de eliminar cerramos el dialog 
 
 
     };
 
 
     return (
-        <tr > {permitirEditar ? (<>
-            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full'
-                type="text"
-                name="codigoVenta"
-                id=""
-                value={infoNuevaVenta.codigoVenta}
-                onChange={(evento) => {
-                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
-                }} />
-            </td>
-            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full'
-                type="text"
-                name="fecha"
-                id=""
-                value={infoNuevaVenta.fecha}
-                onChange={(evento) => {
-                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
-                }} />
-            </td>
-            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
-                type="text"
-                name="codigoProducto"
-                id=""
-                value={infoNuevaVenta.codigoProducto}
-                onChange={(evento) => {
-                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
-                }} /></td>
-            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
-                type="text"
-                name="cantidadProducto"
-                id=""
-                value={infoNuevaVenta.cantidadProducto}
-                onChange={(evento) => {
-                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
-                }} /></td>
-            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
-                type="text"
-                name="nombreVendedor"
-                id=""
-                value={infoNuevaVenta.nombreVendedor}
-                onChange={(evento) => {
-                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
-                }} /></td>
-            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
-                type="text"
-                name="nombreCliente"
-                id=""
-                value={infoNuevaVenta.nombreCliente}
-                onChange={(evento) => {
-                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
-                }} /></td>
-            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
-                type="text"
-                name="precioUnitario"
-                id=""
-                value={infoNuevaVenta.precioUnitario}
-                onChange={(evento) => {
-                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
-                }} /></td>
-            <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
-                type="text"
-                name="valorTotal"
-                id=""
-                value={infoNuevaVenta.precioUnitario * infoNuevaVenta.cantidadProducto}
-                onChange={(evento) => {
-                    setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
-                }} /></td>
-            {/* Drop-down list */}
-            <td>
-                <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg  text-xl'
+        <tr> {permitirEditar ? (
+            <>
+                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full'
                     type="text"
-                    name=""
+                    name="codigoVenta"
                     id=""
-                    defaultValue={0}>
-                    <option defaultValue={0}>Seleccione una opción
-                    </option>
-                    <option defaultValue="proceso">En Proceso
-                    </option>
-                    <option defaultValue="entregada">Entregada
-                    </option>
-                    <option defaultValue="cancelada">Cancelada
-                    </option>
-                </select>
-            </td>
-        </>) : (<>
-            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl '>
-                {venta.codigoVenta}
-            </td>
-            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                {venta.fecha}
-            </td>
-            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                {venta.codigoProducto}
-            </td>
-            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                {venta.cantidadProducto}
-            </td>
-            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                {venta.nombreVendedor}
-            </td>
-            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                {venta.nombreCliente}
-            </td>
-            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                {venta.nombreVendedor}
-            </td>
-            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                {venta.precioUnitario}
-            </td>
-            <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                {venta.precioUnitario * venta.cantidadProducto}
-            </td>
-        </>
+                    value={infoNuevaVenta.codigoVenta}
+                    onChange={(evento) => {
+                        setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
+                    }} />
+                </td>
+                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full'
+                    type="text"
+                    name="fecha"
+                    id=""
+                    value={infoNuevaVenta.fecha}
+                    onChange={(evento) => {
+                        setInfoNuevaVenta({ ...infoNuevaVenta, fecha: evento.target.value });
+                    }} />
+                </td>
+                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                    type="text"
+                    name="codigoProducto"
+                    id=""
+                    value={infoNuevaVenta.codigoProducto}
+                    onChange={(evento) => {
+                        setInfoNuevaVenta({ ...infoNuevaVenta, codigoProducto: evento.target.value });
+                    }} /></td>
+                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                    type="text"
+                    name="cantidadProducto"
+                    id=""
+                    value={infoNuevaVenta.cantidadProducto}
+                    onChange={(evento) => {
+                        setInfoNuevaVenta({ ...infoNuevaVenta, cantidadProducto: evento.target.value });
+                    }} /></td>
+                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                    type="text"
+                    name="nombreVendedor"
+                    id=""
+                    value={infoNuevaVenta.nombreVendedor}
+                    onChange={(evento) => {
+                        setInfoNuevaVenta({ ...infoNuevaVenta, nombreVendedor: evento.target.value });
+                    }} /></td>
+                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                    type="text"
+                    name="nombreCliente"
+                    id=""
+                    value={infoNuevaVenta.nombreCliente}
+                    onChange={(evento) => {
+                        setInfoNuevaVenta({ ...infoNuevaVenta, nombreCliente: evento.target.value });
+                    }} /></td>
+                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                    type="text"
+                    name="precioUnitario"
+                    id=""
+                    value={infoNuevaVenta.precioUnitario}
+                    onChange={(evento) => {
+                        setInfoNuevaVenta({ ...infoNuevaVenta, precioUnitario: evento.target.value });
+                    }} /></td>
+                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                    type="text"
+                    name="valorTotal"
+                    id=""
+                    value={infoNuevaVenta.precioUnitario * infoNuevaVenta.cantidadProducto}
+                    onChange={(evento) => {
+                        setInfoNuevaVenta({ ...infoNuevaVenta, valorTotal: evento.target.value });
+                    }} /></td>
+                {/* Drop-down list */}
+                <td>
+                    <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg  text-xl'
+                        type="text"
+                        name="estadoVenta"
+                        id=""
+                        defaultValue={0}
+                    >
+                        <option defaultValue={0}>Seleccione una opción
+                        </option>
+                        <option defaultValue="proceso">En Proceso
+                        </option>
+                        <option defaultValue="entregada">Entregada
+                        </option>
+                        <option defaultValue="cancelada">Cancelada
+                        </option>
+                    </select>
+                </td>
+            </>) : (
+            <>
+                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl '>
+                    {venta.codigoVenta}
+                </td>
+                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                    {venta.fecha}
+                </td>
+                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                    {venta.codigoProducto}
+                </td>
+                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                    {venta.cantidadProducto}
+                </td>
+                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                    {venta.nombreVendedor}
+                </td>
+                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                    {venta.nombreCliente}
+                </td>
+                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                    {venta.precioUnitario}
+                </td>
+                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                    {venta.precioUnitario * venta.cantidadProducto}
+                </td>
+                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                    {venta.estadoVenta}
+                </td>
+            </>
         )
 
 
@@ -594,69 +710,82 @@ const FormularioCreacionVentas = ({
 }) => {
 
 
+    // 
+
+    const [vendedores, setVendedores] = useState([]);
+
+
+    useEffect(() => {
+        
+        const obtenerVendedores = async () => {
+            
+        }
+        obtenerVendedores();
+
+    }, [])
     // con el useRef y el FormData ya podemos eliminar cada estado para cada input por pruebas solo los comentaremos
-    const [fecha, setFecha] = useState('')
-    const [codigoVenta, setCodigoVenta] = useState('')
-    const [nombreVendedor, setNombreVendedor] = useState('')
-    const [identificacionVendedor, setIdentificacionVendedor] = useState('')
-    const [nombreCliente, setNombreCliente] = useState('')
-    const [identificacionCliente, setIdentificacionCliente] = useState('')
-    const [cantidadProducto, setCantidadProducto] = useState('')
-    const [codigoProducto, setCodigoProducto] = useState('')
-    const [precioUnitario, setPrecioUnitario] = useState('')
-    const [valorTotal, setValorTotal] = useState('')
+    // const [fecha, setFecha] = useState('')
+    // const [codigoVenta, setCodigoVenta] = useState('')
+    // const [nombreVendedor, setNombreVendedor] = useState('')
+    // const [identificacionVendedor, setIdentificacionVendedor] = useState('')
+    // const [nombreCliente, setNombreCliente] = useState('')
+    // const [identificacionCliente, setIdentificacionCliente] = useState('')
+    // const [cantidadProducto, setCantidadProducto] = useState('')
+    // const [codigoProducto, setCodigoProducto] = useState('')
+    // const [precioUnitario, setPrecioUnitario] = useState('')
+    // const [valorTotal, setValorTotal] = useState('')
     // const [reset, setReset] = useState()
 
 
     // funcion que me hace todo el proceso de registro en la tabla ventas 
-    const enviarAlBackend = () => {
+    // const enviarAlBackend = () => {
 
 
-        // console.log('fecha:', fecha, 'codigoVenta:', codigoVenta, 'nombreVendedor:', nombreVendedor, 'identificacionVendedor:',
-        //     identificacionVendedor, 'nombreCliente:', nombreCliente, 'identificacionCliente:', identificacionCliente, 'cantidadProducto:',
-        //     cantidadProducto, 'codigoProducto:', codigoProducto, 'precioUnitario:', precioUnitario, 'valorTotal:', valorTotal);
+    // console.log('fecha:', fecha, 'codigoVenta:', codigoVenta, 'nombreVendedor:', nombreVendedor, 'identificacionVendedor:',
+    //     identificacionVendedor, 'nombreCliente:', nombreCliente, 'identificacionCliente:', identificacionCliente, 'cantidadProducto:',
+    //     cantidadProducto, 'codigoProducto:', codigoProducto, 'precioUnitario:', precioUnitario, 'valorTotal:', valorTotal);
 
-        //codigo para evitar que se envie una casilla vacia usando condicional if existe otra mejor forma y es usando html los atributos required de 
-        // los input y el boton asociado al formulario ponerlo de tipo submit
+    //codigo para evitar que se envie una casilla vacia usando condicional if existe otra mejor forma y es usando html los atributos required de 
+    // los input y el boton asociado al formulario ponerlo de tipo submit
 
-        if (fecha === '' || codigoVenta === '' || nombreVendedor === '' || identificacionVendedor === '' || nombreCliente === ''
-            || identificacionCliente === '' || cantidadProducto === '' || codigoProducto === '' || precioUnitario === '') {
+    //     if (fecha === '' || codigoVenta === '' || nombreVendedor === '' || identificacionVendedor === '' || nombreCliente === ''
+    //         || identificacionCliente === '' || cantidadProducto === '' || codigoProducto === '' || precioUnitario === '') {
 
-            toast.error('Ingrese todos los datos', {
-                position: "bottom-center",
-                autoClose: 5000,
-            })
-        } else {
-
-
-            toast.success('Registro Exitoso', {
-                position: "bottom-center",
-                autoClose: 5000,
-            })
-
-            irTablasVentas(true);// esto es equivante internamente a setMostrarTablaVentas (true) cambio el estado de mostrarTablaVentas
+    //         toast.error('Ingrese todos los datos', {
+    //             position: "bottom-center",
+    //             autoClose: 5000,
+    //         })
+    //     } else {
 
 
-            funcionAgregarNuevaVenta([        // esta funcion es setVentas entonces me agrega nuevos datos a el array json pero necesito dejar lo que tiene y
-                // agregra nuevos datos a la cola de este para esto se usa ...ventas me dice ponga los que ya tiene guardados 
-                // listaVentas es el prop que es equivalente y le asigne el estado ventas la variable ventas 
-                //spread operator ( ... ) significa ponga lo que ya tenia mas las cosas nuevas
+    //         toast.success('Registro Exitoso', {
+    //             position: "bottom-center",
+    //             autoClose: 5000,
+    //         })
 
-                ...listaVentas, {
-                    codigoVenta: codigoVenta,
-                    fecha: fecha,
-                    codigoProducto: codigoProducto,
-                    cantidadProducto: cantidadProducto,
-                    nombreVendedor: nombreVendedor,
-                    nombreCliente: nombreCliente,
-                    precioUnitario: precioUnitario,
-                    valorTotal: valorTotal
-                }
-            ])
+    //         irTablasVentas(true);// esto es equivante internamente a setMostrarTablaVentas (true) cambio el estado de mostrarTablaVentas
 
-        }
 
-    };
+    //         funcionAgregarNuevaVenta([        // esta funcion es setVentas entonces me agrega nuevos datos a el array json pero necesito dejar lo que tiene y
+    //             // agregra nuevos datos a la cola de este para esto se usa ...ventas me dice ponga los que ya tiene guardados 
+    //             // listaVentas es el prop que es equivalente y le asigne el estado ventas la variable ventas 
+    //             //spread operator ( ... ) significa ponga lo que ya tenia mas las cosas nuevas
+
+    //             ...listaVentas, {
+    //                 codigoVenta: codigoVenta,
+    //                 fecha: fecha,
+    //                 codigoProducto: codigoProducto,
+    //                 cantidadProducto: cantidadProducto,
+    //                 nombreVendedor: nombreVendedor,
+    //                 nombreCliente: nombreCliente,
+    //                 precioUnitario: precioUnitario,
+    //                 valorTotal: valorTotal
+    //             }
+    //         ])
+
+    //     }
+
+    // };
 
     // useEffect(() => {
     //     console.log(fecha)
@@ -717,39 +846,36 @@ const FormularioCreacionVentas = ({
 
         // codigo que me trasnforma las peticiones de submit a formato REST en este caso estamos haciendo la peticion de crear venta
         //o registrar venta y en REST se hace con POST.. pero para hacer esto debemos tener instalado axios la cual es la libreria
-        // que me transformara ese codigo en formato REST y porder hacer las peticiones al backend 
+        // que me transformara ese codigo en formato REST y poder hacer las peticiones al backend 
 
         // la accion de ejecutar la peticion POST la hace el submit de formulario 
         // operacion de tipo POST
-        const options = { // variable de tipo lista que lleva la informacion del metodo REST a ejecutar, la url de la api, los 
-            // headers, y la data toda la informacion a enviar en formato clave valor. donde cada clave son los campos o atributos de 
-            // la base de datos y el valor es el registrado en los inpust del formulario 
-            method: 'POST', // tipo de peticion es crear nuevo registro 
-            url: 'https://vast-waters-45728.herokuapp.com/vehicle/create',// servidor donde enviare la peticion e informacion
-            headers: { 'Content-Type': 'application/json' },
-            data: {  // datos a enviar
-                fecha: objetoNuevaVenta.fecha, codigoVenta: objetoNuevaVenta.codigoVenta, nombreVendedor: objetoNuevaVenta.nombreVendedor,
-                identificacionVendedor: objetoNuevaVenta.identificacionVendedor, nombreCliente: objetoNuevaVenta.nombreCliente,
-                identificacionCliente: objetoNuevaVenta.identificacionCliente, codigoProducto: objetoNuevaVenta.codigoProducto,
-                cantidadProducto: objetoNuevaVenta.cantidadProducto, precioUnitario: objetoNuevaVenta.precioUnitario,
+
+        // data: {  // datos a enviar
+        //     fecha: objetoNuevaVenta.fecha, codigoVenta: objetoNuevaVenta.codigoVenta, nombreVendedor: objetoNuevaVenta.nombreVendedor,
+        //     identificacionVendedor: objetoNuevaVenta.identificacionVendedor, nombreCliente: objetoNuevaVenta.nombreCliente,
+        //     identificacionCliente: objetoNuevaVenta.identificacionCliente, codigoProducto: objetoNuevaVenta.codigoProducto,
+        //     cantidadProducto: objetoNuevaVenta.cantidadProducto, precioUnitario: objetoNuevaVenta.precioUnitario,
+        //     valorTotal: objetoNuevaVenta.valorTotal
+        // },
+        // datos a enviar, 
+        await crearVenta(
+            {
+
+                fecha: objetoNuevaVenta.fecha,
+                codigoVenta: objetoNuevaVenta.codigoVenta,
+                nombreVendedor: objetoNuevaVenta.nombreVendedor,
+                identificacionVendedor: objetoNuevaVenta.identificacionVendedor,
+                nombreCliente: objetoNuevaVenta.nombreCliente,
+                identificacionCliente: objetoNuevaVenta.identificacionCliente,
+                codigoProducto: objetoNuevaVenta.codigoProducto,
+                cantidadProducto: objetoNuevaVenta.cantidadProducto,
+                precioUnitario: objetoNuevaVenta.precioUnitario,
                 valorTotal: objetoNuevaVenta.valorTotal
             },
-        };
 
-
-        // ahora con axios ejecutaremos la peticion le enviaremos como parametro de entrada la varible con la informacion
-        await axios  // el await es para decirle que debe esperar una respuesta puesto que estas operaciones son asincronas se tiene que 
-            // esperar a obtener un resultado para esto mostraremos loading para mejorar la experiencia de usuario mietras espera 
-            // pero por eso se coloca await para que espere pero se debe colocar async la funcion que este use el await  
-            // cuando necesitemos o debemos que esperar a que una operacion ocurra debemos usar await para ayudarnos a esperar a que el 
-            // backend nos de una respuesta y por eso se usa await para esperar y luego ejecutar el resultado si de esta peticion si fue realizada
-            // con exito o no 
-
-            // axios esta funcion axios no se tienen que ejecutar sin el await por que no tendre como esperar a ver que paso 
-            .request(options)// peticion funcion de peticion con el argumento de entrada la variable con la informacion la data 
-            // y los procesos a ejecutar 
-            .then(function (response) {// si se recibe respuesta se ejecuta el mensaje response es palabra reservada 
-                // si se recibe respuesta entonces se hace eso signifa el .then entonces
+            (response) => {// si se recibe respuesta se ejecuta el mensaje, response= es palabra reservada 
+                // si se recibe respuesta entonces se hace eso significa el .then entonces
                 console.log(response.data);
                 toast.success('Venta agregada con éxito', {
                     position: "bottom-center",
@@ -758,8 +884,9 @@ const FormularioCreacionVentas = ({
                 // alert('SI.........FUNCIONO LA PETICION POST!!! !!!');
                 console.log('SI.........FUNCIONO LA PETICION POST!!! !!!');
                 // irTablasVentas(true);
-            })
-            .catch(function (error) { // si se recibe error se ejecuta el mensaje de error 
+            },
+
+            (error) => { // si se recibe error se ejecuta el mensaje de error --> esta funcion es equivalente a function (error) {
                 console.error(error);
                 toast.error('Error registrando venta', {
                     position: "bottom-center",
@@ -767,9 +894,43 @@ const FormularioCreacionVentas = ({
                 });
                 // alert('NO.........FUNCIONO LA PETICION POST!!! !!!');
                 console.log('NO.........FUNCIONO LA PETICION POST!!! !!!');
-            });
+            }
+        );
 
-        // irTablasVentas(true) // llamada de funcion que entro como prop al formulario y me muestra y permite modificar el estado usado para
+
+        // // ahora con axios ejecutaremos la peticion le enviaremos como parametro de entrada la varible con la informacion
+        // await axios  // el await es para decirle que debe esperar una respuesta puesto que estas operaciones son asincronas se tiene que 
+        //     // esperar a obtener un resultado para esto mostraremos loading para mejorar la experiencia de usuario mietras espera 
+        //     // pero por eso se coloca await para que espere pero se debe colocar async la funcion que este use el await  
+        //     // cuando necesitemos o debemos que esperar a que una operacion ocurra debemos usar await para ayudarnos a esperar a que el 
+        //     // backend nos de una respuesta y por eso se usa await para esperar y luego ejecutar el resultado si de esta peticion si fue realizada
+        //     // con exito o no 
+
+        //     // axios esta funcion axios no se tienen que ejecutar sin el await por que no tendre como esperar a ver que paso 
+        //     .request(options)// peticion funcion de peticion con el argumento de entrada la variable con la informacion la data 
+        //     // y los procesos a ejecutar 
+        //     .then(function (response) {// si se recibe respuesta se ejecuta el mensaje, response = es palabra reservada 
+        // si se recibe respuesta entonces se hace eso significa el .then entonces
+        //     console.log(response.data);
+        //     toast.success('Venta agregada con éxito', {
+        //         position: "bottom-center",
+        //         autoClose: 5000,
+        //     });
+        //     // alert('SI.........FUNCIONO LA PETICION POST!!! !!!');
+        //     console.log('SI.........FUNCIONO LA PETICION POST!!! !!!');
+        //     irTablasVentas(true);
+        // })
+        // .catch(function (error) { // si se recibe error se ejecuta el mensaje de error 
+        //     console.error(error);
+        //     toast.error('Error registrando venta', {
+        //         position: "bottom-center",
+        //         autoClose: 5000,
+        //     });
+        //     // alert('NO.........FUNCIONO LA PETICION POST!!! !!!');
+        //     console.log('NO.........FUNCIONO LA PETICION POST!!! !!!');
+        // });
+
+        irTablasVentas(true) // llamada de funcion que entro como prop al formulario y me muestra y permite modificar el estado usado para
         // la renderizacion condicional y mostrar la tabla apenas ocurre el evenot onSubmit
 
         funcionAgregarNuevaVenta([...listaVentas, objetoNuevaVenta]);// permite primero con el operador ... agrega los datos anteriores o todos los
@@ -827,8 +988,13 @@ const FormularioCreacionVentas = ({
                         // }}
                         />
                     </label>
-
                     <label className='font-bold text-gray-800' htmlFor="nombreVendedor">Nombre Vendedor
+                        {/* <span>
+                            Nombre Vendedor
+                        </span>
+                        <select className='p-2 rounded-lg block' name="" id="">
+                            <option value="">Seleccione un Vendedor</option>
+                        </select> */}
                         <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='nombreVendedor'

@@ -14,7 +14,7 @@ const NavBarResponsive = () => {
                 setMostrarNavegacion(!mostrarNavegacion);
 
             }}>
-            <i class={`mx-1 fas fa-${mostrarNavegacion ? "times" : "bars"}`}>hola soy hamburger</i>
+            <i className={`mx-1 fas fa-${mostrarNavegacion ? "times" : "bars"}`}>hola soy hamburger</i>
             {mostrarNavegacion && (   // permite renderizar la lista desordenada <ul> si mostrarNavegacion es true 
             // si es falso no muetra. solo se muetra cuando el usuario da clic en el menu hamburguer 
                 <ul className='border border-gray-300 w-screen text-white'>
@@ -34,7 +34,7 @@ const NavBarResponsive = () => {
 
 const NavegacionRuta = ({ruta,incono,nombre}) => {
     return (
-        <div className=' '>
+        <div >
             <Link to={ruta}>
                 <button className='border w-full border-gray-700 bg-blue-500 p-1  text-left  '>
                     <i className={`ml-1 ${incono}`} /> {/*String literal* como meter una variable es un strig */}
