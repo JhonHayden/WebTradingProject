@@ -505,7 +505,8 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
 
 
     return (
-        <tr> {permitirEditar ? (
+        <tr> {permitirEditar ? 
+            (
             <>
                 <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full'
                     type="text"
