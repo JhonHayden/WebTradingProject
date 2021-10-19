@@ -43,7 +43,6 @@ export const obtenerVentasDelBackend = async (successCallback, errorCallback) =>
 };
 
 
-
 export const crearVenta = async (data, successCallback, errorCallback) => {
 
     const options = { // Obejto que lleva la informacion del metodo REST a ejecutar, la url de la api, los 
@@ -213,14 +212,6 @@ export const deleteUsuario = async (id, data, successCallback, errorCallback) =>
 }
 
 
-
-
-export const obtenerVendedores = (successCallback, errorCallback) => {
-
-}
-
-
-
 // CRUD PRODUCTOS 
 
 export const obtenerProductos = async (successCallback, errorCallback) => {
@@ -269,13 +260,7 @@ export const crearProducto = async (data, successCallback, errorCallback) => {
         method: 'POST', // tipo de peticion es crear nuevo registro 
         url: 'http://localhost:5000/productos/',// servidor donde enviare la peticion e informacion
         headers: { 'Content-Type': 'application/json' },
-        data, // datos a enviar los recibo como parametro de la funcion crearVenta en el parametro data
-        //     fecha: objetoNuevaVenta.fecha, codigoVenta: objetoNuevaVenta.codigoVenta, nombreVendedor: objetoNuevaVenta.nombreVendedor,
-        //     identificacionVendedor: objetoNuevaVenta.identificacionVendedor, nombreCliente: objetoNuevaVenta.nombreCliente,
-        //     identificacionCliente: objetoNuevaVenta.identificacionCliente, codigoProducto: objetoNuevaVenta.codigoProducto,
-        //     cantidadProducto: objetoNuevaVenta.cantidadProducto, precioUnitario: objetoNuevaVenta.precioUnitario,
-        //     valorTotal: objetoNuevaVenta.valorTotal
-        // },
+        data, 
     } // este es el objeto donde esta la operacion POST, la URL de la api la ruta en el backend, la data a enviar mas 
     // los headers que me indica el tipo de contenido a enviar en esta peticion POST y pueden haber otras opciones 
     // para este metodo POST
@@ -323,3 +308,12 @@ export const deleteProducto = async (id, data, successCallback, errorCallback) =
         .catch(errorCallback)
 
 }
+
+
+
+
+
+
+// export const obtenerVendedores = (successCallback, errorCallback) => {
+
+// }

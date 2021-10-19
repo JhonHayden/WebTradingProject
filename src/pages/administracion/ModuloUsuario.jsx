@@ -80,19 +80,19 @@ const ModuloUsuario = () => {
 
     }, [ejecutarConsultaGET]);
 
-    const ruta = '/administracion/moduloUsuario';
-    const isRutaActiva = useActiveRoute(ruta);
+    // const ruta = '/administracion/moduloUsuario';
+    // const isRutaActiva = useActiveRoute(ruta);
 
-    useEffect(() => {
-
-
-        console.log(isRutaActiva, ruta)
-
-        setEjecutarConsultaGET(true)
-    }, [isRutaActiva, ruta])
+    // useEffect(() => {
 
 
-    console.log(usuarios);
+    //     console.log(isRutaActiva, ruta)
+
+    //     setEjecutarConsultaGET(true)
+    // }, [isRutaActiva, ruta])
+
+
+    // console.log(usuarios);
 
     // useEffect(() => {
 
@@ -109,8 +109,8 @@ const ModuloUsuario = () => {
     return (
         <div className='border rounded-xl bg-blue-400 self-start mt-24 p-8'>
             <div className='flex flex-col  '>
-                <h1 className='text-center font-extrabold text-4xl mt-2 mb-4'>
-                    Modulo Usuario
+                <h1 className='text-center font-extrabold text-4xl mt-2 mb-5'>
+                    Maestro Usuarios
                 </h1>
 
                 <form className='text-3xl font-bold'>
@@ -187,6 +187,9 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
 
     const [mostrarDialog, setMostrarDialog] = useState(false)// muestra dialog para confirmar accion delete 
 
+    // console.log("soy el nuevo usuario : ", infoNuevoUsuario.rol);
+    // console.log("soy el viejo usuario : ", usuario.rol);
+
 
     const actualizarUsuario = async () => { // debe ser asyncrona 
         // console.log(infoNuevoUsuario);
@@ -261,8 +264,6 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
         setMostrarDialog(false); // despues de eliminar cerramos el dialog 
 
 
-
-
     };
 
     return (
@@ -280,8 +281,12 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
                             type="text"
                             name="rol"
                             id=""
-                            defaultValue={usuario.rol}
                             value={infoNuevoUsuario.rol}
+                            onChange={(evento) => {
+                                
+                                setInfoNuevoUsuario({...infoNuevoUsuario,rol:evento.target.value})
+                                
+                            }}
                         >
                             <option defaultValue='Seleccione una opción'>Seleccione una opción
                             </option>
@@ -298,12 +303,15 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
                             type="text"
                             name="estado"
                             id=""
-                            defaultValue={usuario.estado}
                             value={infoNuevoUsuario.estado}
+                            onChange={(evento) => {
+                                
+                                setInfoNuevoUsuario({...infoNuevoUsuario,estado:evento.target.value})
+                                // console.log(evento.target.value);
+                                // console.log(infoNuevoUsuario.estado);
+                            }}
                         >
                             <option defaultValue={0}>Seleccione una opción
-                            </option>
-                            <option defaultValue="pendiente">Pendiente
                             </option>
                             <option defaultValue="autorizado">Autorizado
                             </option>
@@ -342,6 +350,7 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
                                         () => {
                                             // setPermitirEditar(!permitirEditar);// me cambia el estado actual  por el contrario si estaba en true lo pone falso 
                                             actualizarUsuario();
+                                            setEjecutarConsultaGET(false);
                                             // y si estaba falso lo pone true
                                         }
                                     } />

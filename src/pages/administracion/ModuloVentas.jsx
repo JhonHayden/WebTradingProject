@@ -713,17 +713,17 @@ const FormularioCreacionVentas = ({
 
     // 
 
-    const [vendedores, setVendedores] = useState([]);
+    // const [vendedores, setVendedores] = useState([]);
 
 
-    useEffect(() => {
+    // useEffect(() => {
         
-        const obtenerVendedores = async () => {
+    //     const obtenerVendedores = async () => {
             
-        }
-        obtenerVendedores();
+    //     }
+    //     obtenerVendedores();
 
-    }, [])
+    // }, [])
     // con el useRef y el FormData ya podemos eliminar cada estado para cada input por pruebas solo los comentaremos
     // const [fecha, setFecha] = useState('')
     // const [codigoVenta, setCodigoVenta] = useState('')
