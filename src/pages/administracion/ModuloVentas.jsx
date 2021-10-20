@@ -333,13 +333,15 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
     //console.log(venta); //imprime mi ventas traidas del backend 
     // creamos un estado de tipo boolean para hacer la renderizacion condicional del cambio de campos de tabla 
     // a campos de input de fomulario para poder editar los datos
+
     const [permitirEditar, setPermitirEditar] = useState(false) // estado de control de permitir ediccion si es true se puede editar si es falso no 
+    // const [ventaid, setVentaid] = useState({venta_id:venta._id.slice(20)}) // estado de control de permitir ediccion si es true se puede editar si es falso no 
     // si es true me pinta los inputs del formulario si es false me pinta las celdas de la tabla normal, ese estado me lo cambia de valor el icono 
     // de editar con el evento onclick
     const [infoNuevaVenta, setInfoNuevaVenta] = useState({ // estado que me tiene la informacion de una venta de cualquier fila que elija
         // para editar  algun campo 
 
-        codigoVenta: venta.codigoVenta,
+        _id: venta._id,
         fecha: venta.fecha,
         codigoProducto: venta.codigoProducto,
         cantidadProducto: venta.cantidadProducto,
@@ -359,7 +361,20 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
         await editarVenta(
             venta._id,
 
-            infoNuevaVenta,
+            {
+                fecha: infoNuevaVenta.fecha,
+                codigoProducto: infoNuevaVenta.codigoProducto,
+                cantidadProducto: infoNuevaVenta.cantidadProducto,
+                nombreVendedor: infoNuevaVenta.nombreVendedor,
+                nombreCliente: infoNuevaVenta.nombreCliente,
+                precioUnitario: infoNuevaVenta.precioUnitario,
+                valorTotal: infoNuevaVenta.valorTotal,
+                estadoVenta: infoNuevaVenta.estadoVenta
+
+
+            }
+
+            ,
 
             (response) => {
 
@@ -505,124 +520,125 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
 
 
     return (
-        <tr> {permitirEditar ? 
+        <tr> {permitirEditar ?
             (
-            <>
-                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full'
-                    type="text"
-                    name="codigoVenta"
-                    id=""
-                    value={infoNuevaVenta.codigoVenta}
-                    onChange={(evento) => {
-                        setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
-                    }} />
-                </td>
-                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full'
-                    type="text"
-                    name="fecha"
-                    id=""
-                    value={infoNuevaVenta.fecha}
-                    onChange={(evento) => {
-                        setInfoNuevaVenta({ ...infoNuevaVenta, fecha: evento.target.value });
-                    }} />
-                </td>
-                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
-                    type="text"
-                    name="codigoProducto"
-                    id=""
-                    value={infoNuevaVenta.codigoProducto}
-                    onChange={(evento) => {
-                        setInfoNuevaVenta({ ...infoNuevaVenta, codigoProducto: evento.target.value });
-                    }} /></td>
-                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
-                    type="text"
-                    name="cantidadProducto"
-                    id=""
-                    value={infoNuevaVenta.cantidadProducto}
-                    onChange={(evento) => {
-                        setInfoNuevaVenta({ ...infoNuevaVenta, cantidadProducto: evento.target.value });
-                    }} /></td>
-                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
-                    type="text"
-                    name="nombreVendedor"
-                    id=""
-                    value={infoNuevaVenta.nombreVendedor}
-                    onChange={(evento) => {
-                        setInfoNuevaVenta({ ...infoNuevaVenta, nombreVendedor: evento.target.value });
-                    }} /></td>
-                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
-                    type="text"
-                    name="nombreCliente"
-                    id=""
-                    value={infoNuevaVenta.nombreCliente}
-                    onChange={(evento) => {
-                        setInfoNuevaVenta({ ...infoNuevaVenta, nombreCliente: evento.target.value });
-                    }} /></td>
-                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
-                    type="text"
-                    name="precioUnitario"
-                    id=""
-                    value={infoNuevaVenta.precioUnitario}
-                    onChange={(evento) => {
-                        setInfoNuevaVenta({ ...infoNuevaVenta, precioUnitario: evento.target.value });
-                    }} /></td>
-                <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
-                    type="text"
-                    name="valorTotal"
-                    id=""
-                    value={infoNuevaVenta.precioUnitario * infoNuevaVenta.cantidadProducto}
-                    onChange={(evento) => {
-                        setInfoNuevaVenta({ ...infoNuevaVenta, valorTotal: evento.target.value });
-                    }} /></td>
-                {/* Drop-down list */}
-                <td>
-                    <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg  text-xl'
+                <>
+                    <td className=' p-2 text-xl'>
+                        {infoNuevaVenta._id} {/*me permite poner el id generado por mongoDB y acortado con slice a digitos  */}
+                    </td>
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full text-xl'
                         type="text"
-                        name="estadoVenta"
+                        name="fecha"
                         id=""
-                        defaultValue={0}
-                    >
-                        <option defaultValue={0}>Seleccione una opción
-                        </option>
-                        <option defaultValue="proceso">En Proceso
-                        </option>
-                        <option defaultValue="entregada">Entregada
-                        </option>
-                        <option defaultValue="cancelada">Cancelada
-                        </option>
-                    </select>
-                </td>
-            </>) : (
-            <>
-                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl '>
-                    {venta.codigoVenta}
-                </td>
-                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                    {venta.fecha}
-                </td>
-                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                    {venta.codigoProducto}
-                </td>
-                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                    {venta.cantidadProducto}
-                </td>
-                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                    {venta.nombreVendedor}
-                </td>
-                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                    {venta.nombreCliente}
-                </td>
-                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                    {venta.precioUnitario}
-                </td>
-                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                    {venta.precioUnitario * venta.cantidadProducto}
-                </td>
-                <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                    {venta.estadoVenta}
-                </td>
-            </>
-        )
+                        value={infoNuevaVenta.fecha}
+                        onChange={(evento) => {
+                            setInfoNuevaVenta({ ...infoNuevaVenta, fecha: evento.target.value });
+                        }} />
+                    </td>
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full text-xl '
+                        type="text"
+                        name="codigoProducto"
+                        id=""
+                        value={infoNuevaVenta.codigoProducto}
+                        onChange={(evento) => {
+                            setInfoNuevaVenta({ ...infoNuevaVenta, codigoProducto: evento.target.value });
+                        }} /></td>
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full text-xl '
+                        type="text"
+                        name="cantidadProducto"
+                        id=""
+                        value={infoNuevaVenta.cantidadProducto}
+                        onChange={(evento) => {
+                            setInfoNuevaVenta({ ...infoNuevaVenta, cantidadProducto: evento.target.value });
+                        }} /></td>
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full text-xl '
+                        type="text"
+                        name="nombreVendedor"
+                        id=""
+                        value={infoNuevaVenta.nombreVendedor}
+                        onChange={(evento) => {
+                            setInfoNuevaVenta({ ...infoNuevaVenta, nombreVendedor: evento.target.value });
+                        }} /></td>
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full text-xl '
+                        type="text"
+                        name="nombreCliente"
+                        id=""
+                        value={infoNuevaVenta.nombreCliente}
+                        onChange={(evento) => {
+                            setInfoNuevaVenta({ ...infoNuevaVenta, nombreCliente: evento.target.value });
+                        }} /></td>
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full text-xl '
+                        type="text"
+                        name="precioUnitario"
+                        id=""
+                        value={infoNuevaVenta.precioUnitario}
+                        onChange={(evento) => {
+                            setInfoNuevaVenta({ ...infoNuevaVenta, precioUnitario: evento.target.value });
+                        }} /></td>
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full text-xl '
+                        type="text"
+                        name="valorTotal"
+                        id=""
+                        value={infoNuevaVenta.precioUnitario * infoNuevaVenta.cantidadProducto}
+                        onChange={(evento) => {
+                            setInfoNuevaVenta({ ...infoNuevaVenta, valorTotal: evento.target.value });
+                        }} /></td>
+                    {/* Drop-down list */}
+                    <td>
+                        <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg  text-xl'
+                            type="text"
+                            name="estadoVenta"
+                            id=""
+                            defaultValue={0}
+                            value={infoNuevaVenta.estadoVenta}
+                            onChange={(evento) => {
+
+                                setInfoNuevaVenta({ ...infoNuevaVenta, estadoVenta: evento.target.value })
+
+                            }}
+                        >
+                            <option disabled defaultValue={0}>Seleccione una opción
+                            </option>
+                            <option defaultValue="proceso">En Proceso
+                            </option>
+                            <option defaultValue="entregada">Entregada
+                            </option>
+                            <option defaultValue="cancelada">Cancelada
+                            </option>
+                        </select>
+                    </td>
+                </>) : (
+                <>
+                    <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl '>
+                        {/* {venta._id.slice(20)} */}
+                        {venta._id}
+                    </td>
+                    <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                        {venta.fecha}
+                    </td>
+                    <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                        {venta.codigoProducto}
+                    </td>
+                    <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                        {venta.cantidadProducto}
+                    </td>
+                    <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                        {venta.nombreVendedor}
+                    </td>
+                    <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                        {venta.nombreCliente}
+                    </td>
+                    <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                        {venta.precioUnitario}
+                    </td>
+                    <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                        {venta.precioUnitario * venta.cantidadProducto}
+                    </td>
+                    <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                        {venta.estadoVenta}
+                    </td>
+                </>
+            )
 
 
         }
@@ -708,7 +724,10 @@ const FormularioCreacionVentas = ({
     listaVentas,      // representa mis datos del backend, las ventas y  ventasDatosBackend
     funcionAgregarNuevaVenta  // me permite modificar los datos del backend es decir la lista ventas 
 
+
+
 }) => {
+    // const [totalVenta, setTotalVenta] = useState("")
 
 
     // 
@@ -717,9 +736,9 @@ const FormularioCreacionVentas = ({
 
 
     // useEffect(() => {
-        
+
     //     const obtenerVendedores = async () => {
-            
+
     //     }
     //     obtenerVendedores();
 
@@ -731,9 +750,9 @@ const FormularioCreacionVentas = ({
     // const [identificacionVendedor, setIdentificacionVendedor] = useState('')
     // const [nombreCliente, setNombreCliente] = useState('')
     // const [identificacionCliente, setIdentificacionCliente] = useState('')
-    // const [cantidadProducto, setCantidadProducto] = useState('')
+    const [cantidadProducto, setCantidadProducto] = useState('')
     // const [codigoProducto, setCodigoProducto] = useState('')
-    // const [precioUnitario, setPrecioUnitario] = useState('')
+    const [precioUnitario, setPrecioUnitario] = useState('')
     // const [valorTotal, setValorTotal] = useState('')
     // const [reset, setReset] = useState()
 
@@ -837,7 +856,7 @@ const FormularioCreacionVentas = ({
             objetoNuevaVenta[claveDeCadaElementoDelFormData] = valorDeCadaElementoDelFormData; //lleno en objeto con los
             // datos de una venta, la cual sus atributos son los datos entrados por los inputs que el usuario registro 
             // en la interaccion con el formulario de la aplicacion 
-
+            // setTotalVenta(objetoNuevaVenta.cantidadProducto * objetoNuevaVenta.precioUnitario);
             // todo esto con la finalidad de evitar el uso de un estado para cada input puesto que con el FormData me muestra todo los datos 
             // pero para usar esto primero usamos permitimos el evento onSubmit en el form y el boton debe ser type=submit luego referenciamos
             // el formulario con el hook useRef y luego le obtenemos el valor actual y a este se lo damos como entrada a FormData para que 
@@ -864,7 +883,6 @@ const FormularioCreacionVentas = ({
             {
 
                 fecha: objetoNuevaVenta.fecha,
-                codigoVenta: objetoNuevaVenta.codigoVenta,
                 nombreVendedor: objetoNuevaVenta.nombreVendedor,
                 identificacionVendedor: objetoNuevaVenta.identificacionVendedor,
                 nombreCliente: objetoNuevaVenta.nombreCliente,
@@ -976,7 +994,11 @@ const FormularioCreacionVentas = ({
                         // }}
                         />
                     </label>
-                    <label className='font-bold text-gray-800' htmlFor="codigoVenta">Codigo Venta
+                    <div>
+
+
+                    </div>
+                    {/* <label className='font-bold text-gray-800' htmlFor="codigoVenta">Codigo Venta
                         <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type='text'
                             placeholder=''
@@ -988,7 +1010,7 @@ const FormularioCreacionVentas = ({
                         //     setCodigoVenta(evento.target.value);  //--------------------------------------------------
                         // }}
                         />
-                    </label>
+                    </label> */}
                     <label className='font-bold text-gray-800' htmlFor="nombreVendedor">Nombre Vendedor
                         {/* <span>
                             Nombre Vendedor
@@ -1063,11 +1085,11 @@ const FormularioCreacionVentas = ({
                             type="text"
                             name='cantidadProducto'
                             required
-                        // value={cantidadProducto}                       //---------------------------------------------------
-                        // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                        //     //                                    cuando se usa un estado para cada input
-                        //     setCantidadProducto(evento.target.value);  //--------------------------------------------------
-                        // }}
+                            // value={cantidadProducto}                       //---------------------------------------------------
+                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //                                    cuando se usa un estado para cada input
+                                setCantidadProducto(evento.target.value);  //--------------------------------------------------
+                            }}
                         />
                     </label>
                     <label className='font-bold text-gray-800' htmlFor="precioUnitario">Precio Producto
@@ -1075,18 +1097,18 @@ const FormularioCreacionVentas = ({
                             type="text"
                             name='precioUnitario'
                             required
-                        // value={precioUnitario}                       //---------------------------------------------------
-                        // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                        //     //                                    cuando se usa un estado para cada input
-                        //     setPrecioUnitario(evento.target.value);  //--------------------------------------------------
-                        // }}
+                            // value={precioUnitario}                       //---------------------------------------------------
+                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                                //                                    cuando se usa un estado para cada input
+                                setPrecioUnitario(evento.target.value);  //--------------------------------------------------
+                            }}
                         />
                     </label>
                     <label className='font-bold text-gray-800' htmlFor="valorTotal">Valor Total
                         <input className=' block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='valorTotal'
-                        // value={cantidadProducto * precioUnitario}                       //---------------------------------------------------
+                            value={precioUnitario * cantidadProducto}                      //---------------------------------------------------
                         // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                         //     //                                    cuando se usa un estado para cada input
                         //     setValorTotal(evento.target.value);  //--------------------------------------------------
