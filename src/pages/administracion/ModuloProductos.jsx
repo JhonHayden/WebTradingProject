@@ -1,53 +1,52 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-
-// datos que simularan ser traidos desde el backend
-const productosDatosDelBackend = [{
-
-    codigoProducto: '123',
-    descripcionProducto: 'tarjeta electronica',
-    precioUnitario: '150000',
-    estadoProducto: 'No disponible'
-
-},
-{
-
-    codigoProducto: '122',
-    descripcionProducto: 'Motor',
-    precioUnitario: '110000',
-    estadoProducto: 'Disponible'
-
-},
-{
-
-    codigoProducto: '121',
-    descripcionProducto: 'Rele electronico',
-    precioUnitario: '170000',
-    estadoProducto: 'Disponible'
-
-},]
+import { nanoid } from 'nanoid';
+import { Dialog, Tooltip } from '@material-ui/core';
+import { obtenerProductos } from 'utils/api';
+import { crearProducto } from 'utils/api';
+import { editarProducto } from 'utils/api';
+import { deleteProducto } from 'utils/api';
 
 const ModuloProductos = () => {
 
-    //creo las variables de estado .. creo los estados que almacenara cada cambio de cada componente 
-    //y elemento de html de mi aplicacion sobre todos los componente relacionado a eventos, para esto de el 
-    // almacenamiento se usa el hook useState()
-
     const [mostrarTablaProductos, setMostrarTablaProductos] = useState(false);
     const [cambiarNombreBoton, setCambiarNombreBoton] = useState('Registrar Producto');
+    const [productos, setProductos] = useState([]);
+    const [ejecutarConsultaGET, setEjecutarConsultaGET] = useState(true);
 
-    const [productos, setProductos] = useState([]); // estado o variable que me almacena los datos del backend en formato .json
+    useEffect(() => {
+
+
+        if (ejecutarConsultaGET) {
+
+            obtenerProductos(
+                (response) => {
+                    setProductos(response.data);
+                    console.log('SI.........FUNCIONO LA PETICION GET!!! !!!');
+                },
+                (error) => {
+                    console.error(error);
+
+                    console.log('NO.........FUNCIONO LA PETICION GET!!! !!!');
+                }
+            );
+
+
+            setEjecutarConsultaGET(false);
+        }
+
+    }, [ejecutarConsultaGET])
 
 
     useEffect(() => {
-        // con estes useEffect vacio mas adelante traemos los datos desde el backend y la guardaremos 7
-        // en un estado y este sera el estado Productos
-        setProductos(productosDatosDelBackend); // guardo en mi estado Productos los datos del backend
 
-    }, [])
 
+        if (mostrarTablaProductos) {
+            setEjecutarConsultaGET(true)
+        }
+
+    }, [mostrarTablaProductos])
 
 
     useEffect(() => {
@@ -55,7 +54,8 @@ const ModuloProductos = () => {
 
     }, [mostrarTablaProductos])
     return (
-        <div >
+        <div className='flex flex-col' >
+
             <button className=' self-start text-3xl bg-blue-500 p-5  mt-3 mb-4
                 rounded-full shadow-md hover:bg-blue-900 border hover:border-gray-700 text-gray-100'
                 type='button'
@@ -67,347 +67,448 @@ const ModuloProductos = () => {
                 }
             >{cambiarNombreBoton}</button>
 
-            {/* el props que le paso al componente TablaProductos es mi estado donde esta 
-                                                almacenado las Productos desde el backend */}
             {mostrarTablaProductos ? (
-                <TablaProductos listaProductos={productos} />
+                <TablaProductos listaProductos={productos} setEjecutarConsultaGET={setEjecutarConsultaGET} />
             ) : (
-                <FormularioProductos
+                <FormularioCreacionProductos
                     irTablasProductos={setMostrarTablaProductos}
-                    funcionAgregarNuevoProducto={setProductos}   // prop para poder agregar Productos desde el formulario 
-                    listaProductos={productos} // necesito tambien la lista de formato json osea mis datos backend para poder agregrar esos y los nuevos 
+                    funcionAgregarNuevaProducto={setProductos}
+                    listaProductos={productos}
                 />)}
 
-            {/* // enviarDatosAlBackend();  // funcion del boton cuando se ejecuta el evento onClick
-                        // enviarAMaestroProductos();
 
-                    }}>Registro Producto</button> */}
-
-
-            <ToastContainer position="top-center"  /*componente de una libreria*/
+            <ToastContainer position="top-center"
                 autoClose={5000} />
         </div>
     )
 
 }
 
-// por medio de los props le envio mis datos del backend al componente TablaProductos para que el lo muestre
-// ese props o input para el componente TablaProductos se llamara listaProductos y este es mi estado Productos por ende debo usar 
-// un useEffect para escuchar ese estado 
-const TablaProductos = ({ listaProductos }) => {
+const TablaProductos = ({ listaProductos, setEjecutarConsultaGET }) => {
 
+    const [datoInputBusqueda, setDatoInputBusqueda] = useState('');
+    const [listaFiltradaResultadoBusqueda, setListaFiltradaResultadoBusqueda] = useState(listaProductos);
 
     useEffect(() => {
-        console.log(listaProductos)
 
-    }, [listaProductos])
+        setListaFiltradaResultadoBusqueda(
+            listaProductos.filter((objetoDeLaListaProductos) => {
+
+                return JSON.stringify(objetoDeLaListaProductos).toLowerCase().includes(datoInputBusqueda.toLowerCase());
+            }))
+    }, [datoInputBusqueda, listaProductos]);
+
 
     return (
         <div>
             <div className='border rounded-xl p-3 bg-blue-400 '>
                 <div className='flex flex-col '>
-                    <h1 className=' text-center font-extrabold text-4xl mt-2 mb-4'>
+                    <h1 className=' text-center font-extrabold text-4xl mt-2'>
                         Maestro Productos
                     </h1>
 
-                    <form className='text-3xl font-bold'>
-                        <div className='bg-blue-500 w-max p-3 rounded-xl'>
-                            <label  htmlFor="buscar">
+                    <form className='text-3xl font-bold text-gray-800 '>
+                        <div className='bg-blue-500 w-max p-3 rounded-xl mb-11 mt-9'>
+                            <label className='font-bold' htmlFor="buscar">
                                 Buscar Producto
-                                <input name='buscar'
+                                <input
+                                    className='bg-gray-50 border border-gray-300 p-2 rounded-lg ml-5 focus:outline-none'
+                                    name='buscar'
                                     id="buscar"
+                                    placeholder='Buscar'
                                     type="text"
-                                    className='bg-gray-50 border border-gray-300 p-2 rounded-lg ml-5'
+                                    value={datoInputBusqueda}
+                                    onChange={(evento) => {
+                                        setDatoInputBusqueda(evento.target.value);
+                                    }}
                                 />
-
                             </label>
                         </div>
                     </form>
-                    <button
-                        type='button'
-                        className='self-end text-3xl bg-blue-600 p-5 mb-14 rounded-full shadow-md hover:bg-blue-900 text-gray-100'
-
-                    >Actualizar Estado</button>
                 </div>
-                <div>
-                    <table >
+                <div className=' hidden md:flex w-full'>
+                    <table className='tabla'>
                         <thead>
-                            <tr className='' >
+                            <tr>
                                 <th className='text-3xl  bg-blue-500 rounded-xl p-1'>Codigo Producto</th>
                                 <th className='text-3xl  bg-blue-500 rounded-xl p-1'>Descripción Producto</th>
                                 <th className='text-3xl  bg-blue-500 rounded-xl p-1'>Precio Unitario</th>
                                 <th className='text-3xl  bg-blue-500 rounded-xl p-1'>Estado Producto</th>
-                                {/* <th className='text-3xl p-5'>Estado Producto</th> */}
+                                <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Acciones</th>
                             </tr>
-                            {/* codigoProducto: '123',
-                                descripcionProducto: 'tarjeta electronica',
-                                precioUnitario: '150000',
-                                estadoProducto: '' */}
 
                         </thead>
                         <tbody>
-                            {/* ya el componente TablaProductos tiene el json de los datos del backend el cual 
-                            es un array y para mostrarlos en cada uno  las celdas correpondientes debemos recorrerlo
-                            el array con el siguiente codigo en javaScript justo aqui donde arriba de las celdas al
-                            inicion de tbody */}
-                            {listaProductos.map((productos) => {  // como parametro de entrada le paso el estado que me tiene guardado 
-                                // el arreglo y los datos en formato .json de mi datos del backend
+
+                            {listaFiltradaResultadoBusqueda.map((elementoproducto) => {
 
                                 return (
-                                    // en el retorno pongo el html relacionada con el arreglo de mi informacion 
-                                    <tr>
-                                        <td className=' text-center pr-5 mr-1'><input className='w-full bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                                            type="text"
-                                            name="codigoProducto"
-                                            id=""
-                                            value={productos.codigoProducto} />
-                                        </td>
-                                        <td className=' text-center px-2 '><input className='w-full bg-gray-50 border border-gray-300  rounded-lg p-2 '
-                                            type="text"
-                                            name="descripcionProducto"
-                                            id=""
-                                            value={productos.descripcionProducto} /></td>
-                                        <td className=' text-center  '><input className=' bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                                            type="text"
-                                            name="precioUnitario"
-                                            id=""
-                                            value={productos.precioUnitario} /></td>
-                                        <td className=' text-center  '><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                                            type="text"
-                                            name="estadoProducto"
-                                            id=""
-                                            value={productos.estadoProducto} /></td>
-                                        {/* Drop-down list */}
-                                        {/* <td className=' text-center  '>
-                                            <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2 text-xl'
-                                                type="text"
-                                                name="estadoProducto"
-                                                defaultValue={0}
-                                                id="">
-                                                <option disabled value={0}>
-                                                </option>
-                                                <option value={productos.estadoProducto}>Disponible
-                                                </option>
-                                                <option value={productos.estadoProducto}>No Disponible
-                                                </option>
 
-                                            </select>
-                                        </td> */}
-                                    </tr>
+                                    <FilaProducto
+                                        key={nanoid()}
+                                        producto={elementoproducto}
+                                        setEjecutarConsultaGET={setEjecutarConsultaGET} />
                                 );
-                            })}{/* este codigo me transforma un array de tipo json en un array
-                             de tipo html y es con .map me recorre el estado listaProductos */}
+                            })}
                         </tbody>
 
                     </table>
+                </div>
+                <div className='flex flex-col w-full md:hidden'>
 
+                    {listaFiltradaResultadoBusqueda.map((elemento) => {
+
+                        return (
+                            < div className='bg-blue-300 m-2 shadow-xl  flex flex-col border border-red-800 p-4 rounded-xl text-gray-700 '
+                                key={nanoid()}  >
+                                <span className='bg-blue-50'>{elemento.codigoProducto}</span>
+                                <span className='bg-blue-50'>{elemento.descripcionProducto}</span>
+                                <span className='bg-blue-50'>{elemento.precioUnitario}</span>
+                                <span className='bg-blue-50'>{elemento.cantidadProducto}</span>
+                                <span className='bg-blue-50'>{elemento.estadoProducto}</span>
+
+
+                            </div>
+                        )
+                    })}
+                    <div>
+
+                    </div>
                 </div>
             </div>
 
-        </div>
+        </div >
     )
 }
 
+const FilaProducto = ({ producto, setEjecutarConsultaGET }) => {
+
+    const [permitirEditar, setPermitirEditar] = useState(false)
+    const [infoNuevaProducto, setInfoNuevaProducto] = useState({
+
+        codigoProducto: producto.codigoProducto,
+        descripcionProducto: producto.descripcionProducto,
+        precioUnitario: producto.precioUnitario,
+        estadoProducto: producto.estadoProducto,
+
+    })
+
+    const [mostrarDialog, setMostrarDialog] = useState(false)
 
 
-const FormularioProductos = ({
-    irTablasProductos,
-    listaProductos,                       // props 
-    funcionAgregarNuevoProducto
+    const actualizarProducto = async () => {
 
-}) => {
+        await editarProducto(
+            producto._id,
 
+            infoNuevaProducto,
 
-    // con el useRef y el FormData ya podemos eliminar cada estado para cada input por pruebas solo los comentaremos
-    const [codigoProducto, setCodigoProducto] = useState('')
-    const [descripcionProducto, setDescripcionProducto] = useState('')
-    const [precioUnitario, setPrecioUnitario] = useState('')
-    const [estadoProducto, setEstadoProducto] = useState('')
-    // const [reset, setReset] = useState()
+            (response) => {
 
+                console.log(response.data);
 
-    // funcion que me hace todo el proceso de registro en la tabla Productos 
-    const enviarAlBackend = () => {
-
-
-        console.log('codigoProducto:', codigoProducto, 'descripcionProducto:', descripcionProducto, 'precioUnitario:', precioUnitario, 'estadoProducto:', estadoProducto);
-
-        //codigo para evitar que se envie una casilla vacia usando condicional if existe otra mejor forma y es usando html los atributos required de 
-        // los input y el boton asociado al formulario ponerlo de tipo submit
-
-        if (codigoProducto === '' || descripcionProducto === '' || precioUnitario === '') {
-
-            toast.error('Ingrese todos los datos', {
-                position: "bottom-center",
-                autoClose: 5000,
-            })
-        } else {
+                console.log('SI.........FUNCIONO LA PETICION PATCH!!! !!!')
+                toast.success('Producto actualizada con éxito', {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                });
+                setPermitirEditar(false);
+                setEjecutarConsultaGET(true);
+            },
+            (error) => {
+                console.error(error);
 
 
-            toast.success('Registro Exitoso', {
-                position: "bottom-center",
-                autoClose: 5000,
-            })
+                console.log('NO.......funciono LA PETICION PATCH!!!');
+                toast.error('Error modificando producto', {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                });
+            }
 
-            irTablasProductos(true);// esto es equivante internamente a setMostrarTablaProductos (true) cambio el estado de mostrarTablaProductos
+        )
 
+    };
 
-            funcionAgregarNuevoProducto([        // esta funcion es setProductos entonces me agrega nuevos datos a el array json pero necesito dejar lo que tiene y
-                // agregra nuevos datos a la cola de este para esto se usa ...Productos me dice ponga los que ya tiene guardados 
-                // listaProductos es el prop que es equivalente y le asigne el estado Productos la variable Productos 
-                //spread operator ( ... ) significa ponga lo que ya tenia mas las cosas nuevas
+    const eliminarProducto = async () => {
 
-                ...listaProductos, {
-                    codigoProducto: codigoProducto,
-                    descripcionProducto: descripcionProducto,
-                    precioUnitario: precioUnitario,
-                    estadoProducto: estadoProducto
-                }
-            ])
+        await deleteProducto(
 
-        }
+            producto._id,
+
+            { id: producto._id },
+
+            (response) => {
+                console.log(response.data);
+
+                console.log('SI.........FUNCIONO LA PETICION DELETE!!! !!!');
+
+                toast.success('Producto eliminada con éxito', {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                });
+                setEjecutarConsultaGET(true);
+            },
+
+            (error) => {
+                console.error(error);
+                console.log('NO.........FUNCIONO LA PETICION DELETE!!! !!!')
+
+                toast.error('Error eliminando producto', {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                })
+            }
+        );
+
+        setMostrarDialog(false);
+
 
     };
 
 
-    const referenciaFomulario = useRef(null); //aun no se pero la idea es que me devuele una referencia apuntando al codigo html que le indique        
+    return (
+        <tr> {permitirEditar ?
+            (
+                <>
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full'
+                        type="text"
+                        name="codigoProducto"
+                        id=""
+                        value={infoNuevaProducto.codigoProducto}
+                        onChange={(evento) => {
+                            setInfoNuevaProducto({ ...infoNuevaProducto, codigoProducto: evento.target.value });
+                        }} />
+                    </td>
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full'
+                        type="text"
+                        name="descripcionProducto"
+                        id=""
+                        value={infoNuevaProducto.descripcionProducto}
+                        onChange={(evento) => {
+                            setInfoNuevaProducto({ ...infoNuevaProducto, descripcionProducto: evento.target.value });
+                        }} />
+                    </td>
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                        type="text"
+                        name="precioUnitario"
+                        id=""
+                        value={infoNuevaProducto.precioUnitario}
+                        onChange={(evento) => {
+                            setInfoNuevaProducto({ ...infoNuevaProducto, precioUnitario: evento.target.value });
+                        }} /></td>
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                        type="text"
+                        name="estadoProducto"
+                        id=""
+                        value={infoNuevaProducto.estadoProducto}
+                        onChange={(evento) => {
+                            setInfoNuevaProducto({ ...infoNuevaProducto, estadoProducto: evento.target.value });
+                        }} /></td>
+
+                </>) : (
+                <>
+                    <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl '>
+                        {producto.codigoProducto}
+                    </td>
+                    <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                        {producto.descripcionProducto}
+                    </td>
+                    <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                        {producto.precioUnitario}
+                    </td>
+                    <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
+                        {producto.estadoProducto}
+                    </td>
+
+                </>
+            )
 
 
-    const submitFormulario = (evento) => {  // con esta funcion nos permite controlar mejor la validaciones 
+        }
+            <td><div className='flex w-full justify-around '>
+                {permitirEditar ? (
+                    <>
+                        <Tooltip title='Actualizar producto' arrow>
+                            <i className="fas fa-check text-green-500 hover:text-green-800 ml-5"
+                                onClick={
+                                    () => {
 
-        evento.preventDefault(); // nos permite tener mayor control sobre los inputs
+                                        actualizarProducto();
 
-        //ahora haremos la extraccion de los datos del formulario de referencia al cual le apuntamos con el hoo useRef para esto usaremos 
-        // la funcion FormData( dentro le pasamos el trozo de codigo html devuelto por el useRef es decir referenciaFomulario.current ) pero debemos 
-        // guardar esto en una variable y depues la recorremos con un forEach todo esto se hace cuando ocurre el evento submit es decir el boton
-        // del fomulario se oprime 
+                                    }
+                                } />
+                        </Tooltip>
+                        <Tooltip title='Cancelar' arrow>
+                            <i className="fas fa-window-close text-yellow-700 hover:text-yellow-500 ml-5"
+                                onClick={
+                                    () => {
+                                        setPermitirEditar(!permitirEditar);
+                                    }
+                                } />
+                        </Tooltip>
+                    </>
 
-        // agregamos los datos del formulario en una variable claveValorDeValuesFomulario
-        const claveValorDeValuesFomulario = new FormData(referenciaFomulario.current); //FormData=  interfaz que  proporciona una manera de construir fácilmente
-        //  un conjunto de pares clave / valor que representan campos de formulario y sus valores, que luego se pueden enviar fácilmente mediante 
-        //  el XMLHttpRequest.send()método. Utiliza el mismo formato que usaría un formulario si se configurara el tipo de codificación
-        //   "multipart/form-data".
+                ) : (
+                    <>
+                        <Tooltip title='Editar producto' arrow>
+                            <i className="fas fa-edit text-yellow-700 hover:text-yellow-500 ml-5"
+                                onClick={
+                                    () => {
+                                        setPermitirEditar(!permitirEditar);
+                                    }
+                                } />
+                        </Tooltip>
+
+
+                        <Tooltip title='Eliminar producto' arrow>
+
+                            <i className="fas fa-trash-alt text-red-800 hover:text-red-600 ml-2"
+                                onClick={() => {
+                                    setMostrarDialog(true)
+
+                                }}
+                            />
+                        </Tooltip >
+                    </>
+                )
+                }
+            </div>
+                <Dialog open={mostrarDialog}>
+                    <div className='bg-blue-200 p-4'>
+                        <h1 className='font-extrabold m-3 '>¿Está seguro de querer eliminar la producto?</h1>
+                        <div className='flex justify-center text-xl '>
+                            <button
+                                className='bg-green-500 p-3 m-1 px-4 hover:bg-green-700  text-white'
+                                onClick={() => eliminarProducto()}>
+                                Si</button>
+                            <button
+                                className='bg-red-600 p-3 m-1 hover:bg-red-800 text-white'
+                                onClick={() => setMostrarDialog(false)}> No</button>
+                        </div>
+                    </div>
+
+                </Dialog>
+            </td>
+        </tr >
+    );
+};
+
+const FormularioCreacionProductos = ({
+
+    irTablasProductos,
+    listaProductos,
+    funcionAgregarNuevaProducto
+
+}) => {
+
+
+   
+
+    const referenciaFomulario = useRef(null); 
+    const submitFormulario = async (evento) => {  
+
+        evento.preventDefault(); 
+        const claveValorDeValuesFomulario = new FormData(referenciaFomulario.current); 
+        const objetoNuevaProducto = {}; 
+
         claveValorDeValuesFomulario.forEach((valorDeCadaElementoDelFormData, claveDeCadaElementoDelFormData) => {
 
-            console.log(claveDeCadaElementoDelFormData, valorDeCadaElementoDelFormData)
+            
 
-            // todo esto con la finalidad de evitar el uso de un estado para cada input puesto que con el FormData me muestra todo los datos 
-            // pero para usar esto primero usamos permitimos el evento onSubmit en el form y el boton debe ser type=submit luego referenciamos
-            // el formulario con el hook useRef y luego le obtenemos el valor actual y a este se lo damos como entrada a FormData para que 
-            // le de un formato y lo acomode en clave valor y luego esto se lo asignamos a una  variable y por ultimo la recorremos con un 
-            // foreach y mostramos la clave y el valor  
+            objetoNuevaProducto[claveDeCadaElementoDelFormData] = valorDeCadaElementoDelFormData; 
+
         })
 
-        console.log('datos del formulario enviados', claveValorDeValuesFomulario);// con referenciaFomulario.current me saca todo el codigo en 
-        // bloque html del form .. formulario de la etiqueta <form> a la cual se puse de ref={referenciaFomulario} le puse el hook useRef()
-        // me permite tener todo el bloque de este html como una variable y asi acceder al valor actual registrado por el usuario en cada uno de 
-        // los inputs de este formulario que hemos referenciado con el hook useRef y nos sirve para provar cosas con el backend nos permita sacar 
-        // esta infomacion en un formato super facil de manejar 
-    }
+        
+        await crearProducto(
+            {
+
+                codigoProducto: objetoNuevaProducto.codigoProducto,
+                descripcionProducto: objetoNuevaProducto.descripcionProducto,
+                precioUnitario: objetoNuevaProducto.precioUnitario,
+                estadoProducto: objetoNuevaProducto.estadoProducto,
+               
+            },
+
+            (response) => {
+                
+                console.log(response.data);
+                toast.success('Producto agregada con éxito', {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                });
+                
+                console.log('SI.........FUNCIONO LA PETICION POST!!! !!!');
+              
+            },
+
+            (error) => { 
+                console.error(error);
+                toast.error('Error registrando producto', {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                });
+                
+                console.log('NO.........FUNCIONO LA PETICION POST!!! !!!');
+            }
+        );
+       
+        irTablasProductos(true) 
+
+        funcionAgregarNuevaProducto([...listaProductos, objetoNuevaProducto]);
+    };
 
 
-    // realmente FormData me muestra los datos de los input relacionados donde la key es el name del input y el valor es el value
-    // estonces seri name : value  key: valor
 
     return (
-        <div className=' rounded-xl p-3 bg-blue-400 '>
+        <div className=' border rounded-xl p-3 bg-blue-400 '>
             <h1 className='text-4xl text-center font-extrabold mb-5 text-gray-800'>
                 Formulario Productos
             </h1>
-
-            {/* usaremos una propiedad de los formularios para generar una accion y es con el evento onSubmit donde le pondremos una 
-            funcion para saber cuando se le esta haciendo submit con el boton del fomulario */}
             <form
-                ref={referenciaFomulario} // con esto yo referencio esta etiqueta y como tal todo el grupo del fromulario y me devuelve un trozo
-                // de este formulario como variable 
-                onSubmit={submitFormulario} // con esto se le idica que ejecute esta accion esta funcion cuando se oprime el boton del formulario 
+                ref={referenciaFomulario} 
+                onSubmit={submitFormulario} 
                 className='flex flex-col text-3xl'>
                 <div className='grid-cols-2 grid gap-4 m-7'>
-
                     <label className='font-bold text-gray-800' htmlFor="codigoProducto">Codigo Producto
                         <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                            type='text'
-                            placeholder=''
-                            name="codigoProducto"
-                            required
-                            value={codigoProducto}                       //---------------------------------------------------
-                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                //
-                                setCodigoProducto(evento.target.value);  //--------------------------------------------------
-                            }}
-                        />
-                    </label>
-                    <label className='font-bold text-gray-800' htmlFor="descripcionProducto">Descripción Producto:
-                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
-                            name='descripcionProducto'
+                            name='codigoProducto'
                             required
-                            value={descripcionProducto}                       //---------------------------------------------------
-                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                //
-                                setDescripcionProducto(evento.target.value);  //--------------------------------------------------
-                            }}
+                       
                         />
                     </label>
-
-                    <label className='font-bold text-gray-800' htmlFor="precioUnitario">Precio Producto:
+                    <label className='font-bold text-gray-800' htmlFor="descripcionProducto">Descripcion Producto
+                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                            type='text'
+                            name="descripcionProducto"
+                            required
+                       
+                        />
+                    </label>
+                    <label className='font-bold text-gray-800' htmlFor="precioUnitario">Precio Unitario
+                        
                         <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='precioUnitario'
                             required
-                            value={precioUnitario}                       //---------------------------------------------------
-                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                //
-                                setPrecioUnitario(evento.target.value);  //--------------------------------------------------
-                            }}
+                      
                         />
                     </label>
-                    <label className='font-bold text-gray-800' htmlFor="estadoProducto">Estado Producto:
-                        <select className='block  border border-gray-300 p-2 rounded-lg m-2 text-2xl'
-                            type="text"
-                            name="estadoProducto"
-                            id=""
-                            value={estadoProducto}
-                            required
-                            defaultValue={0}
-
-                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                                //
-                                setEstadoProducto(evento.target.value);  //--------------------------------------------------
-                            }}
-                        >
-                            <option  value={0}>Seleccione una opción
-                            </option>
-                            <option value='Disponible'>Disponible
-                            </option>
-                            <option value='No Disponible'>No Disponible
-                            </option>
-
-                        </select>
-                        <input className='block bg-blue-400 text-blue-400 '
+                    <label className='font-bold text-gray-800' htmlFor="estadoProducto">Estado Producto
+                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='estadoProducto'
-                            value={estadoProducto}
-                            //---------------------------------------------------
-                            onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-
-                                setEstadoProducto(evento.target.value);  //--------------------------------------------------
-                            }}
+                            required
+                      
                         />
-                    </label>
-                    <label className='font-bold text-gray-800' htmlFor="">
-
-
                     </label>
                 </div>
                 <button className=' text-3xl bg-blue-500 border border-gray-500 p-5 self-center m-3 
                 rounded-full  hover:bg-blue-900 text-gray-200'
                     type='submit'
-                    onClick={() => {
-
-                        enviarAlBackend();
-                    }
-                    }
+               
                 >Registrar Producto</button>
             </form>
 

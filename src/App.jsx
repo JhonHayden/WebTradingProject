@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'styles/styles.css';
+import 'styles/responsive.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';  // importo libreria para navegacion 
 import PrivateLayout from 'layouts/PrivateLayout';
 import AuthLayout from 'layouts/AuthLayout';

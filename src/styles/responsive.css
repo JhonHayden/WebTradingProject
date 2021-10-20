@@ -1,0 +1,6 @@
+@media (max-width: 600px) {   /*me permite ocultar la clase a partir de los 600 px o mejor dicho se ejecuta
+    la o las clases cuando la pantalla sea menor que 600 px */
+    .facet_sidebar {
+      display: none;
+    }
+  }

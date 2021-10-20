@@ -4,3 +4,32 @@
 @tailwind utilities;
 
 
+.tabla td,
+.tabla th {
+
+  width: 8em;
+  border: 1px solid  
+
+}
+
+.tabla td {
+
+  background-color: aliceblue;
+
+}
+
+.tabla {
+  
+  overflow-y: scroll;
+
+}
+  
+
+/* .tabla tr:nth-child(even) {       /* (even )me pone color  a las filas pares de la tabla. (odd) serian los impares*/
+    /* background-color: #f2f2f2; */
+  /* } */
+  
+  /* .tabla tr:hover {    */
+    /* background-color: #ddd; */
+    /* cursor: pointer; para habilitar que el cursor esta encima de ese elemento */
+ /* }  */
