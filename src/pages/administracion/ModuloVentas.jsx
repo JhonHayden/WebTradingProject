@@ -7,6 +7,8 @@ import { obtenerVentasDelBackend } from 'utils/api';
 import { crearVenta } from 'utils/api';
 import { editarVenta } from 'utils/api';
 import { deleteVenta } from 'utils/api';
+import { obtenerUsuarios } from 'utils/api';
+import { obtenerProductos } from 'utils/api';
 
 
 const ModuloVentas = () => {
@@ -34,33 +36,7 @@ const ModuloVentas = () => {
     // escucharemos con el useEffect el valor de ejecutarConsultaGET si esta cambia se ejecuta las instrucciones del useEffect siguiente
     useEffect(() => {
 
-        // console.log("consulta", ejecutarConsultaGET);
-        // con este useEffect vacio mas adelante traemos los datos desde el backend y la guardaremos 
-        // en un estado y este sera el estado ventas
 
-        // aqui dentro haremos la peticion de GET de REST con axios para traer informacion de la API y la base de datos 
-        // necesitamos una funcion async para la peticion GET por que useEffect no permite ser async 
-        // const obtenerVentasDelBackend = async () => {
-        //     // dentro ponemos la peticion GET
-        //     const options = { method: 'GET', url: 'https://vast-waters-45728.herokuapp.com/vehicle/' };
-        //     await axios
-        //         .request(options)
-        //         .then(function (response) { // si recibo respuesta entonces guardo la data en mi estado ventas la lista de ventas
-        //             // que mostrare en el mi tabla ventas del frontend
-        //             setVentas(response.data);
-        //             // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
-        //             console.log('SI.........FUNCIONO LA PETICION GET!!! !!!')
-
-
-        //         })
-        //         .catch(function (error) {
-        //             console.error(error);
-        //             // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
-        //             console.log('SI.........FUNCIONO LA PETICION GET!!! !!!')
-        //         });
-        //     setEjecutarConsultaGET(false);
-
-        // };
 
         if (ejecutarConsultaGET) {
 
@@ -403,43 +379,7 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
 
         )
 
-        // enviar al backend la actualizacion de una venta
-        // aqui pongo la operacion PATCH para hacer la perticion de actualizar los campos de un registro de una venta
 
-        // const options = {
-        //     method: 'PATCH', // metodo actualizar 
-        //     url: `http://localhost:5000/ventas/${venta._id}/`, // url de mi api servidor backend
-        //     headers: { 'Content-Type': 'application/json' },
-        //     data: { ...infoNuevaVenta }, // datos a actualizar tiene toda la venta mas necesitamos pasarle 
-        //     // el id del la fila que quiero actualizar del dato o venta que estoy actualizando 
-        //     // ese id me representa la fila y venta que voy a actualizar 
-
-        // };
-
-        // await axios
-        //     .request(options)
-        //     .then(function (response) {
-        //         console.log(response.data);
-        //         // alert('SI.........FUNCIONO LA PETICION PATCH!!! !!!')
-        //         console.log('SI.........FUNCIONO LA PETICION PATCH!!! !!!')
-        //         toast.success('Venta actualizada con éxito', {
-        //             position: "bottom-center",
-        //             autoClose: 5000,
-        //         })
-        //         setPermitirEditar(false);
-        //         setEjecutarConsultaGET(true);
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //         // alert('NO.........FUNCIONO LA PETICION PATCH!!! !!!')
-
-        //         console.log('NO.......funciono LA PETICION PATCH!!!')
-        //         toast.error('Error modificando venta', {
-        //             position: "bottom-center",
-        //             autoClose: 5000,
-        //         })
-        //         // setPermitirEditar(false);// APENAS FUNCIONE SE LO QUITO AUN NO SE HACE EL BACKEND POR ESO MO FUNCIONA TODAVIA
-        //     });
     };
 
     const eliminarVenta = async () => { // funcion de eliminar venta esta me ejecuta la peticion DELETE al servidor
@@ -729,8 +669,67 @@ const FormularioCreacionVentas = ({
 }) => {
     // const [totalVenta, setTotalVenta] = useState("")
 
+    const [vendedores, setVendedores] = useState([]);
+    const [productos, setProductos] = useState([]);
+    const [listaFiltradaResultadoBusqueda, setListaFiltradaResultadoBusqueda] = useState(vendedores);
+    const datoInputBusquedaVendedor = "vendedor"
 
+    useEffect(() => {
+
+        setListaFiltradaResultadoBusqueda( // modifico el estdado listaFiltradaResultadoBusqueda, con el resultado de la busqueda
+            // es decir la listafiltrada con los criterios de busqueda, conicidencia el letras con el texto del input buscar venta
+
+            vendedores.filter((objetoDeLaListaVendedores) => {
+
+                // console.log("objetoDeLaListaVentas", objetoDeLaListaVentas);
+                return JSON.stringify(objetoDeLaListaVendedores).toLowerCase().includes(datoInputBusquedaVendedor.toLowerCase());
+            }))
+
+
+    }, [vendedores]);
     // 
+    useEffect(() => {
+
+        const obtenerVendedores = async () => {
+
+            await obtenerUsuarios(
+                (response) => {// si se recibe respuesta se ejecuta el mensaje, response= es palabra reservada 
+                    // si se recibe respuesta entonces se hace eso significa el .then entonces
+
+                    setVendedores(response.data);// guardo todos los usuarios de la base de datos en el estado 
+                    // vendedores luego tengo que hacer un flitro por rol 
+                    console.log(response.data);
+
+                    console.log('SI.........FUNCIONO LA PETICION POST!!! !!!');
+                },
+                (error) => { // si se recibe error se ejecuta el mensaje de error --> esta funcion es equivalente a function (error) {
+                    console.error(error);
+                    console.log('NO.........FUNCIONO LA PETICION POST!!! !!!');
+
+                });
+            await obtenerProductos(
+                (response) => {// si se recibe respuesta se ejecuta el mensaje, response= es palabra reservada 
+                    // si se recibe respuesta entonces se hace eso significa el .then entonces
+
+                    setProductos(response.data);// guardo todos los usuarios de la base de datos en el estado 
+                    // vendedores luego tengo que hacer un flitro por rol 
+                    console.log(response.data);
+
+                    console.log('SI.........FUNCIONO LA PETICION POST!!! !!!');
+                },
+                (error) => { // si se recibe error se ejecuta el mensaje de error --> esta funcion es equivalente a function (error) {
+                    console.error(error);
+                    console.log('NO.........FUNCIONO LA PETICION POST!!! !!!');
+
+                });
+
+        }
+
+        obtenerVendedores();// sin hacer la llamada a esta funcion aqui igual me funciona
+        obtenerProductos();// sin hacer la llamada a esta funcion aqui igual me funciona
+
+
+    }, [])
 
     // const [vendedores, setVendedores] = useState([]);
 
@@ -847,7 +846,11 @@ const FormularioCreacionVentas = ({
         const objetoNuevaVenta = {};  //variable objeto la declaro vacia aqui estara mi objeto nueva venta que representa una venta 
         // con todos los datos de los inputs actualmente registrados cada ves que se registra un nueva venta aqui se guarda y luego es añadida 
 
-
+        // FormData saca un objeto con  los nombres de los inputs como key y los datos escritos por el usuario en cada input del formulario 
+        // como value .. es decir un objeto con la forma de:
+        // {nombreInput1(key):registroenInput1(value)
+        // nombreInput2(key):registroenInput2(value)
+        // nombreInput3(key):registroenInput3(value)}
 
         claveValorDeValuesFomulario.forEach((valorDeCadaElementoDelFormData, claveDeCadaElementoDelFormData) => {
 
@@ -864,6 +867,7 @@ const FormularioCreacionVentas = ({
             // foreach y mostramos la clave y el valor  
         })
 
+        
         // codigo que me trasnforma las peticiones de submit a formato REST en este caso estamos haciendo la peticion de crear venta
         //o registrar venta y en REST se hace con POST.. pero para hacer esto debemos tener instalado axios la cual es la libreria
         // que me transformara ese codigo en formato REST y poder hacer las peticiones al backend 
@@ -883,11 +887,11 @@ const FormularioCreacionVentas = ({
             {
 
                 fecha: objetoNuevaVenta.fecha,
+                codigoProducto: objetoNuevaVenta.codigoProducto,
                 nombreVendedor: objetoNuevaVenta.nombreVendedor,
                 identificacionVendedor: objetoNuevaVenta.identificacionVendedor,
                 nombreCliente: objetoNuevaVenta.nombreCliente,
                 identificacionCliente: objetoNuevaVenta.identificacionCliente,
-                codigoProducto: objetoNuevaVenta.codigoProducto,
                 cantidadProducto: objetoNuevaVenta.cantidadProducto,
                 precioUnitario: objetoNuevaVenta.precioUnitario,
                 valorTotal: objetoNuevaVenta.valorTotal
@@ -978,7 +982,8 @@ const FormularioCreacionVentas = ({
             funcion para saber cuando se le esta haciendo submit con el boton del fomulario */}
             <form
                 ref={referenciaFomulario} // con esto yo referencio esta etiqueta y como tal todo el grupo del fromulario y me devuelve un trozo
-                // de este formulario como variable 
+                // de este formulario como variable apenas ocurre el evento submit y permite traer la data completa con todos los input 
+                // registrados en el formulario 
                 onSubmit={submitFormulario} // con esto se le idica que ejecute esta accion esta funcion cuando se oprime el boton del formulario 
                 className='flex flex-col text-3xl'>
                 <div className='grid-cols-2 grid gap-4 m-7'>
@@ -1011,14 +1016,34 @@ const FormularioCreacionVentas = ({
                         // }}
                         />
                     </label> */}
-                    <label className='font-bold text-gray-800' htmlFor="nombreVendedor">Nombre Vendedor
-                        {/* <span>
+                    <label className='font-bold text-gray-800' htmlFor="nombreVendedor">
+                        <span>
                             Nombre Vendedor
                         </span>
-                        <select className='p-2 rounded-lg block' name="" id="">
-                            <option value="">Seleccione un Vendedor</option>
-                        </select> */}
-                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                        <select className='p-2 rounded-lg block mt-2'
+                            name="nombreVendedor"
+                            id=""
+                            defaultValue={-1}>
+                            <option disabled value={-1}>Seleccione un Vendedor</option>
+                            {listaFiltradaResultadoBusqueda.map((objetoVendedorDentroDeListaVendedores) => {
+
+                                return (
+
+                                    <option
+                                        key={nanoid()}//Me permite tener un indentificador para cada elemento option que el .map 
+                                        // crea y le permite a react saber cual es cual .. nanoid es una libreria muy liviana 
+                                        value={objetoVendedorDentroDeListaVendedores.nombre}>
+                                        {`${objetoVendedorDentroDeListaVendedores.nombre}
+                                          ${objetoVendedorDentroDeListaVendedores.apellido}`}
+                                    </option>
+
+                                );
+
+                            })}
+
+
+                        </select>
+                        {/* <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='nombreVendedor'
                             required
@@ -1027,7 +1052,7 @@ const FormularioCreacionVentas = ({
                         //     //                        cuando se usa un estado para cada input
                         //     setNombreVendedor(evento.target.value);  //--------------------------------------------------
                         // }}
-                        />
+                        /> */}
                     </label>
                     <label className='font-bold text-gray-800' htmlFor="identificacionVendedor">Indentificación
                         <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
@@ -1068,18 +1093,49 @@ const FormularioCreacionVentas = ({
                         />
                     </label>
 
-                    <label className='font-bold text-gray-800' htmlFor="codigoProducto">Codigo Producto
+                    <label className='font-bold text-gray-800 ' htmlFor="descripcionProducto">
+                        <span className='pb-2'>
+                            Producto
+                        </span>
+                        <select className='p-2 rounded-lg block mt-2 '
+                            name="codigoProducto"
+                            id=""
+                            defaultValue={-1}>
+                            <option disabled value={-1}>Seleccione un Producto</option>
+                            {productos.map((objetoProductoDentroDeListaProductos) => {
+
+                                return (
+
+                                    <option
+                                        key={nanoid()}
+                                        value={objetoProductoDentroDeListaProductos.descripcionProducto}>
+                                        {`${objetoProductoDentroDeListaProductos.codigoProducto}
+                                          ${objetoProductoDentroDeListaProductos.descripcionProducto}`}
+                                    </option>
+
+                                );
+
+                            })}
+
+
+                        </select>
+
+
+
+                        {/*                         
                         <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='codigoProducto'
                             required
+
                         // value={codigoProducto}                       //---------------------------------------------------
                         // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                         //     //                                            cuando se usa un estado para cada input
                         //     setCodigoProducto(evento.target.value);  //--------------------------------------------------
                         // }}
-                        />
+                        /> */}
                     </label>
+
                     <label className='font-bold text-gray-800' htmlFor="cantidadProducto">Cantidad Producto
                         <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"

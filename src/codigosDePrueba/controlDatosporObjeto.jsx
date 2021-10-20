@@ -1,146 +1,3 @@
-import React, { useEffect, useState } from 'react'
-import TablaVentas from './TablaVentas'
-
-
-
-const FormularioVentas = () => {
-
-        // creo mi objeto que me almacenara mis datos del formularioVentas llamado datosVentas
-    const [datosVentas, setDatosVentas] = useState({
-
-        fecha:'',
-        codigoVenta:'',
-        nombreVendedor:'',
-        identificacionVendedor:'',
-        nombreCliente:'',                             
-        identificacionCliente:'',
-        cantidadProducto:'',
-        codigoProducto:'',
-        precioUnitario:'',
-        valorTotal:'',
-    })
-   
-    // creo funcion que me manejara los cambios de entrada de cada input me 
-    //los modificara llamando dentro la funcion setDatosVentas
-    const handleInputChange = (event) => {  
-
-        console.log(event.target.value)
-        
-    }
-    
-   
-   
-    const [fecha, setFecha] = useState()
-    const [codigoVenta, setCodigoVenta] = useState()
-    const [nombreVendedor, setNombreVendedor] = useState()
-    const [identificacionVendedor, setIdentificacionVendedor] = useState()
-    const [nombreCliente, setNombreCliente] = useState()
-    const [identificacionCliente, setIdentificacionCliente] = useState()
-    const [cantidadProducto, setCantidadProducto] = useState()
-    const [codigoProducto, setCodigoProducto] = useState()
-    const [precioUnitario, setPrecioUnitario] = useState()
-    const [valorTotal, setValorTotal] = useState()
-    // const [reset, setReset] = useState()
-
-
-    useEffect(() => {
-        console.log(fecha)
-
-
-    }, [fecha])
-
-    return (
-        <div className='scale-95 border border-blue-300 p-20'>
-            <h1 className='text-4xl'>
-                Soy Componente Formulario Ventas
-            </h1>
-            <form className='flex flex-col text-4xl'>
-                <label htmlFor="fecha">Fecha Venta:
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type="date"
-                        name='fecha'
-                        value={fecha}                       //---------------------------------------------------
-                    onChange={ handleInputChange}/>
-                </label>
-                <label htmlFor="codigoVenta">Codigo Venta
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type='text'
-                        placeholder=''
-                        name="codigoVenta"
-                        value={codigoVenta}                       //---------------------------------------------------
-                    onChange={ handleInputChange}/>
-                </label>
-                <div>
-                    <label htmlFor="nombreVendedor">Nombre Vendedor:
-                        <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                            type="text"
-                            name='nombreVendedor'
-                            value={nombreVendedor}                       //---------------------------------------------------
-                        onChange={ handleInputChange}/>
-                    </label>
-                    <label htmlFor="identificacionVendedor">Indentificación:
-                        <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                            type="number"
-                            name='identificacionVendedor'
-                            value={identificacionVendedor}                       //---------------------------------------------------
-                        onChange={ handleInputChange}/>
-                    </label>
-                </div>
-                <div>
-                    <label htmlFor="nombreCliente">Nombre Cliente:
-                        <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                            type="text"
-                            name='nombreCliente'
-                            value={nombreCliente}                       //---------------------------------------------------
-                        onChange={ handleInputChange}/>
-                    </label>
-                    <label htmlFor="identificacionCliente">Indentificación:
-                        <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                            type="number"
-                            name='identificacionCliente'
-                            value={identificacionCliente}                       //---------------------------------------------------
-                        onChange={ handleInputChange}/>
-                    </label>
-                </div>
-                <label htmlFor="codigoProducto">Codigo Producto:
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type="text"
-                        name='codigoProducto'
-                        value={codigoProducto}                       //---------------------------------------------------
-                    onChange={ handleInputChange}/>
-                </label>
-                <label htmlFor="cantidadProducto">Cantidad Producto:
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type="text"
-                        name='cantidadProducto'
-                        value={cantidadProducto}                       //---------------------------------------------------
-                    onChange={ handleInputChange}/>
-                </label>
-                <label htmlFor="precioUnitario">Precio Producto:
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type="text"
-                        name='precioUnitario'
-                        value={precioUnitario}                       //---------------------------------------------------
-                    onChange={ handleInputChange}/>
-                </label>
-                <label htmlFor="valorTotal">Valor Total:
-                    <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                        type="text"
-                        name='valorTotal'
-                        value={valorTotal}                       //---------------------------------------------------
-                    onChange={ handleInputChange}/>
-                </label>  
-            </form>
-
-
-
-        </div>
-    )
-}
-
-export default FormularioVentas
-
-
 import React, { useEffect, useState, useRef } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -179,33 +36,7 @@ const ModuloVentas = () => {
     // escucharemos con el useEffect el valor de ejecutarConsultaGET si esta cambia se ejecuta las instrucciones del useEffect siguiente
     useEffect(() => {
 
-        // console.log("consulta", ejecutarConsultaGET);
-        // con este useEffect vacio mas adelante traemos los datos desde el backend y la guardaremos 
-        // en un estado y este sera el estado ventas
 
-        // aqui dentro haremos la peticion de GET de REST con axios para traer informacion de la API y la base de datos 
-        // necesitamos una funcion async para la peticion GET por que useEffect no permite ser async 
-        // const obtenerVentasDelBackend = async () => {
-        //     // dentro ponemos la peticion GET
-        //     const options = { method: 'GET', url: 'https://vast-waters-45728.herokuapp.com/vehicle/' };
-        //     await axios
-        //         .request(options)
-        //         .then(function (response) { // si recibo respuesta entonces guardo la data en mi estado ventas la lista de ventas
-        //             // que mostrare en el mi tabla ventas del frontend
-        //             setVentas(response.data);
-        //             // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
-        //             console.log('SI.........FUNCIONO LA PETICION GET!!! !!!')
-
-
-        //         })
-        //         .catch(function (error) {
-        //             console.error(error);
-        //             // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
-        //             console.log('SI.........FUNCIONO LA PETICION GET!!! !!!')
-        //         });
-        //     setEjecutarConsultaGET(false);
-
-        // };
 
         if (ejecutarConsultaGET) {
 
@@ -478,13 +309,15 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
     //console.log(venta); //imprime mi ventas traidas del backend 
     // creamos un estado de tipo boolean para hacer la renderizacion condicional del cambio de campos de tabla 
     // a campos de input de fomulario para poder editar los datos
+
     const [permitirEditar, setPermitirEditar] = useState(false) // estado de control de permitir ediccion si es true se puede editar si es falso no 
+    // const [ventaid, setVentaid] = useState({venta_id:venta._id.slice(20)}) // estado de control de permitir ediccion si es true se puede editar si es falso no 
     // si es true me pinta los inputs del formulario si es false me pinta las celdas de la tabla normal, ese estado me lo cambia de valor el icono 
     // de editar con el evento onclick
     const [infoNuevaVenta, setInfoNuevaVenta] = useState({ // estado que me tiene la informacion de una venta de cualquier fila que elija
         // para editar  algun campo 
 
-        codigoVenta: venta.codigoVenta,
+        _id: venta._id,
         fecha: venta.fecha,
         codigoProducto: venta.codigoProducto,
         cantidadProducto: venta.cantidadProducto,
@@ -504,7 +337,20 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
         await editarVenta(
             venta._id,
 
-            infoNuevaVenta,
+            {
+                fecha: infoNuevaVenta.fecha,
+                codigoProducto: infoNuevaVenta.codigoProducto,
+                cantidadProducto: infoNuevaVenta.cantidadProducto,
+                nombreVendedor: infoNuevaVenta.nombreVendedor,
+                nombreCliente: infoNuevaVenta.nombreCliente,
+                precioUnitario: infoNuevaVenta.precioUnitario,
+                valorTotal: infoNuevaVenta.valorTotal,
+                estadoVenta: infoNuevaVenta.estadoVenta
+
+
+            }
+
+            ,
 
             (response) => {
 
@@ -533,43 +379,7 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
 
         )
 
-        // enviar al backend la actualizacion de una venta
-        // aqui pongo la operacion PATCH para hacer la perticion de actualizar los campos de un registro de una venta
 
-        // const options = {
-        //     method: 'PATCH', // metodo actualizar 
-        //     url: `http://localhost:5000/ventas/${venta._id}/`, // url de mi api servidor backend
-        //     headers: { 'Content-Type': 'application/json' },
-        //     data: { ...infoNuevaVenta }, // datos a actualizar tiene toda la venta mas necesitamos pasarle 
-        //     // el id del la fila que quiero actualizar del dato o venta que estoy actualizando 
-        //     // ese id me representa la fila y venta que voy a actualizar 
-
-        // };
-
-        // await axios
-        //     .request(options)
-        //     .then(function (response) {
-        //         console.log(response.data);
-        //         // alert('SI.........FUNCIONO LA PETICION PATCH!!! !!!')
-        //         console.log('SI.........FUNCIONO LA PETICION PATCH!!! !!!')
-        //         toast.success('Venta actualizada con éxito', {
-        //             position: "bottom-center",
-        //             autoClose: 5000,
-        //         })
-        //         setPermitirEditar(false);
-        //         setEjecutarConsultaGET(true);
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //         // alert('NO.........FUNCIONO LA PETICION PATCH!!! !!!')
-
-        //         console.log('NO.......funciono LA PETICION PATCH!!!')
-        //         toast.error('Error modificando venta', {
-        //             position: "bottom-center",
-        //             autoClose: 5000,
-        //         })
-        //         // setPermitirEditar(false);// APENAS FUNCIONE SE LO QUITO AUN NO SE HACE EL BACKEND POR ESO MO FUNCIONA TODAVIA
-        //     });
     };
 
     const eliminarVenta = async () => { // funcion de eliminar venta esta me ejecuta la peticion DELETE al servidor
@@ -653,16 +463,10 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
         <tr> {permitirEditar ?
             (
                 <>
-                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full'
-                        type="text"
-                        name="codigoVenta"
-                        id=""
-                        value={infoNuevaVenta.codigoVenta}
-                        onChange={(evento) => {
-                            setInfoNuevaVenta({ ...infoNuevaVenta, codigoVenta: evento.target.value });
-                        }} />
+                    <td className=' p-2 text-xl'>
+                        {infoNuevaVenta._id} {/*me permite poner el id generado por mongoDB y acortado con slice a digitos  */}
                     </td>
-                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full'
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full text-xl'
                         type="text"
                         name="fecha"
                         id=""
@@ -671,7 +475,7 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
                             setInfoNuevaVenta({ ...infoNuevaVenta, fecha: evento.target.value });
                         }} />
                     </td>
-                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full text-xl '
                         type="text"
                         name="codigoProducto"
                         id=""
@@ -679,7 +483,7 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
                         onChange={(evento) => {
                             setInfoNuevaVenta({ ...infoNuevaVenta, codigoProducto: evento.target.value });
                         }} /></td>
-                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full text-xl '
                         type="text"
                         name="cantidadProducto"
                         id=""
@@ -687,7 +491,7 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
                         onChange={(evento) => {
                             setInfoNuevaVenta({ ...infoNuevaVenta, cantidadProducto: evento.target.value });
                         }} /></td>
-                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full text-xl '
                         type="text"
                         name="nombreVendedor"
                         id=""
@@ -695,7 +499,7 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
                         onChange={(evento) => {
                             setInfoNuevaVenta({ ...infoNuevaVenta, nombreVendedor: evento.target.value });
                         }} /></td>
-                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full text-xl '
                         type="text"
                         name="nombreCliente"
                         id=""
@@ -703,7 +507,7 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
                         onChange={(evento) => {
                             setInfoNuevaVenta({ ...infoNuevaVenta, nombreCliente: evento.target.value });
                         }} /></td>
-                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full text-xl '
                         type="text"
                         name="precioUnitario"
                         id=""
@@ -711,7 +515,7 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
                         onChange={(evento) => {
                             setInfoNuevaVenta({ ...infoNuevaVenta, precioUnitario: evento.target.value });
                         }} /></td>
-                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full text-xl '
                         type="text"
                         name="valorTotal"
                         id=""
@@ -726,8 +530,14 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
                             name="estadoVenta"
                             id=""
                             defaultValue={0}
+                            value={infoNuevaVenta.estadoVenta}
+                            onChange={(evento) => {
+
+                                setInfoNuevaVenta({ ...infoNuevaVenta, estadoVenta: evento.target.value })
+
+                            }}
                         >
-                            <option defaultValue={0}>Seleccione una opción
+                            <option disabled defaultValue={0}>Seleccione una opción
                             </option>
                             <option defaultValue="proceso">En Proceso
                             </option>
@@ -740,7 +550,8 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
                 </>) : (
                 <>
                     <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl '>
-                        {venta.codigoVenta}
+                        {/* {venta._id.slice(20)} */}
+                        {venta._id}
                     </td>
                     <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
                         {venta.fecha}
@@ -853,18 +664,30 @@ const FormularioCreacionVentas = ({
     listaVentas,      // representa mis datos del backend, las ventas y  ventasDatosBackend
     funcionAgregarNuevaVenta  // me permite modificar los datos del backend es decir la lista ventas 
 
+
+
 }) => {
-
-
-    // 
+    // const [totalVenta, setTotalVenta] = useState("")
 
     const [vendedores, setVendedores] = useState([]);
-    const [productos, setProductos] = useState([]);
+    const [productos, setProductos] = useState([]); // me guarda todos los productos de mi base de datos    
+    const [listaFiltradaResultadoBusqueda, setListaFiltradaResultadoBusqueda] = useState(vendedores);
+    const datoInputBusquedaVendedor = "vendedor"
 
-    const [precioUnitario, setPrecioUnitario] = useState();
-    const [cantidadProducto, setCantidadProducto] = useState()
+    useEffect(() => {
+
+        setListaFiltradaResultadoBusqueda( // modifico el estdado listaFiltradaResultadoBusqueda, con el resultado de la busqueda
+            // es decir la listafiltrada con los criterios de busqueda, conicidencia el letras con el texto del input buscar venta
+
+            vendedores.filter((objetoDeLaListaVendedores) => {
+
+                // console.log("objetoDeLaListaVentas", objetoDeLaListaVentas);
+                return JSON.stringify(objetoDeLaListaVendedores).toLowerCase().includes(datoInputBusquedaVendedor.toLowerCase());
+            }))
 
 
+    }, [vendedores]);
+    // 
     useEffect(() => {
 
         const obtenerVendedores = async () => {
@@ -875,7 +698,7 @@ const FormularioCreacionVentas = ({
 
                     setVendedores(response.data);// guardo todos los usuarios de la base de datos en el estado 
                     // vendedores luego tengo que hacer un flitro por rol 
-                    console.log(response.data);
+                    // console.log(response.data);
 
                     console.log('SI.........FUNCIONO LA PETICION POST!!! !!!');
                 },
@@ -890,7 +713,7 @@ const FormularioCreacionVentas = ({
 
                     setProductos(response.data);// guardo todos los usuarios de la base de datos en el estado 
                     // vendedores luego tengo que hacer un flitro por rol 
-                    console.log(response.data);
+                    // console.log(response.data);
 
                     console.log('SI.........FUNCIONO LA PETICION POST!!! !!!');
                 },
@@ -907,6 +730,18 @@ const FormularioCreacionVentas = ({
 
 
     }, [])
+
+    // const [vendedores, setVendedores] = useState([]);
+
+
+    // useEffect(() => {
+
+    //     const obtenerVendedores = async () => {
+
+    //     }
+    //     obtenerVendedores();
+
+    // }, [])
     // con el useRef y el FormData ya podemos eliminar cada estado para cada input por pruebas solo los comentaremos
     // const [fecha, setFecha] = useState('')
     // const [codigoVenta, setCodigoVenta] = useState('')
@@ -914,11 +749,30 @@ const FormularioCreacionVentas = ({
     // const [identificacionVendedor, setIdentificacionVendedor] = useState('')
     // const [nombreCliente, setNombreCliente] = useState('')
     // const [identificacionCliente, setIdentificacionCliente] = useState('')
-    // const [cantidadProducto, setCantidadProducto] = useState('')
+    const [cantidadProducto, setCantidadProducto] = useState('')
     // const [codigoProducto, setCodigoProducto] = useState('')
-    // const [precioUnitario, setPrecioUnitario] = useState('')
+    const [precioUnitario, setPrecioUnitario] = useState('')
     // const [valorTotal, setValorTotal] = useState('')
     // const [reset, setReset] = useState()
+
+    const [productosSelecionados, setProductosSelecionados] = useState([]) // guardo una lista de componentes de react y es el componente 
+
+    // DropDownProductos este componente lo estoy guardando en el estado productosSelecionado varias veces es decir cada ves que el evento 
+    // onclick del boton agregar nuevo producto en este estado se esta guardando una instacia del componente DropDownProductos uno de tras 
+    // de otro cada que se hace clic 
+
+
+    const agregarNuevoProductoAVenta = () => {
+
+
+        setProductosSelecionados([...productosSelecionados, DropDownProductos]);
+
+    }
+
+    useEffect(() => {
+        console.log("productos Selecionados para agregar a una venta", productosSelecionados)
+    }, [productosSelecionados])
+
 
 
     // funcion que me hace todo el proceso de registro en la tabla ventas 
@@ -977,8 +831,6 @@ const FormularioCreacionVentas = ({
 
     // }, [fecha])
 
-
-
     const referenciaFomulario = useRef(null); //aun no se pero la idea es que me devuelve una referencia apuntando al codigo html que le indique        
 
     //la palabra async me indica que la funcion es asincrona que tiene que esperar respuesta antes de ejecutar y con esta palabra 
@@ -1013,7 +865,11 @@ const FormularioCreacionVentas = ({
         const objetoNuevaVenta = {};  //variable objeto la declaro vacia aqui estara mi objeto nueva venta que representa una venta 
         // con todos los datos de los inputs actualmente registrados cada ves que se registra un nueva venta aqui se guarda y luego es añadida 
 
-
+        // FormData saca un objeto con  los nombres de los inputs como key y los datos escritos por el usuario en cada input del formulario 
+        // como value .. es decir un objeto con la forma de:
+        // {nombreInput1(key):registroenInput1(value)
+        // nombreInput2(key):registroenInput2(value)
+        // nombreInput3(key):registroenInput3(value)}
 
         claveValorDeValuesFomulario.forEach((valorDeCadaElementoDelFormData, claveDeCadaElementoDelFormData) => {
 
@@ -1022,13 +878,14 @@ const FormularioCreacionVentas = ({
             objetoNuevaVenta[claveDeCadaElementoDelFormData] = valorDeCadaElementoDelFormData; //lleno en objeto con los
             // datos de una venta, la cual sus atributos son los datos entrados por los inputs que el usuario registro 
             // en la interaccion con el formulario de la aplicacion 
-
+            // setTotalVenta(objetoNuevaVenta.cantidadProducto * objetoNuevaVenta.precioUnitario);
             // todo esto con la finalidad de evitar el uso de un estado para cada input puesto que con el FormData me muestra todo los datos 
             // pero para usar esto primero usamos permitimos el evento onSubmit en el form y el boton debe ser type=submit luego referenciamos
             // el formulario con el hook useRef y luego le obtenemos el valor actual y a este se lo damos como entrada a FormData para que 
             // le de un formato y lo acomode en clave valor y luego esto se lo asignamos a una  variable y por ultimo la recorremos con un 
             // foreach y mostramos la clave y el valor  
         })
+
 
         // codigo que me trasnforma las peticiones de submit a formato REST en este caso estamos haciendo la peticion de crear venta
         //o registrar venta y en REST se hace con POST.. pero para hacer esto debemos tener instalado axios la cual es la libreria
@@ -1049,12 +906,11 @@ const FormularioCreacionVentas = ({
             {
 
                 fecha: objetoNuevaVenta.fecha,
-                codigoVenta: objetoNuevaVenta.codigoVenta,
+                codigoProducto: objetoNuevaVenta.codigoProducto,
                 nombreVendedor: objetoNuevaVenta.nombreVendedor,
                 identificacionVendedor: objetoNuevaVenta.identificacionVendedor,
                 nombreCliente: objetoNuevaVenta.nombreCliente,
                 identificacionCliente: objetoNuevaVenta.identificacionCliente,
-                codigoProducto: objetoNuevaVenta.codigoProducto,
                 cantidadProducto: objetoNuevaVenta.cantidadProducto,
                 precioUnitario: objetoNuevaVenta.precioUnitario,
                 valorTotal: objetoNuevaVenta.valorTotal
@@ -1062,7 +918,7 @@ const FormularioCreacionVentas = ({
 
             (response) => {// si se recibe respuesta se ejecuta el mensaje, response= es palabra reservada 
                 // si se recibe respuesta entonces se hace eso significa el .then entonces
-                console.log(response.data);
+                // console.log(response.data);
                 toast.success('Venta agregada con éxito', {
                     position: "bottom-center",
                     autoClose: 5000,
@@ -1122,8 +978,8 @@ const FormularioCreacionVentas = ({
         funcionAgregarNuevaVenta([...listaVentas, objetoNuevaVenta]);// permite primero con el operador ... agrega los datos anteriores o todos los
         // que tiene la data o datos enviados y leidos desde el backend y luego le agrego al final de esta lista de objetos una nueva venta 
 
-        // setPrecioUnitario(objetoNuevaVenta.precioUnitario);
-        // setCantidadProducto(objetoNuevaVenta.cantidadProducto);
+
+
         // console.log('datos del formulario enviados', claveValorDeValuesFomulario);// con referenciaFomulario.current me saca todo el codigo en 
         // bloque html del form .. formulario de la etiqueta <form> a la cual se puse de ref={referenciaFomulario} le puse el hook useRef()
         // me permite tener todo el bloque de este html como una variable y asi acceder al valor actual registrado por el usuario en cada uno de 
@@ -1136,7 +992,7 @@ const FormularioCreacionVentas = ({
     // estonces seri name : value  key: valor
 
     return (
-        <div className=' border rounded-xl p-3 bg-blue-400 '>
+        <div className=' flex border rounded-xl p-3 bg-blue-400 h-full w-full'>
             <h1 className='text-4xl text-center font-extrabold mb-5 text-gray-800'>
                 Formulario Ventas
             </h1>
@@ -1145,7 +1001,8 @@ const FormularioCreacionVentas = ({
             funcion para saber cuando se le esta haciendo submit con el boton del fomulario */}
             <form
                 ref={referenciaFomulario} // con esto yo referencio esta etiqueta y como tal todo el grupo del fromulario y me devuelve un trozo
-                // de este formulario como variable 
+                // de este formulario como variable apenas ocurre el evento submit y permite traer la data completa con todos los input 
+                // registrados en el formulario 
                 onSubmit={submitFormulario} // con esto se le idica que ejecute esta accion esta funcion cuando se oprime el boton del formulario 
                 className='flex flex-col text-3xl'>
                 <div className='grid-cols-2 grid gap-4 m-7'>
@@ -1161,7 +1018,11 @@ const FormularioCreacionVentas = ({
                         // }}
                         />
                     </label>
-                    <label className='font-bold text-gray-800' htmlFor="codigoVenta">Codigo Venta
+                    <div>
+
+
+                    </div>
+                    {/* <label className='font-bold text-gray-800' htmlFor="codigoVenta">Codigo Venta
                         <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type='text'
                             placeholder=''
@@ -1173,7 +1034,7 @@ const FormularioCreacionVentas = ({
                         //     setCodigoVenta(evento.target.value);  //--------------------------------------------------
                         // }}
                         />
-                    </label>
+                    </label> */}
                     <label className='font-bold text-gray-800' htmlFor="nombreVendedor">
                         <span>
                             Nombre Vendedor
@@ -1183,12 +1044,17 @@ const FormularioCreacionVentas = ({
                             id=""
                             defaultValue={-1}>
                             <option disabled value={-1}>Seleccione un Vendedor</option>
-                            {vendedores.map((objetoVendedorDentroDeListaVendedores) => {
+                            {listaFiltradaResultadoBusqueda.map((objetoVendedorDentroDeListaVendedores) => {
 
                                 return (
 
-                                    <option value={objetoVendedorDentroDeListaVendedores._id}>{`${objetoVendedorDentroDeListaVendedores.nombre} 
-                                    ${objetoVendedorDentroDeListaVendedores.apellido}`}</option>
+                                    <option
+                                        key={nanoid()}//Me permite tener un indentificador para cada elemento option que el .map 
+                                        // crea y le permite a react saber cual es cual .. nanoid es una libreria muy liviana 
+                                        value={objetoVendedorDentroDeListaVendedores.nombre}>
+                                        {`${objetoVendedorDentroDeListaVendedores.nombre}
+                                          ${objetoVendedorDentroDeListaVendedores.apellido}`}
+                                    </option>
 
                                 );
 
@@ -1246,44 +1112,27 @@ const FormularioCreacionVentas = ({
                         />
                     </label>
 
-                    <label className='font-bold text-gray-800 ' htmlFor="descripcionProducto">
-                        <span className='pb-2'>
-                            Producto
+                    <div>
+                        <span>
+                            Selección de productos
                         </span>
-                        <select className='p-2 rounded-lg block mt-2 '
-                            name="descripcionProducto"
-                            id=""
-                            defaultValue={-1}>
-                            <option disabled value={-1}>Seleccione un Producto</option>
-                            {productos.map((objetoProductoDentroDeListaProductos) => {
+                        <button
+                            className='text-3xl bg-blue-500 border border-gray-500 p-5 self-center m-3 rounded-full  hover:bg-blue-900 text-gray-200'
+                            type='button'
+                            onClick={() => {
+                                agregarNuevoProductoAVenta();
 
-                                return (
-
-                                    <option value={objetoProductoDentroDeListaProductos._id}>{`${objetoProductoDentroDeListaProductos.codigoProducto}  
-                                    ${objetoProductoDentroDeListaProductos.descripcionProducto}`}</option>
-
-                                );
-
+                            }}
+                        >
+                            agregar nuevo producto
+                        </button>
+                    </div>
+                            {productosSelecionados.map((Componente) => {
+                                
+                                return <Componente productos={productos} key={nanoid()}/>
                             })}
+                                
 
-
-                        </select>
-
-
-
-                        {/*                         
-                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                            type="text"
-                            name='codigoProducto'
-                            required
-
-                        // value={codigoProducto}                       //---------------------------------------------------
-                        // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
-                        //     //                                            cuando se usa un estado para cada input
-                        //     setCodigoProducto(evento.target.value);  //--------------------------------------------------
-                        // }}
-                        /> */}
-                    </label>
                     <label className='font-bold text-gray-800' htmlFor="cantidadProducto">Cantidad Producto
                         <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
@@ -1310,9 +1159,9 @@ const FormularioCreacionVentas = ({
                     </label>
                     <label className='font-bold text-gray-800' htmlFor="valorTotal">Valor Total
                         <input className=' block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
-                            type="number"
+                            type="text"
                             name='valorTotal'
-                            value={cantidadProducto * precioUnitario}                       //---------------------------------------------------
+                            value={precioUnitario * cantidadProducto}                      //---------------------------------------------------
                         // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
                         //     //                                    cuando se usa un estado para cada input
                         //     setValorTotal(evento.target.value);  //--------------------------------------------------
@@ -1337,5 +1186,52 @@ const FormularioCreacionVentas = ({
     )
 }
 
+const DropDownProductos = ({productos}) => {
+    return (
 
+        <label className='font-bold text-gray-800 ' htmlFor="descripcionProducto">
+            <span className='pb-2'>
+                Producto
+            </span>
+            <select className='p-2 rounded-lg block mt-2 '
+                name="codigoProducto"
+                id=""
+                defaultValue={-1}>
+                <option disabled value={-1}>Seleccione un Producto</option>
+                {productos.map((objetoProductoDentroDeListaProductos) => {
+
+                    return (
+
+                        <option
+                            key={nanoid()}
+                            value={objetoProductoDentroDeListaProductos.descripcionProducto}>
+                            {`${objetoProductoDentroDeListaProductos.codigoProducto}
+                                          ${objetoProductoDentroDeListaProductos.descripcionProducto}`}
+                        </option>
+
+                    );
+
+                })}
+
+
+            </select>
+
+
+
+            {/*                         
+                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+                            type="text"
+                            name='codigoProducto'
+                            required
+
+                        // value={codigoProducto}                       //---------------------------------------------------
+                        // onChange={(evento) => {             //intrucciones necesarias para tener control del un input
+                        //     //                                            cuando se usa un estado para cada input
+                        //     setCodigoProducto(evento.target.value);  //--------------------------------------------------
+                        // }}
+                        /> */}
+        </label>
+    )
+
+}
 export default ModuloVentas
