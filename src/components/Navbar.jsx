@@ -1,9 +1,12 @@
 import useActiveRoute from 'hooks/useActiveRoute'
 import React, { useEffect } from 'react'
-import { Link  } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import ImagenLogo from './componentesVentas/ImagenLogo'
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Navbar = () => {
+
+    const { logout } = useAuth0();
     return (
         <div>
             <nav className='bg-blue-400 '>
@@ -22,8 +25,20 @@ const Navbar = () => {
                     <li className='text-2xl'>
                         <BotonRuta nombre='Usuarios' incono='fas fa-users' ruta='/administracion/moduloUsuario' />
                     </li>
-                    <li className='text-2xl'>
-                        < BotonRuta nombre='Cerrar Sesion' incono='fas fa-sign-out-alt' ruta='/' />
+                    <li className='text-2xl '>
+                        {/* <button
+                            className='border rounded-xl border-gray-700 blue-800  blue-500 p-3  
+                                        flex-colhover:bg-blue-600'
+                            onClick={() => loginWithRedirect()}>
+                            <i className='fas fa-sign-in-alt' /> {/*String literal* como meter una variable es un strig 
+                        </button> */}
+                        <button onClick={() => logout({ returnTo: window.location.origin })}>
+                            < BotonRuta nombre='Cerrar Sesión' incono='fas fa-sign-out-alt' ruta='/' />
+                            
+                        </button>
+
+
+
                     </li>
                 </ul>
 
@@ -37,7 +52,7 @@ const Navbar = () => {
 const BotonRuta = ({ incono, ruta, nombre }) => {
 
     // uso del hook personalizado useActiveRoute en donde lo quiera usar debo llamarlo y asignarlo a una variable 
-    const isRutaActiva= useActiveRoute(ruta); //Hook personalizado
+    const isRutaActiva = useActiveRoute(ruta); //Hook personalizado
 
 
 

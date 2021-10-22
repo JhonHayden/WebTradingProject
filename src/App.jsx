@@ -12,68 +12,70 @@ import Admin from 'pages/administracion/Index';
 import { DarkModeContext } from 'contexto/DarkMode'
 import Login from 'pages/auth/Login';
 import RegistroUsuario from 'pages/auth/RegistroUsuario';
+import { Auth0Provider } from "@auth0/auth0-react";// contexto para la autenticacion 
 
 function App() {
   const [darkMode, setDarkMode] = useState(false); // la idea de tener esto es para usar estados sin pasarlos por props 
   // este useState sera usado por todos los componentes de mis aplicacion puede acceder a lo que tiene guardado y ademas pueden modificarlo 
   // con el setDarkMode sin tener que pasarlo por props esto es para lo que sirve el crear contextos un context
-
   useEffect(() => {
-
     console.log('Modo Dark', darkMode);
   }, [darkMode]);
 
   return (
-    <div>
+    <Auth0Provider     //aqui en los props de Auth0Provider enviamos el perfil de autenticacion son los tres props 
+      domain="auth0-web-trading-project.us.auth0.com"
+      clientId="dEyN0UkLXkCK6jTtPIJUZ1wIRgOlusWU"
+      redirectUri={window.location.origin}>
+      <div>
 
-      {/* con <DarkModeContext.Provider value={{darkMode,setDarkMode}}></DarkModeContext.Provider> permito usar un contexto un estado una variable usada
+        {/* con <DarkModeContext.Provider value={{darkMode,setDarkMode}}></DarkModeContext.Provider> permito usar un contexto un estado una variable usada
       por todos mis componentes de la aplicacion sin tener que pasarlo por los props  */}
-      <DarkModeContext.Provider value={{ darkMode, setDarkMode }}> {/*en value coloco el estado que quiero que se transmita a toda la aplicacion*/}
-        <Router>
-          <Switch>
-            <Route path={['/administracion/moduloUsuario', '/administracion/ventas',
-              '/administracion/moduloproductos', '/administracion/moduloVentas', '/administracion']}>
-              <PrivateLayout>
-                <Switch>
-                  <Route path='/administracion/moduloUsuario'>
-                    <ModuloUsuario />
-                  </Route>
-                  <Route path='/administracion/moduloproductos'>
-                    <ModuloProductos />
-                  </Route>
-                  <Route path='/administracion/moduloVentas'>
-                    <ModuloVentas />
-                  </Route>
-                  <Route path='/administracion'>
-                    <Admin />
-                  </Route>
-                </Switch>
-              </PrivateLayout>
-            </Route>
-            <Route path={['/RegistroUsuario', '/']}>
-              <AuthLayout>
-                <Switch >
-                  <Route path='/RegistroUsuario'>
-                    <RegistroUsuario />
-                  </Route>
-                  <Route path='/'>
-                    <Login />
-                  </Route>
-                </Switch>
-              </AuthLayout>
-            </Route>
-            <Route path='/public'>
-              <PublicLayout>
-              </PublicLayout>
-            </Route>
-          </Switch>
-        </Router>
-      </DarkModeContext.Provider>
-    </div>
-
+        <DarkModeContext.Provider value={{ darkMode, setDarkMode }}> {/*en value coloco el estado que quiero que se transmita a toda la aplicacion*/}
+          <Router>
+            <Switch>
+              <Route path={['/administracion/moduloUsuario', '/administracion/ventas',
+                '/administracion/moduloproductos', '/administracion/moduloVentas', '/administracion']}>
+                <PrivateLayout>
+                  <Switch>
+                    <Route path='/administracion/moduloUsuario'>
+                      <ModuloUsuario />
+                    </Route>
+                    <Route path='/administracion/moduloproductos'>
+                      <ModuloProductos />
+                    </Route>
+                    <Route path='/administracion/moduloVentas'>
+                      <ModuloVentas />
+                    </Route>
+                    <Route path='/administracion'>
+                      <Admin />
+                    </Route>
+                  </Switch>
+                </PrivateLayout>
+              </Route>
+              <Route path={['/RegistroUsuario', '/']}>
+                <AuthLayout>
+                  <Switch >
+                    <Route path='/RegistroUsuario'>
+                      <RegistroUsuario />
+                    </Route>
+                    <Route path='/'>
+                      <Login />
+                    </Route>
+                  </Switch>
+                </AuthLayout>
+              </Route>
+              <Route path='/public'>
+                <PublicLayout>
+                </PublicLayout>
+              </Route>
+            </Switch>
+          </Router>
+        </DarkModeContext.Provider>
+      </div>
+    </Auth0Provider>
   );
 }
-
 export default App;
 
 
