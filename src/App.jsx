@@ -26,7 +26,10 @@ function App() {
     <Auth0Provider     //aqui en los props de Auth0Provider enviamos el perfil de autenticacion son los tres props 
       domain="auth0-web-trading-project.us.auth0.com"
       clientId="dEyN0UkLXkCK6jTtPIJUZ1wIRgOlusWU"
-      redirectUri={window.location.origin}>
+      redirectUri={window.location.origin}
+      audience='api/autenticacion/web/trading/project' //mismo nombre de la api de Auth0 y debe ser 
+      // la misma audience del backend del middleware
+      >
       <div>
 
         {/* con <DarkModeContext.Provider value={{darkMode,setDarkMode}}></DarkModeContext.Provider> permito usar un contexto un estado una variable usada
