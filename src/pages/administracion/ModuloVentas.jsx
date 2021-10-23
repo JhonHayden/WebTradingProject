@@ -9,6 +9,7 @@ import { editarVenta } from 'utils/api';
 import { deleteVenta } from 'utils/api';
 import { obtenerUsuarios } from 'utils/api';
 import { obtenerProductos } from 'utils/api';
+import ReactLoading from 'react-loading';//  permite colocar el componente de loading espera de carga 
 
 
 const ModuloVentas = () => {
@@ -32,16 +33,17 @@ const ModuloVentas = () => {
     //luego setEjecutarConsultaGET la pasamos como prop a la tabla y luego a la filaVenta para que los botones iconos de eliminar y editar
     // puedan ejecutar esta consulta y se actualice la informacion en el frontend y se muetre el cambio en edicion y eliminacion de un registro
 
+    const [loading, setLoading] = useState(false)
 
     // escucharemos con el useEffect el valor de ejecutarConsultaGET si esta cambia se ejecuta las instrucciones del useEffect siguiente
     useEffect(() => {
 
+        const fetchVentas = async () => {
 
-
-        if (ejecutarConsultaGET) {
+            setLoading(true)
 
             //                      parametro para la funcion que tengo en api y hace la peticion GET
-            obtenerVentasDelBackend(
+            await obtenerVentasDelBackend(
                 // esta funcion siguiente es una funcion anonima que se ejecuta despues de un evento y el evento es
                 // la peticion get, cuando el servidor devuelve una respuesta a esta peticion la instruccion .then revisa esta respuesta y
                 // ejecuta alguna de las dos funciones anonimas siguientes si la respuesta es positiva ejecuta la siguiente si no es
@@ -55,18 +57,32 @@ const ModuloVentas = () => {
                     setVentas(response.data); // response es la respuesta del backend a la peticion get es decir trae toda la trama de la respuesta
                     // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
                     console.log('SI.........FUNCIONO LA PETICION GET!!! !!!');
+                    setEjecutarConsultaGET(false); // luego de consultar le retornamos el valor a false para estar lista para solicitarla de nuevo
+                    setLoading(false);
                 },
                 (error) => {  // esta funcion es equivalente a la anterior function (error) { solo que esta escrita como arrow function
-                    console.error(error);
+                    console.error("Salio un error con la peticion Get Ventas", error);
                     // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
                     console.log('NO.........FUNCIONO LA PETICION GET!!! !!!');
+                    setLoading(false);
                 }
             ); // si se ejecuta la consulta es porque el estado de ejecutarConsultaGET es true por ende ejecutaremos la
             // funcion que ejecuta la peticion GET .. obtenerVentasDelBackend
 
             // luego de consultar le retornamos el valor a false para estar lista para solicitarla de nuevo
 
-            setEjecutarConsultaGET(false);
+            // setEjecutarConsultaGET(false);
+
+
+
+        }
+
+
+        if (ejecutarConsultaGET) {
+
+
+            fetchVentas();
+
         }
 
     }, [ejecutarConsultaGET]) // supervisamos esta variable o estado  de ejecutarConsultaGET
@@ -107,7 +123,10 @@ const ModuloVentas = () => {
             {/* el props que le paso al componente TablaVentas es mi estado donde esta
                                                 almacenado las ventas desde el backend */}
             {mostrarTablaVentas ? (
-                <TablaVentas listaVentas={ventas} setEjecutarConsultaGET={setEjecutarConsultaGET} /> // prop lista de las ventas es decir los datos del backend para que se muestren en la tabla
+                <TablaVentas
+                    listaVentas={ventas}
+                    setEjecutarConsultaGET={setEjecutarConsultaGET}
+                    loading={loading} /> // prop lista de las ventas es decir los datos del backend para que se muestren en la tabla
             ) : (
                 <FormularioCreacionVentas
                     irTablasVentas={setMostrarTablaVentas}  // prop para permitir renderizacion condicional del tabla ventas
@@ -136,7 +155,7 @@ const ModuloVentas = () => {
 // cuando se modifica elimina un registro del backend con los botones de edicion y eliminacion de la tabla de ventas puesto que si no se lo pasamos
 // no se actualizara la informacion en en front a menos que le demos refrescar a la pagina web con f5 pero no tiene sentido eso tiene que
 // actualizar solo por eso se le pasa el prop ejecutarConsultaGET
-const TablaVentas = ({ listaVentas, setEjecutarConsultaGET }) => {
+const TablaVentas = ({ listaVentas, setEjecutarConsultaGET, loading }) => {
 
 
     // creamos un estado para hacer busqueda me guarda el dato entrado por el input de busqueda y luego lo uso para hacer el
@@ -195,7 +214,7 @@ const TablaVentas = ({ listaVentas, setEjecutarConsultaGET }) => {
                     </h1>
 
                     <form className='text-3xl font-bold text-gray-800 '>
-                        <div className='bg-blue-500 w-max p-3 rounded-xl'>
+                        <div className='bg-blue-500 w-max p-3 rounded-xl mb-14'>
                             <label className='font-bold' htmlFor="buscar">
                                 Buscar Venta
                                 <input
@@ -214,30 +233,32 @@ const TablaVentas = ({ listaVentas, setEjecutarConsultaGET }) => {
                             </label>
                         </div>
                     </form>
-                    <button
-                        type='button'
-                        className='  self-end text-3xl bg-blue-600 p-5 mb-14 rounded-full shadow-md hover:bg-blue-900 text-gray-100'
-
-                    >Actualizar Estado</button>
-
                 </div>
                 <div className=' hidden md:flex w-full'>
-                    <table className='tabla'>
-                        <thead>
-                            <tr>
-                                <th className='text-3xl  bg-blue-500 rounded-xl p-1 '>Codigo Venta</th>
-                                <th className='text-3xl bg-blue-500 rounded-xl p-1 ' >Fecha</th>
-                                <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Producto</th>
-                                <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Cantidad</th>
-                                <th className='text-3xl bg-blue-500 rounded-xl p-1 ' >Vendedor</th>
-                                <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Cliente</th>
-                                <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Precio Unitario</th>
-                                <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Valor Venta</th>
-                                <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Estado Venta</th>
-                                {/* agregaremos un nuevo header para las acciones del crud */}
-                                <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Acciones</th>
-                            </tr>
-                            {/* codigoVenta: '123',
+
+                    {loading ?
+
+                        (
+                            <ReactLoading type='cylon' color='#abc123' height={667} width={375} />
+                        )
+                        :
+                        (
+                            <table className='tabla'>
+                                <thead>
+                                    <tr>
+                                        <th className='text-3xl  bg-blue-500 rounded-xl p-1 '>Codigo Venta</th>
+                                        <th className='text-3xl bg-blue-500 rounded-xl p-1 ' >Fecha</th>
+                                        <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Producto</th>
+                                        <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Cantidad</th>
+                                        <th className='text-3xl bg-blue-500 rounded-xl p-1 ' >Vendedor</th>
+                                        <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Cliente</th>
+                                        <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Precio Unitario</th>
+                                        <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Valor Venta</th>
+                                        <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Estado Venta</th>
+                                        {/* agregaremos un nuevo header para las acciones del crud */}
+                                        <th className='text-3xl bg-blue-500 rounded-xl p-1 '>Acciones</th>
+                                    </tr>
+                                    {/* codigoVenta: '123',
                                 fecha: '15/2/2021',
                                 codigoProducto: 'tarjeta elenctronica',
                                 cantidadProducto: '50',
@@ -246,32 +267,34 @@ const TablaVentas = ({ listaVentas, setEjecutarConsultaGET }) => {
                                 precioUnitario: '150000',
                                 valorTotal: '' */}
 
-                        </thead>
-                        <tbody>
-                            {/* ya el componente TablaVentas tiene el json de los datos del backend el cual
+                                </thead>
+                                <tbody>
+                                    {/* ya el componente TablaVentas tiene el json de los datos del backend el cual
                             es un array y para mostrarlos en cada uno  las celdas correpondientes debemos recorrerlo
                             el array con el siguiente codigo en javaScript justo aqui donde arriba de las celdas al
                             inicion de tbody */}
-                            {listaFiltradaResultadoBusqueda.map((elementoventa) => {// le paso la lista filtrada al .map para que me lo convierta
-                                // a una lista de elementos de html y los muestre en la table los td y filas de la tabla
-                                // ejecuto al arreglo el metodo .map y el me entrega un  parametro de entrada  un objeto de venta
-                                // el arreglo y los datos en formato .json de mi datos del backend
+                                    {listaFiltradaResultadoBusqueda.map((elementoventa) => {// le paso la lista filtrada al .map para que me lo convierta
+                                        // a una lista de elementos de html y los muestre en la table los td y filas de la tabla
+                                        // ejecuto al arreglo el metodo .map y el me entrega un  parametro de entrada  un objeto de venta
+                                        // el arreglo y los datos en formato .json de mi datos del backend
 
-                                return (
-                                    // en el retorno pongo el html relacionada con el arreglo de mi informacion
-                                    // componente FilaVenta me representa las fila de la tabla ventas
-                                    // le pasamos el prop de  setEjecutarConsultaGET
-                                    <FilaVenta
-                                        key={nanoid()}
-                                        venta={elementoventa}
-                                        setEjecutarConsultaGET={setEjecutarConsultaGET} />/*ELEMENTO PADRE DEL .MAP DEBE TENER UN ID O KEY UNICO con nanoid me resuelve esto
+                                        return (
+                                            // en el retorno pongo el html relacionada con el arreglo de mi informacion
+                                            // componente FilaVenta me representa las fila de la tabla ventas
+                                            // le pasamos el prop de  setEjecutarConsultaGET
+                                            <FilaVenta
+                                                key={nanoid()}
+                                                venta={elementoventa}
+                                                setEjecutarConsultaGET={setEjecutarConsultaGET} />/*ELEMENTO PADRE DEL .MAP DEBE TENER UN ID O KEY UNICO con nanoid me resuelve esto
                                     me pone un id unico para cada elemento*/
-                                );
-                            })}{/* este codigo me transforma un array de tipo json en un array
+                                        );
+                                    })}{/* este codigo me transforma un array de tipo json en un array
                              de tipo html y es con .map me recorre el estado listaVentas */}
-                        </tbody>
+                                </tbody>
 
-                    </table>
+                            </table>
+                        )
+                    }
                 </div>
                 <div className='flex flex-col w-full md:hidden'>
 
@@ -2226,7 +2249,7 @@ export default ModuloVentas
 //         const listaComprasAEnviarAlBackend = Object.keys(objetoNuevaVenta).map((key) => {
 //             if (key.includes('_id')) {
 //                 return ventaTabla.filter((v )=> v._id === objetoNuevaVenta[key])[0]
-            
+
 //             }
 
 //         }) 

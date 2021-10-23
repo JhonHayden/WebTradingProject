@@ -6,7 +6,20 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 const Navbar = () => {
 
-    const { logout } = useAuth0();
+    const { user, logout } = useAuth0();
+
+    useEffect(() => {
+        console.log('user = ', user);
+
+    }, [])
+
+    const cerrarSesion = () => {
+
+        logout({ returnTo: window.location.origin });
+        localStorage.setItem('token', null); // me permite borrar del local Storage el token cada vez que se cierre sesion 
+    }
+
+
     return (
         <div>
             <nav className='bg-blue-400 '>
@@ -25,26 +38,39 @@ const Navbar = () => {
                     <li className='text-2xl'>
                         <BotonRuta nombre='Usuarios' incono='fas fa-users' ruta='/administracion/moduloUsuario' />
                     </li>
-                    <li className='text-2xl '>
+                    <li className='text-2xl flex '>
                         {/* <button
                             className='border rounded-xl border-gray-700 blue-800  blue-500 p-3  
                                         flex-colhover:bg-blue-600'
                             onClick={() => loginWithRedirect()}>
                             <i className='fas fa-sign-in-alt' /> {/*String literal* como meter una variable es un strig 
                         </button> */}
-                        <button onClick={() => logout({ returnTo: window.location.origin })}>
-                            < BotonRuta nombre='Cerrar Sesión' incono='fas fa-sign-out-alt' ruta='/' />
-                            
-                        </button>
+                        <div className='flex m-1 '>
+                            <img src={user.picture} alt={user.name} className='w-min h-9 mr-1 rounded-full' />
+                            {/* <i className='fas fa-user m-2' /> */}
+                            <span className='m-1'>
 
+                                {user.name}
+                            </span>
 
-
+                        </div>
+                        <Link to='/'>
+                            <button
+                                className='border rounded-xl border-gray-700  p-3 bg-blue-500 hover:bg-blue-600 '
+                                onClick={() => cerrarSesion()}
+                            >
+                                <i className='fas fa-sign-out-alt' />
+                                <span className='pl-2'>
+                                    Cerrar Sesión
+                                </span>
+                            </button>
+                        </Link>
                     </li>
                 </ul>
 
             </nav>
 
-        </div>
+        </div >
     )
 }
 

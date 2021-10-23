@@ -14,7 +14,7 @@ const ModuloUsuario = () => {
 
     const [ejecutarConsultaGET, setEjecutarConsultaGET] = useState(true);
 
-    const [usuarios, setUsuarios] = useState([]);
+    const [usuarios, setUsuarios] = useState([]);// lista de usuarios traidos desde el backend 
     const [datoInputBusqueda, setDatoInputBusqueda] = useState('');// inicializamos en vacio 
     // necesito un estado para almacenar la lista filtadra que me retorna el .filter y asi luego pasarla al .map de 
     // la renderizacion de las filas de la tabla y muestre dinamicamente las filas del resultado de la busqueda
@@ -59,15 +59,14 @@ const ModuloUsuario = () => {
 
     useEffect(() => {
 
+        const fetchUsuarios = async () => {
 
-        if (ejecutarConsultaGET) {
 
-
-            obtenerUsuarios(
+           await obtenerUsuarios(
                 (response) => { // esta funcion es equivalente a la anterior function (response) { solo que esta escrita como arrow function
                     setUsuarios(response.data); // response es la respuesta del backend a la peticion get es decir trae toda la trama de la respuesta
                     // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
-                    console.log('SI.........FUNCIONO LA PETICION GET!!! !!!');
+                    console.log('SI.........FUNCIONO LA PETICION GET!!! !!!',response.data );
                 },
                 (error) => {  // esta funcion es equivalente a la anterior function (error) { solo que esta escrita como arrow function
                     console.error(error);
@@ -75,6 +74,12 @@ const ModuloUsuario = () => {
                     console.log('NO.........FUNCIONO LA PETICION GET!!! !!!');
                 }
             );
+        }
+
+        if (ejecutarConsultaGET) {
+
+
+            fetchUsuarios();
             setEjecutarConsultaGET(false);
         }
 
@@ -179,8 +184,8 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
     const [infoNuevoUsuario, setInfoNuevoUsuario] = useState({ // estado que me tiene la informacion de un usuario de cualquier fila que elija
         // para editar  algun campo 
 
-        nombre: usuario.nombre,
-        correo: usuario.correo,
+        name: usuario.name,
+        email: usuario.email,
         rol: usuario.rol,
         estado: usuario.estado
     })
@@ -271,10 +276,10 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
             (
                 <>
                     <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl '>
-                        {usuario.nombre}
+                        {usuario.name}
                     </td>
                     <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                        {usuario.correo}
+                        {usuario.email}
                     </td>
                     <td>
                         <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg  text-xl'
@@ -322,10 +327,10 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
                 </>) : (
                 <>
                     <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl '>
-                        {usuario.nombre}
+                        {usuario.name}
                     </td>
                     <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
-                        {usuario.correo}
+                        {usuario.email}
                     </td>
                     <td className='bg-gray-50 border border-gray-300 p-4 rounded-lg m-2 text-xl ' >
                         {usuario.rol}

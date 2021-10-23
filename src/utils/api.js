@@ -1,7 +1,7 @@
 import axios from 'axios';
 // esta api.js se encarga solamente de hacer las consultas al servidor
 
-// creamos una funcion que me traiga el token y ser usado en cada peticion 
+// creamos una funcion que me traiga el token y pueda ser usado en cada peticion axios
 
 const getToken = () => {
 
@@ -336,6 +336,53 @@ export const deleteProducto = async (id, data, successCallback, errorCallback) =
 }
 
 
+
+// obtener usuario que acaba de iniciar sesion y autenticarse 
+
+export const obtenerUsuarioAutenticado = async (successCallback, errorCallback) => {
+    // dentro ponemos la peticion GET
+    const options = {
+        method: 'GET',
+        url: 'http://localhost:5000/usuarios/self/',
+        headers: {
+            Authorization: getToken(), // estructura para mandar el token en esta peticion se debe enviar en los headers 
+            // le envio el token enriquecido con la informacion del usuario para el backend y este verifica si esta creado 
+            // si lo esta lo devuelve si no esta lo crea con la informacion del token e igual lo devuelve 
+        }
+    };
+    await axios
+        .request(options)
+        .then(successCallback
+
+            // esta funcion siguiente es una funcion anonima que se ejecuta despues de un evento y el evento es 
+            // la peticion get, cuando el servidor devuelve una respuesta a esta peticion la instruccion .then revisa esta respuesta y 
+            // ejecuta alguna de las dos funciones anonimas siguientes si la respuesta es positiva ejecuta la siguiente si no es 
+            // positiva ejecuta el .catch 
+            // function (response) { // si recibo respuesta entonces guardo la data en mi estado ventas la lista de ventas
+            // que mostrare en el mi tabla ventas del frontend 
+
+
+            // las siguientes dos funciones son callback por que se ejecutan depues que sucede un evento
+            // (response) => { // esta funcion es equivalente a la anterior function (response) { solo que esta escrita como arrow function
+            //     setVentas(response.data);
+            //     // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
+            //     console.log('SI.........FUNCIONO LA PETICION GET!!! !!!');
+
+
+            // }
+        )
+        .catch(errorCallback
+
+
+            // // function (error) {
+            // (error) => {  // esta funcion es equivalente a la anterior function (error) { solo que esta escrita como arrow function
+            //     console.error(error);
+            //     // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
+            //     console.log('NO.........FUNCIONO LA PETICION GET!!! !!!');
+            // }
+        );
+
+};
 
 
 
