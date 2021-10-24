@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react'
-import useActiveRoute from 'hooks/useActiveRoute'
+// import useActiveRoute from 'hooks/useActiveRoute'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid'; // me permite tener id 
 import { Dialog, Tooltip } from '@material-ui/core';
 import { obtenerUsuarios, editarUsuario, deleteUsuario } from 'utils/api';
+import PrivateComponent from 'components/PrivateComponent';
 
 
 const ModuloUsuario = () => {
@@ -62,11 +63,11 @@ const ModuloUsuario = () => {
         const fetchUsuarios = async () => {
 
 
-           await obtenerUsuarios(
+            await obtenerUsuarios(
                 (response) => { // esta funcion es equivalente a la anterior function (response) { solo que esta escrita como arrow function
                     setUsuarios(response.data); // response es la respuesta del backend a la peticion get es decir trae toda la trama de la respuesta
                     // alert('SI.........FUNCIONO LA PETICION GET!!! !!!')
-                    console.log('SI.........FUNCIONO LA PETICION GET!!! !!!',response.data );
+                    console.log('SI.........FUNCIONO LA PETICION GET!!! !!!', response.data);
                 },
                 (error) => {  // esta funcion es equivalente a la anterior function (error) { solo que esta escrita como arrow function
                     console.error(error);
@@ -288,9 +289,9 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
                             id=""
                             value={infoNuevoUsuario.rol}
                             onChange={(evento) => {
-                                
-                                setInfoNuevoUsuario({...infoNuevoUsuario,rol:evento.target.value})
-                                
+
+                                setInfoNuevoUsuario({ ...infoNuevoUsuario, rol: evento.target.value })
+
                             }}
                         >
                             <option defaultValue='Seleccione una opción'>Seleccione una opción
@@ -310,8 +311,8 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
                             id=""
                             value={infoNuevoUsuario.estado}
                             onChange={(evento) => {
-                                
-                                setInfoNuevoUsuario({...infoNuevoUsuario,estado:evento.target.value})
+
+                                setInfoNuevoUsuario({ ...infoNuevoUsuario, estado: evento.target.value })
                                 // console.log(evento.target.value);
                                 // console.log(infoNuevoUsuario.estado);
                             }}
@@ -386,17 +387,19 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
                             {/* /* elemento icono de eliminar, con este elimino  */}
 
                             {/* /* agregamos tooltip mensaje que sale al pasar por encima de un boton y me indica que accion hace ese boton  */}
+                            <PrivateComponent listaRoles='Administrador'>
+                                <Tooltip title='Eliminar usuario' arrow>
 
-                            <Tooltip title='Eliminar usuario' arrow>
+                                    <i className="fas fa-trash-alt text-red-800 hover:text-red-600 ml-2"
+                                        onClick={() => {
+                                            setMostrarDialog(true)
+                                            // eliminarUsuario(); // cuando ocurre el evento onClick en el boton icono de trash de eliminar se ejecuta esta funcion 
 
-                                <i className="fas fa-trash-alt text-red-800 hover:text-red-600 ml-2"
-                                    onClick={() => {
-                                        setMostrarDialog(true)
-                                        // eliminarUsuario(); // cuando ocurre el evento onClick en el boton icono de trash de eliminar se ejecuta esta funcion 
+                                        }}
+                                    />
+                                </Tooltip >
 
-                                    }}
-                                />
-                            </Tooltip >
+                            </PrivateComponent >
                         </>
                     )
                     }
@@ -405,6 +408,8 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
                     <div className='bg-blue-200 p-4'>
                         <h1 className='font-extrabold m-3 '>¿Está seguro de querer eliminar la usuario?</h1>
                         <div className='flex justify-center text-xl '>
+
+
                             <button
                                 className='bg-green-500 p-3 m-1 px-4 hover:bg-green-700  text-white'
                                 onClick={() => {
@@ -415,6 +420,7 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
                                 }
                             >
                                 Si</button>
+
                             <button
                                 className='bg-red-600 p-3 m-1 hover:bg-red-800 text-white'
                                 onClick={() => setMostrarDialog(false)}> No</button>

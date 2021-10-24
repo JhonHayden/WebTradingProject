@@ -1057,8 +1057,8 @@ const FormularioCreacionVentas = ({
                                     <option
                                         key={nanoid()}//Me permite tener un indentificador para cada elemento option que el .map
                                         // crea y le permite a react saber cual es cual .. nanoid es una libreria muy liviana
-                                        value={objetoVendedorDentroDeListaVendedores.nombre}>
-                                        {`${objetoVendedorDentroDeListaVendedores.nombre}
+                                        value={objetoVendedorDentroDeListaVendedores.nombreVendedor}>
+                                        {`${objetoVendedorDentroDeListaVendedores.nombreVendedor}
                                           ${objetoVendedorDentroDeListaVendedores.apellido}`}
                                     </option>
 
