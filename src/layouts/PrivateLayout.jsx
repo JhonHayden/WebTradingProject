@@ -9,10 +9,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import ReactLoading from 'react-loading';//  permite colocar el componente de loading (espera de carga) 
 
 
-
 const PrivateLayout = ({ children }) => {
 
-    const { user, isAuthenticated, isLoading, loginWithRedirect, getAccessTokenSilently } = useAuth0();
+    const { user, isAuthenticated, isLoading,logout, loginWithRedirect, getAccessTokenSilently } = useAuth0();
     const [loadingUserInformation, setLoadingUserInformation] = useState(false);// me permite mostrar un loading antes de que se pida 
     // el token al auth0 y quitarlo cuando el backend ya valido que el usuario es valido es decir el token es permitido por Auth0
 
@@ -53,6 +52,9 @@ const PrivateLayout = ({ children }) => {
                 (error) => {  // esta funcion es equivalente a la anterior function (error) { solo que esta escrita como arrow function
                     console.error("Salio un error con la peticion Get obtenerUsuarioAutenticado", error);
                     console.log('NO.........FUNCIONO LA PETICION GET obtenerUsuarioAutenticado!!! !!!');
+
+                    logout({ returnTo: window.location.origin });
+                    localStorage.setItem('token', null); // me permite borrar del local Storage el token cada vez que se cierre sesion 
                     setLoadingUserInformation(false)//para quitar el loading justo despues de obtener un error de la validacion del 
                     // token del usuario que recien inicio sesion 
 
@@ -90,18 +92,18 @@ const PrivateLayout = ({ children }) => {
 
     return (
 
-            <div className='flex flex-col justify-between h-screen '>
-                <Navbar />
-                <NavBarResponsive />
+        <div className='flex flex-col justify-between h-screen '>
+            <Navbar />
+            <NavBarResponsive />
 
-                <div className='h-full'>
-                    <main className='h-full flex justify-center bg-white'>
-                        {children}
-                    </main>
-                    <Footer />
-                </div>
+            <div className='h-full'>
+                <main className='h-full flex justify-center bg-white'>
+                    {children}
+                </main>
+                <Footer />
             </div>
-        
+        </div>
+
     )
 }
 
