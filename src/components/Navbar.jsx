@@ -54,7 +54,7 @@ const Navbar = () => {
                             </span>
 
                         </div>
-                        <Link to='/'>
+                        {/* <Link to='/'> */}
                             <button
                                 className='border rounded-xl border-gray-700  p-3 bg-blue-500 hover:bg-blue-600 '
                                 onClick={() => cerrarSesion()}
@@ -64,7 +64,7 @@ const Navbar = () => {
                                     Cerrar Sesión
                                 </span>
                             </button>
-                        </Link>
+                        {/* </Link> */}
                     </li>
                 </ul>
 
