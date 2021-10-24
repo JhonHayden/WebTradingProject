@@ -273,6 +273,7 @@ const FilaProducto = ({ producto, setEjecutarConsultaGET }) => {
                 <>
                     <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full'
                         type="text"
+                        disabled
                         name="codigoProducto"
                         id=""
                         value={infoNuevaProducto.codigoProducto}
@@ -297,14 +298,37 @@ const FilaProducto = ({ producto, setEjecutarConsultaGET }) => {
                         onChange={(evento) => {
                             setInfoNuevaProducto({ ...infoNuevaProducto, precioUnitario: evento.target.value });
                         }} /></td>
-                    <td><input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
-                        type="text"
-                        name="estadoProducto"
-                        id=""
-                        value={infoNuevaProducto.estadoProducto}
-                        onChange={(evento) => {
-                            setInfoNuevaProducto({ ...infoNuevaProducto, estadoProducto: evento.target.value });
-                        }} /></td>
+                    <td>
+                        <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg  text-xl'
+                            type="text"
+                            name="estadoProducto"
+                            id=""
+                            defaultValue=''
+                            value={infoNuevaProducto.estadoProducto}
+                            onChange={(evento) => {
+
+                                setInfoNuevaProducto({ ...infoNuevaProducto, estadoProducto: evento.target.value })
+
+                            }}
+                        >
+                            <option disabled value=''>Seleccione una opción
+                            </option>
+                            <option defaultValue="disponible">Disponible
+                            </option>
+                            <option defaultValue="no disponible">No disponible
+                            </option>
+
+                        </select>
+                        {/* <input className='bg-gray-50 border border-gray-300 p-2 rounded-lg w-full '
+                            type="text"
+                            name="estadoProducto"
+                            id=""
+                            value={infoNuevaProducto.estadoProducto}
+                            onChange={(evento) => {
+                                setInfoNuevaProducto({ ...infoNuevaProducto, estadoProducto: evento.target.value });
+                            }} /> */}
+
+                    </td>
 
                 </>) : (
                 <>
@@ -403,24 +427,24 @@ const FormularioCreacionProductos = ({
 }) => {
 
 
-   
 
-    const referenciaFomulario = useRef(null); 
-    const submitFormulario = async (evento) => {  
 
-        evento.preventDefault(); 
-        const claveValorDeValuesFomulario = new FormData(referenciaFomulario.current); 
-        const objetoNuevaProducto = {}; 
+    const referenciaFomulario = useRef(null);
+    const submitFormulario = async (evento) => {
+
+        evento.preventDefault();
+        const claveValorDeValuesFomulario = new FormData(referenciaFomulario.current);
+        const objetoNuevaProducto = {};
 
         claveValorDeValuesFomulario.forEach((valorDeCadaElementoDelFormData, claveDeCadaElementoDelFormData) => {
 
-            
 
-            objetoNuevaProducto[claveDeCadaElementoDelFormData] = valorDeCadaElementoDelFormData; 
+
+            objetoNuevaProducto[claveDeCadaElementoDelFormData] = valorDeCadaElementoDelFormData;
 
         })
 
-        
+
         await crearProducto(
             {
 
@@ -428,33 +452,33 @@ const FormularioCreacionProductos = ({
                 descripcionProducto: objetoNuevaProducto.descripcionProducto,
                 precioUnitario: objetoNuevaProducto.precioUnitario,
                 estadoProducto: objetoNuevaProducto.estadoProducto,
-               
+
             },
 
             (response) => {
-                
+
                 console.log(response.data);
                 toast.success('Producto agregada con éxito', {
                     position: "bottom-center",
                     autoClose: 5000,
                 });
-                
+
                 console.log('SI.........FUNCIONO LA PETICION POST!!! !!!');
-              
+
             },
 
-            (error) => { 
+            (error) => {
                 console.error(error);
                 toast.error('Error registrando producto', {
                     position: "bottom-center",
                     autoClose: 5000,
                 });
-                
+
                 console.log('NO.........FUNCIONO LA PETICION POST!!! !!!');
             }
         );
-       
-        irTablasProductos(true) 
+
+        irTablasProductos(true)
 
         funcionAgregarNuevaProducto([...listaProductos, objetoNuevaProducto]);
     };
@@ -467,8 +491,8 @@ const FormularioCreacionProductos = ({
                 Formulario Productos
             </h1>
             <form
-                ref={referenciaFomulario} 
-                onSubmit={submitFormulario} 
+                ref={referenciaFomulario}
+                onSubmit={submitFormulario}
                 className='flex flex-col text-3xl'>
                 <div className='grid-cols-2 grid gap-4 m-7'>
                     <label className='font-bold text-gray-800' htmlFor="codigoProducto">Codigo Producto
@@ -476,7 +500,7 @@ const FormularioCreacionProductos = ({
                             type="text"
                             name='codigoProducto'
                             required
-                       
+
                         />
                     </label>
                     <label className='font-bold text-gray-800' htmlFor="descripcionProducto">Descripcion Producto
@@ -484,31 +508,54 @@ const FormularioCreacionProductos = ({
                             type='text'
                             name="descripcionProducto"
                             required
-                       
+
                         />
                     </label>
                     <label className='font-bold text-gray-800' htmlFor="precioUnitario">Precio Unitario
-                        
+
                         <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='precioUnitario'
                             required
-                      
+
                         />
                     </label>
                     <label className='font-bold text-gray-800' htmlFor="estadoProducto">Estado Producto
-                        <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
+
+                        <select className='bg-gray-50 border border-gray-300 p-2 rounded-lg  m-2 text-3xl block'
+                            type="text"
+                            name="estadoProducto"
+                            id=""
+                            defaultValue=''
+                            required
+                            // value={infoNuevaProducto.estadoProducto}
+                            // onChange={(evento) => {
+
+                            //     setInfoNuevaProducto({ ...infoNuevaProducto, estadoProducto: evento.target.value })
+
+                            // }}
+                        >
+                            <option disabled value=''>Seleccione una opción
+                            </option>
+                            <option defaultValue="disponible">Disponible
+                            </option>
+                            <option defaultValue="no disponible">No disponible
+                            </option>
+
+                        </select>
+
+                        {/* <input className='block bg-gray-50 border border-gray-300 p-2 rounded-lg m-2'
                             type="text"
                             name='estadoProducto'
                             required
-                      
-                        />
+
+                        /> */}
                     </label>
                 </div>
                 <button className=' text-3xl bg-blue-500 border border-gray-500 p-5 self-center m-3 
                 rounded-full  hover:bg-blue-900 text-gray-200'
                     type='submit'
-               
+
                 >Registrar Producto</button>
             </form>
 
