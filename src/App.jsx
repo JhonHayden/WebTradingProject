@@ -16,6 +16,10 @@ import RegistroUsuario from 'pages/auth/RegistroUsuario';
 import { Auth0Provider } from "@auth0/auth0-react";// contexto para la autenticacion 
 import PrivateRoute from 'components/PrivateRoute';
 
+// const baseURL = "https://gentle-gorge-66325.herokuapp.com/administracion"  // produccion 
+const baseURL = "http://localhost:3000/administracion" // local 
+
+
 function App() {
 
   const [userRol, setUserRol] = useState({})
@@ -30,7 +34,7 @@ function App() {
     <Auth0Provider     //aqui en los props de Auth0Provider enviamos el perfil de autenticacion son los tres props 
       domain="auth0-web-trading-project.us.auth0.com"
       clientId="dEyN0UkLXkCK6jTtPIJUZ1wIRgOlusWU"
-      redirectUri="https://gentle-gorge-66325.herokuapp.com/administracion"// me direcciona a esta pagina apenas inicie sesion pero debo 
+      redirectUri={`${baseURL}`}// me direcciona a esta pagina apenas inicie sesion pero debo 
       // configurar esta uri para permitir esto en Auth0 en opcion (Allowed Callback URLs)
       audience='api/autenticacion/web/trading/project' //mismo nombre de la api de Auth0 y debe ser 
     // la misma audience del backend del middleware
