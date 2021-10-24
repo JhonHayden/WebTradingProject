@@ -3,6 +3,10 @@ import axios from 'axios';
 
 // creamos una funcion que me traiga el token y pueda ser usado en cada peticion axios
 
+//variable global que contendra la url de produccion 
+
+const baseURL = "https://shrouded-coast-96658.herokuapp.com"
+
 const getToken = () => {
 
     return `Bearer ${localStorage.getItem('token')}`;
@@ -17,7 +21,7 @@ export const obtenerVentasDelBackend = async (successCallback, errorCallback) =>
     // dentro ponemos la peticion GET
     const options = {
         method: 'GET',
-        url: 'http://localhost:5000/ventas/',
+        url: `${baseURL}/ventas/`,
         headers: {
             Authorization: getToken(), // estructura para mandar el token en esta peticion se debe enviar en los headers  
         }
@@ -63,8 +67,8 @@ export const crearVenta = async (data, successCallback, errorCallback) => {
         // headers, y la data toda la informacion a enviar en formato clave valor. donde cada clave son los campos o atributos de 
         // la base de datos y el valor es el registrado en los inpust del formulario 
         method: 'POST', // tipo de peticion es crear nuevo registro 
-        url: 'http://localhost:5000/ventas/',// servidor donde enviare la peticion e informacion
-        headers: { 'Content-Type': 'application/json',Authorization: getToken() },
+        url: `${baseURL}/ventas/`,// servidor donde enviare la peticion e informacion
+        headers: { 'Content-Type': 'application/json', Authorization: getToken() },
         data, // datos a enviar los recibo como parametro de la funcion crearVenta en el parametro data
         //     fecha: objetoNuevaVenta.fecha, codigoVenta: objetoNuevaVenta.codigoVenta, nombreVendedor: objetoNuevaVenta.nombreVendedor,
         //     identificacionVendedor: objetoNuevaVenta.identificacionVendedor, nombreCliente: objetoNuevaVenta.nombreCliente,
@@ -87,8 +91,8 @@ export const editarVenta = async (id, data, successCallback, errorCallback) => {
 
     const options = {
         method: 'PATCH', // metodo actualizar 
-        url: `http://localhost:5000/ventas/${id}/`, // url de mi api servidor backend
-        headers: { 'Content-Type': 'application/json',Authorization: getToken() },
+        url: `${baseURL}/ventas/${id}/`, // url de mi api servidor backend
+        headers: { 'Content-Type': 'application/json', Authorization: getToken() },
         data, // datos a actualizar tiene toda la venta mas necesitamos pasarle 
         // el id del la fila que quiero actualizar del dato o venta que estoy actualizando 
         // ese id me representa la fila y venta que voy a actualizar 
@@ -104,10 +108,10 @@ export const deleteVenta = async (id, data, successCallback, errorCallback) => {
 
     const options = {
         method: 'DELETE', // metodo de eliminar
-        url: `http://localhost:5000/ventas/${id}/`, // url del metodo delete orden que recibe el backend, le paso como un string literal para 
+        url: `${baseURL}/ventas/${id}/`, // url del metodo delete orden que recibe el backend, le paso como un string literal para 
         // poder meter una variable dentro del string ademas la ultima / de la url me permite que funcionen los request en el navegador safari 
         // de los apples
-        headers: { 'Content-Type': 'application/json',Authorization: getToken() },
+        headers: { 'Content-Type': 'application/json', Authorization: getToken() },
         data, // le tengo que pasar el id del dato o registro a eliminar y lo saco del prop que entro al componente filaVenta puesto 
         // que este prop me tiene las filas selecionada de la ventas
 
@@ -128,7 +132,7 @@ export const obtenerUsuarios = async (successCallback, errorCallback) => {
     // dentro ponemos la peticion GET
     const options = {
         method: 'GET',
-        url: 'http://localhost:5000/usuarios/',
+        url: `${baseURL}/usuarios/`,
         headers: {
             Authorization: getToken(), // estructura para mandar el token en esta peticion se debe enviar en los headers  
         }
@@ -174,8 +178,8 @@ export const crearUsuario = async (data, successCallback, errorCallback) => {
         // headers, y la data toda la informacion a enviar en formato clave valor. donde cada clave son los campos o atributos de 
         // la base de datos y el valor es el registrado en los inpust del formulario 
         method: 'POST', // tipo de peticion es crear nuevo registro 
-        url: 'http://localhost:5000/usuarios/',// servidor donde enviare la peticion e informacion
-        headers: { 'Content-Type': 'application/json',Authorization: getToken() },
+        url: `${baseURL}/usuarios/`,// servidor donde enviare la peticion e informacion
+        headers: { 'Content-Type': 'application/json', Authorization: getToken() },
         data, // datos a enviar los recibo como parametro de la funcion crearVenta en el parametro data
         //     fecha: objetoNuevaVenta.fecha, codigoVenta: objetoNuevaVenta.codigoVenta, nombreVendedor: objetoNuevaVenta.nombreVendedor,
         //     identificacionVendedor: objetoNuevaVenta.identificacionVendedor, nombreCliente: objetoNuevaVenta.nombreCliente,
@@ -198,8 +202,8 @@ export const editarUsuario = async (id, data, successCallback, errorCallback) =>
 
     const options = {
         method: 'PATCH', // metodo actualizar 
-        url: `http://localhost:5000/usuarios/${id}/`, // url de mi api servidor backend
-        headers: { 'Content-Type': 'application/json',Authorization: getToken() },
+        url: `${baseURL}/usuarios/${id}/`, // url de mi api servidor backend
+        headers: { 'Content-Type': 'application/json', Authorization: getToken() },
         data, // datos a actualizar tiene toda la venta mas necesitamos pasarle 
         // el id del la fila que quiero actualizar del dato o venta que estoy actualizando 
         // ese id me representa la fila y venta que voy a actualizar 
@@ -215,10 +219,10 @@ export const deleteUsuario = async (id, data, successCallback, errorCallback) =>
 
     const options = {
         method: 'DELETE', // metodo de eliminar
-        url: `http://localhost:5000/usuarios/${id}/`, // url del metodo delete orden que recibe el backend, le paso como un string literal para 
+        url: `${baseURL}/usuarios/${id}/`, // url del metodo delete orden que recibe el backend, le paso como un string literal para 
         // poder meter una variable dentro del string ademas la ultima / de la url me permite que funcionen los request en el navegador safari 
         // de los apples
-        headers: { 'Content-Type': 'application/json',Authorization: getToken() },
+        headers: { 'Content-Type': 'application/json', Authorization: getToken() },
         data, // le tengo que pasar el id del dato o registro a eliminar y lo saco del prop que entro al componente filaVenta puesto 
         // que este prop me tiene las filas selecionada de la ventas
 
@@ -238,7 +242,7 @@ export const obtenerProductos = async (successCallback, errorCallback) => {
     // dentro ponemos la peticion GET
     const options = {
         method: 'GET',
-        url: 'http://localhost:5000/productos/',
+        url: `${baseURL}/productos/`,
         headers: {
             Authorization: getToken(), // estructura para mandar el token en esta peticion se debe enviar en los headers  
         }
@@ -284,8 +288,8 @@ export const crearProducto = async (data, successCallback, errorCallback) => {
         // headers, y la data toda la informacion a enviar en formato clave valor. donde cada clave son los campos o atributos de 
         // la base de datos y el valor es el registrado en los inpust del formulario 
         method: 'POST', // tipo de peticion es crear nuevo registro 
-        url: 'http://localhost:5000/productos/',// servidor donde enviare la peticion e informacion
-        headers: { 'Content-Type': 'application/json',Authorization: getToken() },
+        url: `${baseURL}/productos/`,// servidor donde enviare la peticion e informacion
+        headers: { 'Content-Type': 'application/json', Authorization: getToken() },
         data,
     } // este es el objeto donde esta la operacion POST, la URL de la api la ruta en el backend, la data a enviar mas 
     // los headers que me indica el tipo de contenido a enviar en esta peticion POST y pueden haber otras opciones 
@@ -302,8 +306,8 @@ export const editarProducto = async (id, data, successCallback, errorCallback) =
 
     const options = {
         method: 'PATCH', // metodo actualizar 
-        url: `http://localhost:5000/productos/${id}/`, // url de mi api servidor backend
-        headers: { 'Content-Type': 'application/json',Authorization: getToken()},
+        url: `${baseURL}/productos/${id}/`, // url de mi api servidor backend
+        headers: { 'Content-Type': 'application/json', Authorization: getToken() },
         data, // datos a actualizar tiene toda la venta mas necesitamos pasarle 
         // el id del la fila que quiero actualizar del dato o venta que estoy actualizando 
         // ese id me representa la fila y venta que voy a actualizar 
@@ -319,10 +323,10 @@ export const deleteProducto = async (id, data, successCallback, errorCallback) =
 
     const options = {
         method: 'DELETE', // metodo de eliminar
-        url: `http://localhost:5000/productos/${id}/`, // url del metodo delete orden que recibe el backend, le paso como un string literal para 
+        url: `${baseURL}/productos/${id}/`, // url del metodo delete orden que recibe el backend, le paso como un string literal para 
         // poder meter una variable dentro del string ademas la ultima / de la url me permite que funcionen los request en el navegador safari 
         // de los apples
-        headers: { 'Content-Type': 'application/json',Authorization: getToken()},
+        headers: { 'Content-Type': 'application/json', Authorization: getToken() },
         data, // le tengo que pasar el id del dato o registro a eliminar y lo saco del prop que entro al componente filaVenta puesto 
         // que este prop me tiene las filas selecionada de la ventas
 
@@ -343,7 +347,7 @@ export const obtenerUsuarioAutenticado = async (successCallback, errorCallback) 
     // dentro ponemos la peticion GET
     const options = {
         method: 'GET',
-        url: 'http://localhost:5000/usuarios/self/',
+        url: `${baseURL}/usuarios/self/`,
         headers: {
             Authorization: getToken(), // estructura para mandar el token en esta peticion se debe enviar en los headers 
             // le envio el token enriquecido con la informacion del usuario para el backend y este verifica si esta creado 

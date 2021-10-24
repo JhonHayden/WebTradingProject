@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 // import useActiveRoute from 'hooks/useActiveRoute'
 
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid'; // me permite tener id 
 import { Dialog, Tooltip } from '@material-ui/core';
