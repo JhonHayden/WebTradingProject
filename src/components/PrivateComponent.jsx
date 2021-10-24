@@ -6,7 +6,7 @@ const PrivateComponent = ({ listaRoles, children }) => {
     const { userRol } = useUserRol();// traigo la informacion guardada en el contexto donde esta la informacion del usuario 
     // y poder saber cual es el rol de ese usuario 
 
-    console.log('soy el contexto userRol = ',userRol);
+    // console.log('soy el contexto userRol = ',userRol);
 
 
     if (listaRoles.includes(userRol.rol)) {

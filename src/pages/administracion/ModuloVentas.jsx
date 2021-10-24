@@ -695,7 +695,7 @@ const FormularioCreacionVentas = ({
     const [vendedores, setVendedores] = useState([]);
     const [productos, setProductos] = useState([]);
     const [listaFiltradaResultadoBusqueda, setListaFiltradaResultadoBusqueda] = useState(vendedores);
-    const datoInputBusquedaVendedor = "vendedor"
+    const datoInputBusquedaVendedor = "Vendedor"
 
     useEffect(() => {
 
@@ -721,9 +721,9 @@ const FormularioCreacionVentas = ({
 
                     setVendedores(response.data);// guardo todos los usuarios de la base de datos en el estado
                     // vendedores luego tengo que hacer un flitro por rol
-                    console.log(response.data);
+                    // console.log(response.data);
 
-                    console.log('SI.........FUNCIONO LA PETICION POST!!! !!!');
+                    // console.log('SI.........FUNCIONO LA PETICION POST!!! !!!');
                 },
                 (error) => { // si se recibe error se ejecuta el mensaje de error --> esta funcion es equivalente a function (error) {
                     console.error(error);
@@ -736,9 +736,9 @@ const FormularioCreacionVentas = ({
 
                     setProductos(response.data);// guardo todos los usuarios de la base de datos en el estado
                     // vendedores luego tengo que hacer un flitro por rol
-                    console.log(response.data);
+                    // console.log(response.data);
 
-                    console.log('SI.........FUNCIONO LA PETICION POST!!! !!!');
+                    // console.log('SI.........FUNCIONO LA PETICION POST!!! !!!');
                 },
                 (error) => { // si se recibe error se ejecuta el mensaje de error --> esta funcion es equivalente a function (error) {
                     console.error(error);
@@ -754,6 +754,12 @@ const FormularioCreacionVentas = ({
 
     }, [])
 
+
+
+
+    console.log("todos los usuarios del backend =", vendedores)
+    console.log("todos los Productos del backend =", productos)
+    console.log("todos los usuarios con el rol Vendedor del backend =", listaFiltradaResultadoBusqueda)
     // const [vendedores, setVendedores] = useState([]);
 
 
@@ -1055,11 +1061,11 @@ const FormularioCreacionVentas = ({
                                 return (
 
                                     <option
-                                        key={nanoid()}//Me permite tener un indentificador para cada elemento option que el .map
-                                        // crea y le permite a react saber cual es cual .. nanoid es una libreria muy liviana
-                                        value={objetoVendedorDentroDeListaVendedores.nombreVendedor}>
-                                        {`${objetoVendedorDentroDeListaVendedores.nombreVendedor}
-                                          ${objetoVendedorDentroDeListaVendedores.apellido}`}
+                                        key={objetoVendedorDentroDeListaVendedores._id}//Me permite tener un indentificador para cada elemento option que el .map
+                                        // crea y le permite a react saber cual es cual .. nanoid es una libreria muy liviana (no usar nanoid genero un bug)
+                                        // es mejor usar el id de mongo que nanoid
+                                        value={objetoVendedorDentroDeListaVendedores.name}>
+                                        {`${objetoVendedorDentroDeListaVendedores.name}`}
                                     </option>
 
                                 );
@@ -1133,7 +1139,7 @@ const FormularioCreacionVentas = ({
                                 return (
 
                                     <option
-                                        key={nanoid()}
+                                        key={objetoProductoDentroDeListaProductos._id}// es mejor usar el id de mongo que nanoid
                                         value={objetoProductoDentroDeListaProductos.descripcionProducto}>
                                         {`${objetoProductoDentroDeListaProductos.codigoProducto}
                                           ${objetoProductoDentroDeListaProductos.descripcionProducto}`}

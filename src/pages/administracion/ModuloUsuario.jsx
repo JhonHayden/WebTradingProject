@@ -210,10 +210,10 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
                 // console.log(response.data);
                 // alert('SI.........FUNCIONO LA PETICION PATCH!!! !!!')
                 console.log('SI.........FUNCIONO LA PETICION PATCH!!! !!!')
-                toast.success('Usuario actualizado con éxito', {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                });
+                // toast.success('Usuario actualizado con éxito', {
+                //     position: "bottom-center",
+                //     autoClose: 5000,
+                // });
                 setPermitirEditar(false);
                 setEjecutarConsultaGET(true);
             },
@@ -221,11 +221,11 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
                 console.error(error);
                 // alert('NO.........FUNCIONO LA PETICION PATCH!!! !!!')
 
-                console.log('NO.......funciono LA PETICION PATCH!!!');
-                toast.error('Error modificando usuario', {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                });
+                // console.log('NO.......funciono LA PETICION PATCH!!!');
+                // toast.error('Error modificando usuario', {
+                //     position: "bottom-center",
+                //     autoClose: 5000,
+                // });
                 // setPermitirEditar(false);// APENAS FUNCIONE SE LO QUITO AUN NO SE HACE EL BACKEND POR ESO MO FUNCIONA TODAVIA
             }
 
@@ -247,10 +247,10 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
                 // alert('SI.........FUNCIONO LA PETICION DELETE!!! !!!')
                 console.log('SI.........FUNCIONO LA PETICION DELETE!!! !!!');
 
-                toast.success('Usuario eliminado con éxito', {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                });
+                // toast.success('Usuario eliminado con éxito', {
+                //     position: "bottom-center",
+                //     autoClose: 5000,
+                // });
                 setEjecutarConsultaGET(true); // si elimino con exito actualiza la tabla con esta funcion de setEjecutarConsultaGET en true por que 
                 //         // me ejecuta la consulta GET y me trae la informacion y la muestra en el frontend
 
@@ -260,10 +260,10 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
                 console.error(error);
                 console.log('NO.........FUNCIONO LA PETICION DELETE!!! !!!')
                 // alert('NO.........FUNCIONO LA PETICION DELETE!!! !!!')
-                toast.error('Error eliminando usuario', {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                })
+                // toast.error('Error eliminando usuario', {
+                //     position: "bottom-center",
+                //     autoClose: 5000,
+                // })
             }
         );
 
@@ -322,6 +322,8 @@ const FilaUsuario = ({ usuario, setEjecutarConsultaGET }) => {
                             <option defaultValue="autorizado">Autorizado
                             </option>
                             <option defaultValue="no autorizado">No autorizado
+                            </option>
+                            <option defaultValue="pendiente">Pendiente
                             </option>
                         </select>
                     </td>

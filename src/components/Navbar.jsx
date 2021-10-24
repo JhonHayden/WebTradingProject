@@ -9,7 +9,7 @@ const Navbar = () => {
     const { user, logout } = useAuth0();
 
     useEffect(() => {
-        console.log('user = ', user);
+        // console.log('user = ', user);
 
     }, [])
 
@@ -110,7 +110,7 @@ const BotonRuta = ({ incono, ruta, nombre }) => {
 
     useEffect(() => {
 
-        console.log(isRutaActiva, ruta)
+        // console.log(isRutaActiva, ruta)
     }, [isRutaActiva, ruta])
     return (
         <Link to={ruta}>

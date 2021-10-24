@@ -23,7 +23,7 @@ function App() {
   // este useState sera usado por todos los componentes de mis aplicacion puede acceder a lo que tiene guardado y ademas pueden modificarlo 
   // con el setDarkMode sin tener que pasarlo por props esto es para lo que sirve el crear contextos un context
   useEffect(() => {
-    console.log('Modo Dark', darkMode);
+    // console.log('Modo Dark', darkMode);
   }, [darkMode]);
 
   return (

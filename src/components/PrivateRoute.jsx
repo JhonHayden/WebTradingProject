@@ -8,7 +8,7 @@ const PrivateRoute = ({ listaRoles, children }) => {// me permite bloquear las r
   const { userRol } = useUserRol();// traigo la informacion guardada en el contexto donde esta la informacion del usuario 
   // y puedo saber cual es el rol de ese usuario 
 
-  console.log('soy el contexto userRol = ', userRol);
+  // console.log('soy el contexto userRol = ', userRol);
 
   if (listaRoles.includes(userRol.rol)) { //si en el value de la key del objeto userRol el cual 
     // es la informacion del usuario es el objeto usuario, incluye una de la palbras de la listaRoles 

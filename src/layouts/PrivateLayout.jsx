@@ -29,7 +29,7 @@ const PrivateLayout = ({ children }) => {
             });
 
             localStorage.setItem('token', accessToken); // me permite guardar el token en el local storage para luego acceder desde otras partes 
-            console.log('token de autenticacion enviado desde auth0 =  ', accessToken);// me imprime el token (jwt) en consola el toquen esta guardado en accerToken 
+            // console.log('token de autenticacion enviado desde auth0 =  ', accessToken);// me imprime el token (jwt) en consola el toquen esta guardado en accerToken 
             // hay tres estrategias para usar el token la primera estrategia es guardarlo en el almacenamiento de la aplicacion 
             // este es local Storage
             // la segunda es guardarlo en los cookies y sea transferible al resto de sesiones que esten dentro del mismo dominio 
@@ -42,7 +42,7 @@ const PrivateLayout = ({ children }) => {
             await obtenerUsuarioAutenticado(
                 (response) => { // esta funcion es equivalente a la anterior function (response) { solo que esta escrita como arrow function
 
-                    console.log('SI.........FUNCIONO LA PETICION GET de obtenerUsuarioAutenticado !!! !!!', response);
+                    // console.log('SI.........FUNCIONO LA PETICION GET de obtenerUsuarioAutenticado !!! !!!', response);
                     setUserRol(response.data)// guardo en el estado del contexto los datos del usuario que esta 
                     // usando la aplicacion en ese momento, guardo todo la informacion del usuario que ingresa a la 
                     // aplicacion
@@ -51,7 +51,7 @@ const PrivateLayout = ({ children }) => {
                 },
                 (error) => {  // esta funcion es equivalente a la anterior function (error) { solo que esta escrita como arrow function
                     console.error("Salio un error con la peticion Get obtenerUsuarioAutenticado", error);
-                    console.log('NO.........FUNCIONO LA PETICION GET obtenerUsuarioAutenticado!!! !!!');
+                    // console.log('NO.........FUNCIONO LA PETICION GET obtenerUsuarioAutenticado!!! !!!');
 
                     logout({ returnTo: window.location.origin });
                     localStorage.setItem('token', null); // me permite borrar del local Storage el token cada vez que se cierre sesion 

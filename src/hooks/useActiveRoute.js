@@ -12,7 +12,7 @@ const useActiveRoute = (ruta) => {
     // y asi hacer tareas que quiera hacer 
 
     useEffect(() => {
-        console.log(marcarLocacionEnUso, ruta);
+        // console.log(marcarLocacionEnUso, ruta);
 
         if (marcarLocacionEnUso.pathname.includes(ruta)) { // pendiente no se como excluir la ruta de login el cual 
             // es '/' entonces esta se incluye y es verdadero  
