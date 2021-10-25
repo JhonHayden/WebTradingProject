@@ -552,7 +552,7 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
                             type="text"
                             name="estadoVenta"
                             id=""
-                            defaultValue={0}
+                            defaultValue=''
                             value={infoNuevaVenta.estadoVenta}
                             onChange={(evento) => {
 
@@ -560,7 +560,7 @@ const FilaVenta = ({ venta, setEjecutarConsultaGET }) => {
 
                             }}
                         >
-                            <option disabled defaultValue={0}>Seleccione una opción
+                            <option disabled defaultValue=''>Seleccione una opción
                             </option>
                             <option defaultValue="proceso">En Proceso
                             </option>
@@ -923,7 +923,8 @@ const FormularioCreacionVentas = ({
                 identificacionCliente: objetoNuevaVenta.identificacionCliente,
                 cantidadProducto: objetoNuevaVenta.cantidadProducto,
                 precioUnitario: objetoNuevaVenta.precioUnitario,
-                valorTotal: objetoNuevaVenta.valorTotal
+                valorTotal: objetoNuevaVenta.valorTotal,
+                estadoVenta:'En proceso'
             },
 
             (response) => {// si se recibe respuesta se ejecuta el mensaje, response= es palabra reservada
