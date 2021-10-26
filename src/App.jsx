@@ -16,8 +16,8 @@ import RegistroUsuario from 'pages/auth/RegistroUsuario';
 import { Auth0Provider } from "@auth0/auth0-react";// contexto para la autenticacion 
 import PrivateRoute from 'components/PrivateRoute';
 
-// const baseURL = "https://gentle-gorge-66325.herokuapp.com/administracion"  // produccion 
-const baseURL = "http://localhost:3000/administracion" // local 
+const baseURL = "https://gentle-gorge-66325.herokuapp.com/administracion"  // produccion 
+// const baseURL = "http://localhost:3000/administracion" // local 
 
 
 function App() {

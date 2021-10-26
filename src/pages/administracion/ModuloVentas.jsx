@@ -1133,7 +1133,13 @@ const FormularioCreacionVentas = ({
                             name="codigoProducto"
                             id=""
                             defaultValue=''
-                            required>
+                            required
+                            // onChange={(evento) => {
+                                
+                            //     setPrecioUnitario(evento.target.value);
+                            // }}
+                            >
+
                             <option disabled value=''>Seleccione un Producto</option>
                             {productos.map((objetoProductoDentroDeListaProductos) => {
 

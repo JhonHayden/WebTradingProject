@@ -5,8 +5,8 @@ import axios from 'axios';
 
 //variable global que contendra la url de produccion 
 
-// const baseURL = "https://shrouded-coast-96658.herokuapp.com" // produccion 
-const baseURL = "http://localhost:5000" // local 
+const baseURL = "https://shrouded-coast-96658.herokuapp.com" // produccion 
+// const baseURL = "http://localhost:5000" // local 
 
 
 const getToken = () => {
